@@ -1,0 +1,1 @@
+Analytics Dashboard is an AngularJS application for visualizing data. In essence, you have some kinda of standalone analytic processing data (Pandas, Apache Pig, etc...) and exposing the results via REST. This application allows for the creation of widgets that utilize REST to consume the resutls and display them in your desired form (tables, graphics, etc.).

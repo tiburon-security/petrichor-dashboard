@@ -1,0 +1,33 @@
+<!-- Layout for the sidebar accordion menu; utilized ui-bootstrap.js for animations -->
+
+<div id="sidebar-menu">
+		
+		<div class="menu_section"> 
+			
+			<uib-accordion ng-class="menu">
+			
+				
+		    	<uib-accordion-group template-url="app/components/menu/bootstrapAccordionTemplate.html" ng-if="menuItem.visible_in_menu==true" ng-repeat="menuItem in menu" is-open="status.open" >
+		    		
+		    		<!-- Menu item Heading -->
+			    	<uib-accordion-heading>
+			    		<i class="{{menuItem.menu_font_awesome_icon}}"></i> 
+			    		
+			    		<a ng-attr-href="{{menuItem.child_routes ? undefined : '/#' + menuItem.route}}">{{menuItem.menu_title}}</a>
+			    		<i class="pull-right glyphicon" ng-if="menuItem.child_routes" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+			    	</uib-accordion-heading>
+				
+			    	<!-- Menu Item Body -->
+		    	 	<div class="nav child_menu" ng-if="menuItem.child_routes" ng-class="{open: status.open, closed: !status.open}">
+			     	 	<ul>
+							<li ng-if="child_route.visible_in_menu == true" ng-repeat="child_route in menuItem.child_routes"> <a href="/#{{menuItem.route}}{{child_route.route}}"> {{child_route.menu_title}} </a> </li>
+						</ul>
+					</div>
+					
+		    	</uib-accordion-group>
+		    
+			</uib-accordion>
+		
+		</div>
+	
+</div>
