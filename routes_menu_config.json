@@ -1,0 +1,76 @@
+{
+    "routes" : [
+        {
+            "route_name"              : "home",
+            "path"                   : "/",
+            "visible_in_menu"         : true,
+            "menu_title"              : "Home",
+            "menu_font_awesome_icon"  : "fa fa-home",
+            "component"              : "App",
+            "child_routes"            : null
+        },
+        {
+            "route_name"              : "analytics",
+            "path"                   : "/analytics",
+            "visible_in_menu"         : true,
+            "menu_title"              : "Analytics",
+            "menu_font_awesome_icon"  : "fa fa-bar-chart",
+            "component"              : "Dashboard",
+            "template"                : null,
+            "child_routes" : [
+                {
+                    "route_name"      : "analytics_daily" ,
+                    "path"           : "/daily",
+                    "visible_in_menu" : true,
+                    "menu_title"      : "Daily",
+                    "component"      : "Dashboard"
+                }
+            ]
+        },
+        {
+            "route_name"              : "discover",
+            "path"                   : "/discover",
+            "visible_in_menu"         : true,
+            "menu_title"              : "Discover",
+            "menu_font_awesome_icon"  : "fa fa-search",
+            "component"              : "Dashboard",
+            "child_routes"            :   [             
+				{
+                    "route_name"      : "analytics_daily" ,
+                    "path"           : "/daily2",
+                    "visible_in_menu" : true,
+                    "menu_title"      : "weekly",
+                    "component"      : "Dashboard"
+                }
+			]
+        },
+		{
+            "route_name"              : "gentella",
+            "path"                   : "/gentella",
+            "visible_in_menu"         : false,
+            "menu_title"              : "Gentella",
+            "menu_font_awesome_icon"  : "fa fa-search",
+            "component"              : "Gentella",
+            "child_routes"            : null		
+		}
+    ],
+	
+    "dashboard_widgets" : [
+        {
+            "widget_class_name" : "FakeWidget",
+            "widget_url" : "./Dashboard/Widgets/FakeWidget.js",
+            "supported_route_names": ["analytics_daily", "discover"]
+        },        
+		{
+            "widget_class_name" : "FakeWidget2",
+            "widget_url" : "./Dashboard/Widgets/FakeWidget2.js",
+            "supported_route_names": ["analytics_daily"]
+        },    
+		{
+            "widget_class_name" : "FakeWidget3",
+            "widget_url" : "./Dashboard/Widgets/FakeWidget3.js",
+            "supported_route_names": ["analytics_daily"]
+        }
+        
+    ]
+}
