@@ -17,7 +17,6 @@ import React, { Component } from 'react';
  
  - SET LINKS ACTIVE IF IT'S THE CURRENT PAGE... 
  - mimick jquery slideup, slidedown animations when menu item with children links clicked
- - obey visible_in_menu property 
  
  */
  
@@ -59,21 +58,9 @@ class MenuItem extends Component {
 	}
 	
 	openSubmenu(e){		
-	
-		this.props.linkClicked(this.props.title);
-	
-		/*this.setState(
-			{submenuOpen : !this.state.submenuOpen}
-		);*/
-		
-		
+		this.props.linkClicked(this.props.title);		
 	}
 	
-	componentDidUpdate(){
-		console.log("updated");
-		
-	}
-
 	render(){
 		
 		// Determine if there are any child elements
@@ -90,7 +77,6 @@ class MenuItem extends Component {
 					
 					{/* Add down chevron if there are subitems */}
 					{hasChildren ? <span className="fa fa-chevron-down"></span> : null}
-					
 				
 				</a>
 				
@@ -141,7 +127,6 @@ class SidebarMenu extends Component {
 		// Update DOM
 		this.setState({childrenElements : childrenElements});
 			
-
 	}
 	
 	componentDidMount(){
