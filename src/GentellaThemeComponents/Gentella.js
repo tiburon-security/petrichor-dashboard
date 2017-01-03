@@ -11,12 +11,43 @@ import Footer from './Footer';
 import ProfileQuickInfo from './ProfileQuickInfo';
 
 export class Gentella extends Component {
-	  constructor(props) {
-    super(props);
-  }
-componentDidMount(){
-}
+	
+	constructor(props) {
+		super(props);
+		this.state = {menuFullsize : true};
+	}
+  
+  
+	/**
+	 * Toggle the size of the sidebar menu when toggle button clicked. This a very
+	 * non-react solution, but the body tag can't be modified via typicaly react 
+	 * functions. This tag is a carryover from the Gentella theme.
+	 */
+  	topNavigationClickHandler(event){
+		
+		if(this.state.menuFullsize){
+			document.body.classList.remove("nav-md");
+			document.body.classList.add("nav-sm");
+			
+		}else {
+			document.body.classList.remove("nav-sm");
+			document.body.classList.add("nav-md");
+		}
+		
+		// Toggle size state
+		this.setState({menuFullsize : !this.state.menuFullsize});
+	}
+	
+	componentDidMount(){
+		
+		// Full size menu by default
+		document.body.classList.add("nav-md");
+	}
+	
   render() {
+	  
+	
+	  
     return (
     <div className="container body">
       <div className="main_container">
@@ -28,28 +59,27 @@ componentDidMount(){
 
             <div className="clearfix"></div>
 
-	<ProfileQuickInfo/>
+			<ProfileQuickInfo/>
 
             <br />
 
-			
-			
-		<DynamicSidebarMenu/>
+			<DynamicSidebarMenu/>
 
-
-		<MenuFooter/>
+			<MenuFooter/>
 
           </div>
         </div>
 
-	<TopNavigation/>
-
+		
+		<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}/>
+		
+		
         {/* page content */}
         <div className="right_col" role="main" id="gentella_content_body">
 
 		<Footer/>
 
-	</div>
+		</div>
 
       </div>
     </div>
