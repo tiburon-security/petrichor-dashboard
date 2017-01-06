@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, browserHistory } from 'react-router';
+import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router';
 import $ from 'jquery';
 import Gentella from './GentellaThemeComponents/Gentella.js';
 
@@ -20,7 +20,7 @@ function bootstrapApplication(config){
 	var dynamicRoutesJSX = buildDynamicRoutes(config);
 
 	// Render overall look and theme for gentella
-	ReactDOM.render(<Gentella/>, document.getElementById('root'));
+	//ReactDOM.render(<Gentella/>, document.getElementById('root'));
 
 	// Hook the content body of gentella, this is where page content
 	// will be rendered. Routes control this body content
@@ -29,7 +29,7 @@ function bootstrapApplication(config){
 			{dynamicRoutesJSX}
 		</Router>
 	     
-	), document.getElementById('gentella_content_body'));
+	), document.getElementById('root'));
 
 }
 	
@@ -38,6 +38,9 @@ function bootstrapApplication(config){
 function buildDynamicRoutes(config){
 
 	var routeJSX = [];
+	
+	// Add the index route
+	routeJSX.push(<IndexRoute component={routableComponents[config.index_route.component]} />)
 	
 	// Iterate all routes and add them to React Router
 	for(var i=0; i < config.routes.length; i++){
@@ -63,8 +66,11 @@ function buildDynamicRoutes(config){
 	
 	}
 	
+	let final = <Route path="/" name={config.index_route.route_name} component={Gentella} children={routeJSX}/>
 
-	return routeJSX;
+	
+
+	return final;
 
 }
 

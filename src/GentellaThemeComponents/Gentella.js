@@ -15,6 +15,7 @@ export class Gentella extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {menuFullsize : true};
+
 	}
   
   
@@ -39,7 +40,8 @@ export class Gentella extends Component {
 	}
 	
 	componentDidMount(){
-		
+				console.log("route:");
+		console.log(  this.props);
 		// Full size menu by default
 		document.body.classList.add("nav-md");
 	}
@@ -49,40 +51,42 @@ export class Gentella extends Component {
 	
 	  
     return (
-    <div className="container body">
-      <div className="main_container">
-        <div className="col-md-3 left_col">
-          <div className="left_col scroll-view">
-            <div className="navbar nav_title" style={{"border": "0"}}>
-              <a href="index.html" className="site_title"><i className="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
-            </div>
+		<div className="container body">
+			<div className="main_container">
+				<div className="col-md-3 left_col">
+					<div className="left_col scroll-view">
+						<div className="navbar nav_title" style={{"border": "0"}}>
+							<a href="index.html" className="site_title"><i className="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
+						</div>
 
-            <div className="clearfix"></div>
+						<div className="clearfix"></div>
 
-			<ProfileQuickInfo/>
+						<ProfileQuickInfo/>
 
-            <br />
+						<br />
 
-			<DynamicSidebarMenu/>
+						<DynamicSidebarMenu/>
 
-			<MenuFooter/>
+						<MenuFooter/>
 
-          </div>
-        </div>
+					</div>
+				</div>
 
-		
-		<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}/>
-		
-		
-        {/* page content */}
-        <div className="right_col" role="main" id="gentella_content_body">
 
-		<Footer/>
+				<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}/>
 
+
+				{/* page content */}
+				<div className="right_col" role="main" id="gentella_content_body">
+
+					{this.props.children}
+
+					<Footer/>
+
+				</div>
+
+			</div>
 		</div>
-
-      </div>
-    </div>
 	);
   }
 }

@@ -1,14 +1,12 @@
 {
-    "routes" : [
-        {
-            "route_name"              : "home",
-            "path"                   : "/",
+	"index_route" : {
+			"route_name" 			  : "home",
             "visible_in_menu"         : true,
             "menu_title"              : "Home",
             "menu_font_awesome_icon"  : "fa fa-home",
-            "component"              : "App",
-            "child_routes"            : null
-        },
+            "component"              : "App"
+	},
+    "routes" : [
         {
             "route_name"              : "analytics",
             "path"                   : "/analytics",

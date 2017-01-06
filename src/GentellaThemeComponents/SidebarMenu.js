@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -33,7 +34,7 @@ class MenuLink extends Component {
 	
 	render(){
 		return (
-			<li><a href={this.props.url}>{this.props.title}</a></li>
+			<li><Link to={this.props.url}>{this.props.title}</Link></li>
 		
 		)
 	}
@@ -171,12 +172,19 @@ class SidebarMenu extends Component {
 class DynamicSidebarMenu extends Component {
 	
 	render() {
+		let currentRouteName = this.props.route;
+		console.log("ttt: ");
+		console.log(this.props.router);
 		
 		let menu = [];
 		let uniqueKey = 0;
 		
+		
 		//let currentRouteName = this.props.route.name;
 		let allRoutes = window.app_config.routes;
+		
+		menu.push(<MenuItem key="256" title={window.app_config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={window.app_config.index_route.menu_font_awesome_icon} />);
+
 		
 		// Iteate every top level route
 		for (let [topLevelRouteIndex, topLevelRoute] of allRoutes.entries()) {
