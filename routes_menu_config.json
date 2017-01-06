@@ -34,7 +34,7 @@
             "component"              : "Dashboard",
             "child_routes"            :   [             
 				{
-                    "route_name"      : "analytics_daily" ,
+                    "route_name"      : "analytics_daily2" ,
                     "path"           : "/daily2",
                     "visible_in_menu" : true,
                     "menu_title"      : "weekly",
@@ -57,7 +57,7 @@
         {
             "widget_class_name" : "FakeWidget",
             "widget_url" : "./Dashboard/Widgets/FakeWidget.js",
-            "supported_route_names": ["analytics_daily", "discover"]
+            "supported_route_names": ["analytics_daily", "analytics_daily2"]
         },        
 		{
             "widget_class_name" : "FakeWidget2",

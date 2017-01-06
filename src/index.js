@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router';
+import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import $ from 'jquery';
 import Gentella from './GentellaThemeComponents/Gentella.js';
 

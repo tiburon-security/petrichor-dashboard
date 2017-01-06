@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import {uniqueId } from 'lodash';
+import FakeWidget from './Dashboard/Widgets/FakeWidget.js';
+
 
 /**
  * this is very very broken still. working to figure out how i can use react-grid-layout, but have the individual widgets from seperate files
@@ -9,24 +11,9 @@ import 'react-resizable/css/styles.css';
  */
 
 
-// Brings all widgets used into namespace for referencing by their string name
-//import * as dashboardWidgets from './Dashboard/DashboardWidgets.js';
-import $ from 'jquery';
-//import 'lodash';
 
-//import gridstack from 'gridstack';
+//import ReactGridLayout, {GridItem, WidthProvider} from 'react-grid-layout';
 
-//import {Responsive, WidthProvider, ReactGridLayout} from 'react-grid-layout';
-//var ReactGridLayout = require('react-grid-layout');
-
-//const ResponsiveReactGridLayout = WidthProvider(Responsive);
-
-import ReactGridLayout, {GridItem, WidthProvider} from 'react-grid-layout';
-
-/*
-var WidthProvider = require('react-grid-layout').WidthProvider;
-var ReactGridLayout = require('react-grid-layout');
-ReactGridLayout = WidthProvider(ReactGridLayout);*/
 
 export class Dashboard extends Component {
 	
@@ -34,56 +21,47 @@ export class Dashboard extends Component {
 		
 		super(props);
 		
-		/*
-				this.gridstack_options = {
-			cellHeight: 80,
-			verticalMargin: 10
-		};
-		*/
-		
 		this.state = {
-			rendered_widgets: [],
+			rendered_widgets : [],
 		};
-		
-
 		
 	}
 	
-	componentDidMount(){
+	
+	renderWidgets(){
 		let currentRouteName = this.props.route.name;
 		let allWidgets = window.app_config.dashboard_widgets;
-		
-		let widgetsToRender = [];
+		console.log("dashboard route: ");console.log(this.props.route);
 		let renderedWidgets = []
 		
+				
 		// Iteate every widget
 		for (let [widgetIndex, widget] of allWidgets.entries()) {
-			
-			console.info(widget.widget_class_name);
-			
+						
 			// Look at every route supported by the widget
 			for(var supportedWidget of widget.supported_route_names){
 				
 				// Track the widget if supported by curreny route
 				if(supportedWidget === currentRouteName){
-					
-					console.log("widget url: " + widget.widget_url);
-					
+										
+
 					// Dynamically load Widget module
 					require.ensure([], () => {  
 						let Widget = require(widget.widget_url);
-							console.log(Widget)
+							
+							let widgetComponent = <Widget.default key={uniqueId()}/>;
+
 							// Update the state with the rendered Widget
-							this.state.rendered_widgets.push(<Widget.default key={widgetIndex}/>);
-						
+							renderedWidgets.push(widgetComponent);
+							
 							this.setState(
 								{
-									rendered_widgets : this.state.rendered_widgets
+									rendered_widgets : renderedWidgets
 								}
-							);
+							)
+						
 					}); 
 					
-					widgetsToRender.push(widget.widget_class_name);
 					break;
 				}
 							
@@ -91,35 +69,67 @@ export class Dashboard extends Component {
 			
 		}
 		
-		console.log("widgets to render");
-		console.log(widgetsToRender);
-
-		
 	}
 	
+
+	componentDidMount(){
+		console.log("comp did mount...");
+		this.renderWidgets()
+	}
+	
+	
+	/**
+	 * Only trigger an update if the route has calling the dashboard has changed
+	 * and there were new widgetw added to the state
+	 */
+	shouldComponentUpdate(nextProps, nextState){
+		console.log("should component update?");
+		
+		// Determine if the rendered widgets actually changed
+		var equal = true;
+		if(this.state.rendered_widgets.length == nextState.rendered_widgets.length){
+			for(var i=0; i< this.state.rendered_widgets.length; i++){
+				
+				// Widget keys should be the same unless the entire dashboard has been updated
+				if(this.state.rendered_widgets[i].key != nextState.rendered_widgets[i].key){
+					equal = false;
+				}
+			}
+		} 
+			
+		
+		if(this.props.route.name === nextProps.route.name && this.props.route.path === nextProps.route.path&& !equal){
+			console.log("not it shouldnt");
+			return false;
+		} else {
+			console.log("yes it should");
+			return true;
+		}
+	}
+
+	
+	componentDidUpdate(){
+		this.renderWidgets();
+	}
 
 	
 	render() {
 	  
+		console.log("rendering, this is the current state: ");
+		console.log(this.state.rendered_widgets);
 		
-	  
 		return (
 		  <div>
 			
 			  dashboard  component dude currentLocation
+			  <p>{this.state.fake_state}</p>
 			  <div id='grid-stack' className='grid-stack'>
-			  
 
-
-{this.state.rendered_widgets}
+				{this.state.rendered_widgets}
 			
-			<ReactGridLayout  className="layout" cols={12} rowHeight={30} width={1200}>
-				
+				{/*<ReactGridLayout  className="layout" cols={12} rowHeight={30} width={1200}>
         
-			</ReactGridLayout >
-	  
-	  {/* {this.state.rendered_widgets} */}
-
+				</ReactGridLayout >*/}
 			  
 			  </div>
 			
