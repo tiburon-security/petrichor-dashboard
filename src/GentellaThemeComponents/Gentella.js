@@ -4,7 +4,7 @@ import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';
 
 
-import {DynamicSidebarMenu, SidebarMenu, MenuItem, MenuLink} from './SidebarMenu';
+import {DynamicSidebarMenu} from './SidebarMenu';
 import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
 import Footer from './Footer';
