@@ -31,10 +31,9 @@ export class Dashboard extends Component {
 	renderWidgets(){
 		let currentRouteName = this.props.route.name;
 		let allWidgets = window.app_config.dashboard_widgets;
-		console.log("dashboard route: ");console.log(this.props.route);
-		let renderedWidgets = []
+
+		var renderedWidgets = []
 		
-				
 		// Iteate every widget
 		for (let [widgetIndex, widget] of allWidgets.entries()) {
 						
@@ -44,36 +43,29 @@ export class Dashboard extends Component {
 				// Track the widget if supported by curreny route
 				if(supportedWidget === currentRouteName){
 										
-
 					// Dynamically load Widget module
 					require.ensure([], () => {  
 						let Widget = require(widget.widget_url);
-							
-							let widgetComponent = <Widget.default key={uniqueId()}/>;
 
-							// Update the state with the rendered Widget
-							renderedWidgets.push(widgetComponent);
+						let widgetComponent = <Widget.default key={uniqueId()}/>;
 							
-							this.setState(
-								{
-									rendered_widgets : renderedWidgets
-								}
-							)
+						// React likes immutable datastructues in state, so rebuild it each time. 
+						// Look into immtuability-helper if this becomes unperformant.
+						// Reference: http://stackoverflow.com/questions/26253351/correct-modification-of-state-arrays-in-reactjs/41445812#41445812
+						renderedWidgets = [ ...renderedWidgets, widgetComponent ]; // --> [1,2,3,4]
+
+						this.setState({rendered_widgets : renderedWidgets})
 						
 					}); 
 					
 					break;
-				}
-							
+				}			
 			}
-			
 		}
-		
 	}
 	
 
 	componentDidMount(){
-		console.log("comp did mount...");
 		this.renderWidgets()
 	}
 	
@@ -83,11 +75,11 @@ export class Dashboard extends Component {
 	 * and there were new widgetw added to the state
 	 */
 	shouldComponentUpdate(nextProps, nextState){
-		console.log("should component update?");
 		
 		// Determine if the rendered widgets actually changed
 		var equal = true;
-		if(this.state.rendered_widgets.length == nextState.rendered_widgets.length){
+		if(this.state.rendered_widgets.length === nextState.rendered_widgets.length){
+
 			for(var i=0; i< this.state.rendered_widgets.length; i++){
 				
 				// Widget keys should be the same unless the entire dashboard has been updated
@@ -95,29 +87,38 @@ export class Dashboard extends Component {
 					equal = false;
 				}
 			}
-		} 
+		} else {
+			equal = false;
+		}
 			
 		
-		if(this.props.route.name === nextProps.route.name && this.props.route.path === nextProps.route.path&& !equal){
-			console.log("not it shouldnt");
-			return false;
-		} else {
-			console.log("yes it should");
+		if(this.props.route.name === nextProps.route.name && this.props.route.path === nextProps.route.path){
+			
+			if(equal){
+				return false;
+			} else {
+				return true;
+			}
+			
+		} else {		
 			return true;
 		}
+		
 	}
 
 	
-	componentDidUpdate(){
-		this.renderWidgets();
+	componentDidUpdate(prevProps, prevState){
+				
+		if(this.props.route.name !== prevProps.route.name && this.props.route.path !== prevProps.route.path){
+			// Clear state before re-rendering widgets
+			this.setState({rendered_widgets: []}, () => { this.renderWidgets(); });
+		}
+
 	}
 
 	
 	render() {
-	  
-		console.log("rendering, this is the current state: ");
-		console.log(this.state.rendered_widgets);
-		
+
 		return (
 		  <div>
 			
