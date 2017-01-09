@@ -55,6 +55,54 @@
 	
 	"dashboards" : [
 		{
+			"route_name" : "analytics_daily",
+			"auto_position_widgets" : true,
+			"supported_widgets" : [
+				{
+					"name" : "FakeWidget",
+					"layout" : {
+						"x" : 1,
+						"y" : 1
+					}
+				},
+				{
+					"name" : "FakeWidget2",
+					"layout" : {
+						"x" : 2,
+						"y" : 1
+					}
+				},
+				{
+					"name" : "FakeWidget3",
+					"layout" : {
+						"x" : 3,
+						"y" : 1
+					}
+				}				
+			]
+		},
+		{
+			"route_name" : "analytics_daily2",
+			"auto_position_widgets" : true,
+			"supported_widgets" : [
+				{
+					"name" : "FakeWidget2",
+					"layout" : {
+						"x" : 1,
+						"y" : 1
+					}
+				},
+				{
+					"name" : "FakeWidget3",
+					"layout" : {
+						"x" : 1,
+						"y" : 1
+					}
+				}
+				
+			]
+		},
+		{
 			"route_name" : "gentella",
 			"auto_position_widgets" : true,
 			"supported_widgets" : [
@@ -74,7 +122,6 @@
         {
             "widget_class_name" : "FakeWidget",
             "widget_url" : "./Dashboard/Widgets/FakeWidget.js",
-            "supported_route_names": ["analytics_daily", "analytics_daily2"],
 			"min_grid_size" : { 
 				"w": 1, 
 				"h": 2
@@ -83,7 +130,6 @@
 		{
             "widget_class_name" : "FakeWidget2",
             "widget_url" : "./Dashboard/Widgets/FakeWidget2.js",
-            "supported_route_names": ["analytics_daily"],
 			"min_grid_size" : {
 				"w" : 1,
 				"h" : 1
@@ -92,7 +138,6 @@
 		{
             "widget_class_name" : "FakeWidget3",
             "widget_url" : "./Dashboard/Widgets/FakeWidget3.js",
-            "supported_route_names": ["analytics_daily"],
 			"min_grid_size" : {
 				"w" : 1,
 				"h" : 1
@@ -101,7 +146,6 @@
 		{
             "widget_class_name" : "FakeWidget4",
             "widget_url" : "./Dashboard/Widgets/FakeWidget4.js",
-            "supported_route_names": ["gentella"],
 			"min_grid_size" : {
 				"w" : 1,
 				"h" : 5
