@@ -45,29 +45,67 @@
 		{
             "route_name"              : "gentella",
             "path"                   : "/gentella",
-            "visible_in_menu"         : false,
+            "visible_in_menu"         : true,
             "menu_title"              : "Gentella",
             "menu_font_awesome_icon"  : "fa fa-search",
-            "component"              : "Gentella",
+            "component"              : "Dashboard",
             "child_routes"            : null		
 		}
     ],
+	
+	"dashboards" : [
+		{
+			"route_name" : "gentella",
+			"auto_position_widgets" : true,
+			"supported_widgets" : [
+				{
+					"name" : "FakeWidget4",
+					"layout" : {
+						"x" : 1,
+						"y" : 1
+					}
+				}
+				
+			]
+		}
+	],
 	
     "dashboard_widgets" : [
         {
             "widget_class_name" : "FakeWidget",
             "widget_url" : "./Dashboard/Widgets/FakeWidget.js",
-            "supported_route_names": ["analytics_daily", "analytics_daily2"]
+            "supported_route_names": ["analytics_daily", "analytics_daily2"],
+			"min_grid_size" : { 
+				"w": 1, 
+				"h": 2
+			}
         },        
 		{
             "widget_class_name" : "FakeWidget2",
             "widget_url" : "./Dashboard/Widgets/FakeWidget2.js",
-            "supported_route_names": ["analytics_daily"]
+            "supported_route_names": ["analytics_daily"],
+			"min_grid_size" : {
+				"w" : 1,
+				"h" : 1
+			}
         },    
 		{
             "widget_class_name" : "FakeWidget3",
             "widget_url" : "./Dashboard/Widgets/FakeWidget3.js",
-            "supported_route_names": ["analytics_daily"]
+            "supported_route_names": ["analytics_daily"],
+			"min_grid_size" : {
+				"w" : 1,
+				"h" : 1
+			}
+        },
+		{
+            "widget_class_name" : "FakeWidget4",
+            "widget_url" : "./Dashboard/Widgets/FakeWidget4.js",
+            "supported_route_names": ["gentella"],
+			"min_grid_size" : {
+				"w" : 1,
+				"h" : 5
+			}
         }
         
     ]
