@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
+import {WidgetHeader, WidgetBody, WidgetContent} from '../WidgetStyles.js'
 
 
 class FakeWidget extends Component {
 	
+	componentDidMount(){	
+		console.debug("FakeWidget mounted");
+	}
+	
 	render() {
     
 		return (  
-			<div data-grid={{x: 0, y: 0, w: 3, h: 2}}>
-				<div className='grid-stack-item-content'>
-					<span className='fa fa-times remove-widget'> </span>
-					<span className='fa fa-pencil select-use'></span>  
-					<span className='fa fa-plus add-nested-widget-box'></span>
-
-					<div>My fake dashboard widget - number 1</div>
-
-				</div>
-			</div>
+			<WidgetBody>
+				<WidgetHeader settings_button={true} close_button={true} title="FakeWidget"/>
+				<WidgetContent>Fake data</WidgetContent>
+			</WidgetBody>
 		);
   
 	}

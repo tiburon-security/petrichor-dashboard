@@ -1,27 +1,20 @@
 import React, { Component } from 'react';
+import {WidgetHeader, WidgetBody, WidgetContent} from '../WidgetStyles.js'
 
 
 class FakeWidget4 extends Component {
 	
-	
-	
-	// Specifies the default values for props:
-defaultProps = {
-  fake: 'Stranger'
- };
-	constructor(props){
-		super(props)
-		
-		this.test = "bro";
-	}
-	componentDidMount(){
+	componentDidMount(){	
 		console.debug("FakeWidget4 mounted");
 	}
 	
 	render() {
     
 		return (  
-			<div key="a" data-grid={{x: 0, y: 0, w: 1, h: 2}}>FakeWidget4</div>
+			<WidgetBody>
+				<WidgetHeader settings_button={true} close_button={true} title="FakeWidget4"/>
+				<WidgetContent>Fake data</WidgetContent>
+			</WidgetBody>
 		);
   
 	}
