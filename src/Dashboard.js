@@ -3,19 +3,13 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
 import FakeWidget from './Dashboard/Widgets/FakeWidget.js';
-
-
-
-/**
- * this is very very broken still. working to figure out how i can use react-grid-layout, but have the individual widgets from seperate files
- * generate their own elements
- */
-
-
-
 import ReactGridLayout, {GridItem, WidthProvider} from 'react-grid-layout';
 
-
+/**
+ * View that displays a customizable, draggable dashboard grid of user defined widgets.
+ * Widgets are loaded according to the global application configuration (routes_menu_config), 
+ * which defines what widgets will load on a given route.
+ */
 export class Dashboard extends Component {
 	
 	constructor(props){
@@ -24,27 +18,18 @@ export class Dashboard extends Component {
 		
 		this.state = {
 			rendered_widgets : [],
+			dashboard_columns : 4,
+			dashboard_row_height : 100,
+			dashboard_width : 1200 
 		};
 		
 	}
 	
 	
+	/**
+	 * Renders all of the widgets from the application configuration into the dashboard
+	 */
 	renderWidgets(){
-		
-		/*
-			"dashboard" : [
-		{
-			"route_name" : "gentella",
-			"position" : false,
-			"supported_widgets" : [
-				{
-					"name" : "FakeWidget4",
-				}
-				
-			]
-		}
-	],
-		*/
 		
 		let currentRouteName = this.props.route.name;
 		let allWidgets = window.app_config.dashboard_widgets;
@@ -69,11 +54,22 @@ export class Dashboard extends Component {
 				}
 			};		
 		}
+			
+		// Use dashboard settings, if provided
+		let width = (typeof currentDashboard.width !== "undefined" ? currentDashboard.width : this.state.dashboard_width);
+		let rowHeight = (typeof currentDashboard.row_height !== "undefined" ? currentDashboard.rowHeight : this.state.dashboard_row_height);
+		let numColumns = (typeof currentDashboard.number_of_columns !== "undefined" ? currentDashboard.number_of_columns : this.state.dashboard_columns);
 		
+		this.setState({
+			dashboard_columns : numColumns,
+			dashboard_row_height : rowHeight,
+			dashboard_width : width 
+		})
 		
-		// Write routine for dynamically generating layout
+		// TODO: Write routine for dynamically generating layout
 		if(currentDashboard.auto_position){
 			
+			// TODO
 			
 		} else {
 			
@@ -85,8 +81,8 @@ export class Dashboard extends Component {
 				let x = widget.layout.x;
 				let y = widget.layout.y;
 				let w = (typeof widget.layout.w === 'undefined' ? widgetConfiguration.min_grid_size.w : widget.layout.w);
-				let h = (typeof widget.layout.j === 'undefined' ? widgetConfiguration.min_grid_size.h : widget.layout.h);
-				
+				let h = (typeof widget.layout.h === 'undefined' ? widgetConfiguration.min_grid_size.h : widget.layout.h);
+
 				// Dynamically load Widget module
 				require.ensure([], () => {  
 					let Widget = require(widgetConfiguration.widget_url);
@@ -111,7 +107,10 @@ export class Dashboard extends Component {
 
 	}
 	
-
+	
+	/**
+	 * On initial page load, render the dashboard
+	 */
 	componentDidMount(){
 		this.renderWidgets()
 	}
@@ -152,8 +151,11 @@ export class Dashboard extends Component {
 		}
 		
 	}
-
 	
+
+	/**
+	 * Clears dashboard if a new route was requested
+	 */
 	componentDidUpdate(prevProps, prevState){
 				
 		if(this.props.route.name !== prevProps.route.name && this.props.route.path !== prevProps.route.path){
@@ -169,25 +171,10 @@ export class Dashboard extends Component {
 		return (
 		  <div>
 			
-			  dashboard  component dude currentLocation
-			  <p>{this.state.fake_state}</p>
-			  <div id='grid-stack' className='grid-stack'>
-
-				
-				
-				
-				<ReactGridLayout  className="layout" cols={12} rowHeight={30} width={1200}>
-				
-					{this.state.rendered_widgets}
+			<ReactGridLayout  className="layout" cols={this.state.dashboard_columns} rowHeight={this.state.dashboard_row_height} width={this.state.dashboard_width}>
+				{this.state.rendered_widgets}
+			</ReactGridLayout >
 					
-				</ReactGridLayout >
-			  <div key="ttt" data-grid={{x: 0, y: 0, w: 3, h: 2}}>
-						
-					</div>
-			  </div>
-			
-			
-			
 		  </div>
 		);
   }
