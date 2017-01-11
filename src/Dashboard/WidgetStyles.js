@@ -27,8 +27,8 @@ class WidgetHeader extends Component {
 				<h2>{this.props.title}</h2>
 				
 				<ul className="nav navbar-right panel_toolbox">
-				{this.props.settings_button ? <li><a clickHandler={this.props.settings_button_clickhandler}><i className="fa fa-wrench"></i></a></li> : null}
-				{this.props.close_button ? <li><a clickHandler={this.props.close_button_clickhandler}><i className="fa fa-close"></i></a></li> : null}
+				{this.props.settings_button ? <li><a onClick={this.props.settings_button_clickhandler}><i className="fa fa-wrench"></i></a></li> : null}
+				{this.props.close_button ? <li><a onClick={this.props.close_button_clickhandler}><i className="fa fa-close"></i></a></li> : null}
 				</ul>
 				<div className="clearfix"></div>
 				
