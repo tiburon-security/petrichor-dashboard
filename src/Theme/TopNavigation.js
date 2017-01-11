@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Notifications from './Notifications'
 
 class TopNavigation extends Component {
 	
@@ -32,70 +33,8 @@ class TopNavigation extends Component {
                   </ul>
                 </li>
 
-                <li role="presentation" className="dropdown">
-                  <a href="#" className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                    <i className="fa fa-envelope-o"></i>
-                    <span className="badge bg-green">6</span>
-                  </a>
-                  <ul id="menu1" className="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span className="image"><img src="images/img.jpg" alt="Profile" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span className="time">3 mins ago</span>
-                        </span>
-                        <span className="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span className="image"><img src="images/img.jpg" alt="Profile" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span className="time">3 mins ago</span>
-                        </span>
-                        <span className="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span className="image"><img src="images/img.jpg" alt="Profile" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span className="time">3 mins ago</span>
-                        </span>
-                        <span className="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a>
-                        <span className="image"><img src="images/img.jpg" alt="Profile" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span className="time">3 mins ago</span>
-                        </span>
-                        <span className="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div className="text-center">
-                        <a>
-                          <strong>See All Alerts</strong>
-                          <i className="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
+				<Notifications/>
+
               </ul>
             </nav>
           </div>

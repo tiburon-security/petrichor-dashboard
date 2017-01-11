@@ -81,7 +81,9 @@ export class Gentella extends Component {
 
 					{this.props.children}
 
-					<Footer/>
+					<Footer>
+						Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+					</Footer>
 
 				</div>
 

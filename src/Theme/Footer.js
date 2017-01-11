@@ -8,7 +8,7 @@ class Footer extends Component {
             
         <footer>
           <div className="pull-right">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+			{this.props.children}
           </div>
           <div className="clearfix"></div>
         </footer>
