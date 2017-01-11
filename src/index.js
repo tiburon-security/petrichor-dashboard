@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import $ from 'jquery';
-import Gentella from './GentellaThemeComponents/Gentella.js';
+import Gentella from './Theme/Gentella.js';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
