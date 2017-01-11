@@ -6,7 +6,7 @@ import Gentella from './GentellaThemeComponents/Gentella.js';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
-import * as routableComponents from './RoutableComponents.js';
+import * as routableViews from './RoutableViews.js';
 
 
 $.get("/routes_menu_config.json", bootstrapApplication);
@@ -40,14 +40,14 @@ function buildDynamicRoutes(config){
 	var routeJSX = [];
 	
 	// Add the index route
-	routeJSX.push(<IndexRoute component={routableComponents[config.index_route.component]} />)
+	routeJSX.push(<IndexRoute component={routableViews[config.index_route.component]} />)
 	
 	// Iterate all routes and add them to React Router
 	for(var i=0; i < config.routes.length; i++){
 		
 		var route = config.routes[i];
 
-		routeJSX.push(<Route path={route.path} test='dookie' name={route.route_name} components={routableComponents[route.component]} key={i}/>); 		
+		routeJSX.push(<Route path={route.path} test='dookie' name={route.route_name} components={routableViews[route.component]} key={i}/>); 		
 
 		// If a child route exists, add it
 		if(route.child_routes != null){
@@ -58,7 +58,7 @@ function buildDynamicRoutes(config){
 				var childRoute = route.child_routes[j];
 				var fullPath = route.path + childRoute.path;
 				
-				routeJSX.push(<Route path={fullPath} name={childRoute.route_name} components={routableComponents[childRoute.component]} key={i}/>); 		
+				routeJSX.push(<Route path={fullPath} name={childRoute.route_name} components={routableViews[childRoute.component]} key={i}/>); 		
 				
 			}
 			

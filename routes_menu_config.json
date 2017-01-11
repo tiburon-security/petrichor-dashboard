@@ -133,7 +133,7 @@
     "dashboard_widgets" : [
         {
             "widget_class_name" : "FakeWidget",
-            "widget_url" : "./Dashboard/Widgets/FakeWidget.js",
+            "widget_url" : "Dashboard/Widgets/FakeWidget.js",
 			"min_grid_size" : { 
 				"w": 1, 
 				"h": 2
@@ -141,7 +141,7 @@
         },        
 		{
             "widget_class_name" : "FakeWidget2",
-            "widget_url" : "./Dashboard/Widgets/FakeWidget2.js",
+            "widget_url" : "Dashboard/Widgets/FakeWidget2.js",
 			"min_grid_size" : {
 				"w" : 1,
 				"h" : 1
@@ -149,7 +149,7 @@
         },    
 		{
             "widget_class_name" : "FakeWidget3",
-            "widget_url" : "./Dashboard/Widgets/FakeWidget3.js",
+            "widget_url" : "Dashboard/Widgets/FakeWidget3.js",
 			"min_grid_size" : {
 				"w" : 1,
 				"h" : 1
@@ -157,7 +157,7 @@
         },
 		{
             "widget_class_name" : "FakeWidget4",
-            "widget_url" : "./Dashboard/Widgets/FakeWidget4.js",
+            "widget_url" : "Dashboard/Widgets/FakeWidget4.js",
 			"min_grid_size" : {
 				"w" : 1,
 				"h" : 5

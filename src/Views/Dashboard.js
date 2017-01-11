@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
-import FakeWidget from './Dashboard/Widgets/FakeWidget.js';
 import ReactGridLayout, {GridItem, WidthProvider} from 'react-grid-layout';
 
 /**
@@ -85,7 +84,10 @@ export class Dashboard extends Component {
 
 				// Dynamically load Widget module
 				require.ensure([], () => {  
-					let Widget = require(widgetConfiguration.widget_url);
+				
+					// Widgets live up one directory from Dashbaord.js in /Dashboard/Widgets/
+					// TODO: look into absolute reference in ES6/Babel
+					let Widget = require("../" + widgetConfiguration.widget_url);
 					
 					let widgetComponent = <Widget.default key={uniqueId()}/>;
 					

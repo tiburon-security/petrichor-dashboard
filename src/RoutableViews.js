@@ -7,8 +7,8 @@
  * for more reasoning on this design choice.
  */
 
-export * from './SampleReact.js';
+export * from './Views/SampleReact.js';
 //export * from './SampleGentellaPageContent.js';
-export * from './Dashboard.js';
+export * from './Views/Dashboard.js';
 //export * from './GentellaThemeComponents/Gentella.js';
 
