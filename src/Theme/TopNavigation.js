@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Notifications from './Notifications'
+import ProfileDropdown from './ProfileDropdown'
 
 class TopNavigation extends Component {
 	
@@ -15,24 +16,9 @@ class TopNavigation extends Component {
               </div>
 
               <ul className="nav navbar-nav navbar-right">
-                <li className="">
-                  <a href="#" className="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/img.jpg" alt="John"/>John Doe
-                    <span className=" fa fa-angle-down"></span>
-                  </a>
-                  <ul className="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="#"> Profile</a></li>
-                    <li>
-                      <a href="#">
-                        <span className="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="login.html"><i className="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                  </ul>
-                </li>
+			  
 
+				<ProfileDropdown/>
 				<Notifications/>
 
               </ul>
