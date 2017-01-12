@@ -83,12 +83,14 @@ export class Gentella extends Component {
 					<div style={{"margin-top" : "50px"}}>
 						{this.props.children}
 
-						<Footer>
-							Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-						</Footer>
+
 					</div>
 
 				</div>
+				
+				<Footer>
+					Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+				</Footer>
 
 			</div>
 		</div>
