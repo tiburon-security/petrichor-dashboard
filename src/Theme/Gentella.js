@@ -76,14 +76,17 @@ export class Gentella extends Component {
 				<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}/>
 
 
-				{/* page content */}
+				
 				<div className="right_col" role="main" id="gentella_content_body">
 
-					{this.props.children}
+					{/* page content */}
+					<div style={{"margin-top" : "50px"}}>
+						{this.props.children}
 
-					<Footer>
-						Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-					</Footer>
+						<Footer>
+							Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+						</Footer>
+					</div>
 
 				</div>
 
