@@ -11,12 +11,15 @@ class ProfileDropdown extends Component {
 	}
 	
 	propTypes: {
-		image_path    : React.PropTypes.string.isRequired,
-		user_name : React.PropTypes.bool.isRequired,
+		image_path    : React.PropTypes.string,
+		user_name : React.PropTypes.string,
+		show_dropdown : React.PropTypes.bool.isRequired,
+		
 	}
 	
 	static defaultProps = {
-		user_name: "Unknown"	
+		user_name: "Unknown",
+		show_dropdown : false		
 	}
 	
 	/**
@@ -34,10 +37,10 @@ class ProfileDropdown extends Component {
 
 				<li className={(this.state.menu_open ? 'open' : '')} onBlur={() => this.setState({menu_open : false})}>
                   <a href="#" className="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
-					  {profilePic} {this.props.user_name}
-                    <span className=" fa fa-angle-down"></span>
+						{profilePic} {this.props.user_name}
+						{(this.props.show_dropdown ? <span className=" fa fa-angle-down"></span> : null)}
                   </a>
-                  <ul className="dropdown-menu dropdown-usermenu pull-right">
+                  <ul className="dropdown-menu dropdown-usermenu pull-right" style={{"display" : (this.props.show_dropdown ? null : "none")}}>
                     <li><a href="#"> Profile</a></li>
                     <li>
                       <a href="#">
