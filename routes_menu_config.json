@@ -35,7 +35,7 @@
             "child_routes"            :   [             
 				{
                     "route_name"      : "analytics_daily2" ,
-                    "path"           : "/daily2",
+                    "path"           : "/daily2(/:param)",
                     "visible_in_menu" : true,
                     "menu_title"      : "weekly",
                     "component"      : "Dashboard"
