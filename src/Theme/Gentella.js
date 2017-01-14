@@ -2,7 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';
-
+import profile_pic from './resources/images/img.jpg';
 
 import {DynamicSidebarMenu} from './SidebarMenu';
 import MenuFooter from './MenuFooter';
@@ -65,11 +65,11 @@ export class Gentella extends Component {
 
 						<div className="clearfix"></div>
 
-						<ProfileQuickInfo/>
+						<ProfileQuickInfo user_name="Jovanni Hernandez" image_path={profile_pic}/>
 
 						<br />
 
-						<DynamicSidebarMenu/>
+						<DynamicSidebarMenu menu_full_size={this.state.menuFullsize}/>
 
 						<MenuFooter/>
 

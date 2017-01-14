@@ -121,6 +121,13 @@
   margin-top: 20px;
   border: 1px solid rgba(52, 73, 94, 0.44);
   padding: 4px; }
+  
+  .img-circle.no_profile_img {
+  background: #fff;
+  margin-left: 15%;
+  z-index: 1000;
+  margin-top: 20px;
+  border: 1px solid rgba(52, 73, 94, 0.44); }
 
 .profile_info {
   padding: 25px 10px 10px;
