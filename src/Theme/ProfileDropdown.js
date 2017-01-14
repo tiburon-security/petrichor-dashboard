@@ -20,7 +20,7 @@ class ProfileDropdown extends Component {
 	render() {                
 		return (
 
-				<li className={(this.state.menu_open ? 'open' : '')} >
+				<li className={(this.state.menu_open ? 'open' : '')} onBlur={() => this.setState({menu_open : false})}>
                   <a href="#" className="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
                     <img src="images/img.jpg" alt="John"/>John Doe
                     <span className=" fa fa-angle-down"></span>

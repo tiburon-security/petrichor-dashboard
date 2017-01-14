@@ -111,7 +111,7 @@ class Notifications extends Component {
 	
 		return (
 
-			<li role="presentation" className={"dropdown " + (this.state.menu_open ? 'open' : '')} title={hoverNotificationCountMessage}>
+			<li role="presentation" className={"dropdown " + (this.state.menu_open ? 'open' : '')} title={hoverNotificationCountMessage} onBlur={() => this.setState({menu_open : false})}>
 			
 				{this.state.expanded_notification}
 				
