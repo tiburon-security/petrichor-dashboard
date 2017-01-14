@@ -92,7 +92,7 @@ class Notifications extends Component {
 			
 			var elems = (
 				<li key={index}>
-					<a onClick={() => this.expandNotification(index)}>
+					<a onMouseDown={() => this.expandNotification(index)}>
 						<span className="image"><span className={notification.font_awesome_icon}></span></span>
 						<span>
 							<span className="time">{timeAge}</span>
