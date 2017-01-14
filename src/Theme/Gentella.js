@@ -78,7 +78,7 @@ export class Gentella extends Component {
 
 
 				<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}>
-					<ProfileDropdown/>
+					<ProfileDropdown user_name="Jovanni Hernandez" />
 					<Notifications notifications={this.config.notifications}/>
 				</TopNavigation>
 

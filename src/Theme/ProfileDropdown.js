@@ -10,6 +10,15 @@ class ProfileDropdown extends Component {
 		this.state = {menu_open: false};
 	}
 	
+	propTypes: {
+		image_path    : React.PropTypes.string.isRequired,
+		user_name : React.PropTypes.bool.isRequired,
+	}
+	
+	static defaultProps = {
+		user_name: "Unknown"	
+	}
+	
 	/**
 	 * Open/close the notification dropdown menu
 	 */
@@ -17,12 +26,15 @@ class ProfileDropdown extends Component {
 		this.setState({menu_open:!this.state.menu_open});
 	}
 	
-	render() {                
+	render() { 
+
+		var profilePic = (this.props.image_path ?  <img src={this.props.image_path} alt="Profile Picture"/> : <i className="fa fa-user"></i>);
+	
 		return (
 
 				<li className={(this.state.menu_open ? 'open' : '')} onBlur={() => this.setState({menu_open : false})}>
                   <a href="#" className="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
-                    <img src="images/img.jpg" alt="John"/>John Doe
+					  {profilePic} {this.props.user_name}
                     <span className=" fa fa-angle-down"></span>
                   </a>
                   <ul className="dropdown-menu dropdown-usermenu pull-right">
