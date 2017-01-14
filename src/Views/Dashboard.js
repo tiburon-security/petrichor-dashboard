@@ -89,7 +89,7 @@ export class Dashboard extends Component {
 					// TODO: look into absolute reference in ES6/Babel
 					let Widget = require("../" + widgetConfiguration.widget_url);
 					
-					let widgetComponent = <Widget.default key={uniqueId()} route_params={this.props.routeParams}/>;
+					let widgetComponent = <Widget.default key={uniqueId()} route={this.props.route} route_params={this.props.routeParams}/>;
 					
 					// Widget must be wrapped in a div with specs due to the way
 					// react-grid-layout is written
