@@ -16,7 +16,6 @@ import { Link } from 'react-router';
  
  /* TODO:
  
- - SET LINKS ACTIVE IF IT'S THE CURRENT PAGE... 
  - mimick jquery slideup, slidedown animations when menu item with children links clicked
  
  */
@@ -189,6 +188,7 @@ class DynamicSidebarMenu extends Component {
 			if(topLevelRoute.visible_in_menu === true) {
 				
 				var currentlyActive = false;
+				var topLevelLink = (topLevelRoute.link ? topLevelRoute.link : topLevelRoute.route);
 		
 				// If the menu item has a submenu
 				if(topLevelRoute.child_routes !== null){
@@ -199,8 +199,10 @@ class DynamicSidebarMenu extends Component {
 						if(childRoute.visible_in_menu === true){
 							uniqueKey++;
 							
+							var childLink = (childRoute.link ? childRoute.link : childRoute.route);
+							
 							// Generate URL component
-							var path = topLevelRoute.path + "" + childRoute.path
+							var path = topLevelLink + "" + childLink
 							children.push(<MenuLink key={uniqueKey} title={childRoute.menu_title} url={path} />)
 							
 							// Determine whether child is the currently active route
@@ -221,7 +223,7 @@ class DynamicSidebarMenu extends Component {
 				uniqueKey++;
 				
 				// Generate menu heading component
-			let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelRoute.path} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
+				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelLink} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
 				menu.push(menuItem);
 			
 			}
