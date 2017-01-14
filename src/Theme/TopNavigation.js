@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Notifications from './Notifications'
-import ProfileDropdown from './ProfileDropdown'
 
 class TopNavigation extends Component {
 	
@@ -17,9 +15,7 @@ class TopNavigation extends Component {
 
               <ul className="nav navbar-nav navbar-right">
 			  
-
-				<ProfileDropdown/>
-				<Notifications/>
+				{this.props.children}
 
               </ul>
             </nav>

@@ -25,7 +25,7 @@ function bootstrapApplication(config){
 	// Hook the content body of gentella, this is where page content
 	// will be rendered. Routes control this body content
 	ReactDOM.render((
-		<Router history={browserHistory}>
+<Router history={browserHistory}>
 			{dynamicRoutesJSX}
 		</Router>
 	     
@@ -66,7 +66,7 @@ function buildDynamicRoutes(config){
 	
 	}
 	
-	let final = <Route path="/" name={config.index_route.route_name} component={Gentella} children={routeJSX}/>
+	let final = <Route path="/" name={config.index_route.route_name} component={Gentella} children={routeJSX} config={config}/>
 
 	
 

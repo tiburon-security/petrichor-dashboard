@@ -9,13 +9,17 @@ import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
 import Footer from './Footer';
 import ProfileQuickInfo from './ProfileQuickInfo';
+import Notifications from './Notifications'
+import ProfileDropdown from './ProfileDropdown'
 
 export class Gentella extends Component {
 	
 	constructor(props) {
 		super(props);
 		this.state = {menuFullsize : true};
-
+		
+		// Get application configuration from the router
+		this.config = this.props.route.config;
 	}
   
   
@@ -48,7 +52,7 @@ export class Gentella extends Component {
 	
   render() {
 	  
-	
+		console.log(this.props)
 	  
     return (
 		<div className="container body">
@@ -73,14 +77,17 @@ export class Gentella extends Component {
 				</div>
 
 
-				<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}/>
+				<TopNavigation onClick={this.topNavigationClickHandler.bind(this)}>
+					<ProfileDropdown/>
+					<Notifications notifications={this.config.notifications}/>
+				</TopNavigation>
 
 
 				
 				<div className="right_col" role="main" id="gentella_content_body">
 
 					{/* page content */}
-					<div style={{"margin-top" : "50px"}}>
+					<div style={{"marginTop" : "50px"}}>
 						{this.props.children}
 
 
