@@ -172,15 +172,9 @@ class SidebarMenu extends Component {
 class DynamicSidebarMenu extends Component {
 	
 	render() {
-		let currentRouteName = this.props.route;
-		console.log("ttt: ");
-		console.log(this.props.router);
-		
+		let currentRoute = this.props.current_route;
 		let menu = [];
 		let uniqueKey = 0;
-		
-		
-		//let currentRouteName = this.props.route.name;
 		let allRoutes = window.app_config.routes;
 		
 		menu.push(<MenuItem key="256" title={window.app_config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={window.app_config.index_route.menu_font_awesome_icon} />);
@@ -193,6 +187,8 @@ class DynamicSidebarMenu extends Component {
 			let children = [];
 			
 			if(topLevelRoute.visible_in_menu === true) {
+				
+				var currentlyActive = false;
 		
 				// If the menu item has a submenu
 				if(topLevelRoute.child_routes !== null){
@@ -206,15 +202,26 @@ class DynamicSidebarMenu extends Component {
 							// Generate URL component
 							var path = topLevelRoute.path + "" + childRoute.path
 							children.push(<MenuLink key={uniqueKey} title={childRoute.menu_title} url={path} />)
+							
+							// Determine whether child is the currently active route
+							if(currentRoute.name === childRoute.route_name){
+								currentlyActive = true;
+							}
+							
 						}
 					}
 					
 				}
 				
+				// Determine whether parent is the currently active route
+				if(topLevelRoute.route_name === currentRoute.name){
+					currentlyActive = true;
+				}
+				
 				uniqueKey++;
 				
 				// Generate menu heading component
-				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelRoute.path} active="true" icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
+			let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelRoute.path} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
 				menu.push(menuItem);
 			
 			}

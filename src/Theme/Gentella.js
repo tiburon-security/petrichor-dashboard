@@ -20,6 +20,10 @@ export class Gentella extends Component {
 		
 		// Get application configuration from the router
 		this.config = this.props.route.config;
+		console.log("route: ")
+		
+		this.currentRoute = this.props.routes[this.props.routes.length - 1];
+		console.log(this.currentRoute)
 	}
   
   
@@ -69,7 +73,7 @@ export class Gentella extends Component {
 
 						<br />
 
-						<DynamicSidebarMenu menu_full_size={this.state.menuFullsize}/>
+						<DynamicSidebarMenu menu_full_size={this.state.menuFullsize} current_route={this.currentRoute}/>
 
 						<MenuFooter/>
 
