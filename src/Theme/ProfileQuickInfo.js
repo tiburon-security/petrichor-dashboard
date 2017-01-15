@@ -29,7 +29,7 @@ class ProfileQuickInfo extends Component {
             <div className="profile">
               <div className="profile_pic">
 				
-				{(this.props.image_path ? <img src={this.props.image_path} alt="Profile Image" className="img-circle profile_img"/> : undefinedUserPicture)}
+				{(this.props.image_path ? <img src={this.props.image_path} alt="Profile" className="img-circle profile_img"/> : undefinedUserPicture)}
 
               </div>
               <div className="profile_info">

@@ -31,7 +31,7 @@ class ProfileDropdown extends Component {
 	
 	render() { 
 
-		var profilePic = (this.props.image_path ?  <img src={this.props.image_path} alt="Profile Picture"/> : <i className="fa fa-user"></i>);
+		var profilePic = (this.props.image_path ?  <img src={this.props.image_path} alt="Profile"/> : <i className="fa fa-user"></i>);
 	
 		return (
 

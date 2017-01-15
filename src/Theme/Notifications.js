@@ -81,11 +81,11 @@ class Notifications extends Component {
 
 			// Pretty string for how many hours or days ago notification was created
 			var timeAge = null;
-			if(((new Date) - timestamp) < FULL_DAY){
-				timeAge = this.millisecondsToHours((new Date) - timestamp) + " hour(s) ago";
+			if(((new Date()) - timestamp) < FULL_DAY){
+				timeAge = this.millisecondsToHours((new Date()) - timestamp) + " hour(s) ago";
 				numWithinLastDay++;
 			} else {
-				timeAge = this.millisecondsToDays((new Date) - timestamp) + " day(s) ago"
+				timeAge = this.millisecondsToDays((new Date()) - timestamp) + " day(s) ago"
 			}
 			
 			var shortenedMessage = notification.message.slice(0, 100) + "..."
@@ -117,7 +117,7 @@ class Notifications extends Component {
 				
 				<a href="#" className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
 					<i className="fa fa-envelope-o"></i>
-					<span className="badge bg-green">{numWithinLastDay}</span>
+					{(numWithinLastDay > 0 ? <span className="badge bg-green">{numWithinLastDay}</span> : null)}
 				</a>
 				
 				<ul id="menu1" className="dropdown-menu list-unstyled msg_list" role="menu">

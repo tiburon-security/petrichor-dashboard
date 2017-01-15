@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
-import ReactGridLayout, {GridItem, WidthProvider} from 'react-grid-layout';
+import ReactGridLayout  from 'react-grid-layout';
 
 /**
  * View that displays a customizable, draggable dashboard grid of user defined widgets.
@@ -30,14 +30,12 @@ export class Dashboard extends Component {
 	 */
 	renderWidgets(){
 		
-		let currentRouteName = this.props.route.name;
-		let allWidgets = window.app_config.dashboard_widgets;
-		
+		let currentRouteName = this.props.route.name;		
 		var renderedWidgets = [];
 		
 		// Finds config info for the current dashboard
 		let currentDashboard = function(){
-			for (let [index, dashboard] of window.app_config.dashboards.entries()) {
+			for (let dashboard of window.app_config.dashboards) {
 				if(dashboard.route_name === currentRouteName){
 					return dashboard
 				}
@@ -47,7 +45,7 @@ export class Dashboard extends Component {
 		
 		// Finds config info for a given widget
 		function findWidgetConfiguration(widgetName) {
-			for (let [index, widget] of window.app_config.dashboard_widgets.entries()) {
+			for (let widget of window.app_config.dashboard_widgets) {
 				if(widget.widget_class_name === widgetName){
 					return widget
 				}
@@ -73,7 +71,7 @@ export class Dashboard extends Component {
 		} else {
 			
 			// Iterate every widget and load it
-			for (let [widgetIndex, widget] of currentDashboard.supported_widgets.entries()) {	
+			for (let widget of currentDashboard.supported_widgets) {	
 			
 				let widgetConfiguration = findWidgetConfiguration(widget.name);
 
@@ -131,7 +129,7 @@ export class Dashboard extends Component {
 			for(var i=0; i< this.state.rendered_widgets.length; i++){
 				
 				// Widget keys should be the same unless the entire dashboard has been updated
-				if(this.state.rendered_widgets[i].key != nextState.rendered_widgets[i].key){
+				if(this.state.rendered_widgets[i].key !== nextState.rendered_widgets[i].key){
 					equal = false;
 				}
 			}

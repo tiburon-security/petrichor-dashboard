@@ -180,7 +180,7 @@ class DynamicSidebarMenu extends Component {
 
 		
 		// Iteate every top level route
-		for (let [topLevelRouteIndex, topLevelRoute] of allRoutes.entries()) {
+		for (let topLevelRoute of allRoutes) {
 			
 			// Holds the child url components
 			let children = [];
@@ -194,7 +194,7 @@ class DynamicSidebarMenu extends Component {
 				if(topLevelRoute.child_routes !== null){
 			
 					// Iterate every child route
-					for (let [childRouteIndex, childRoute] of topLevelRoute.child_routes.entries()) {
+					for (let childRoute of topLevelRoute.child_routes) {
 
 						if(childRoute.visible_in_menu === true){
 							uniqueKey++;
