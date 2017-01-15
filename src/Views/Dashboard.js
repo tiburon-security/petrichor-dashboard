@@ -24,6 +24,14 @@ export class Dashboard extends Component {
 		
 	}
 	
+	propTypes: {
+		draggable_handle : React.PropTypes.string,
+	}
+	
+	static defaultProps = {
+		draggable_handle : ".widget_draggabble_area"		
+	}
+	
 	
 	/**
 	 * Renders all of the widgets from the application configuration into the dashboard
@@ -171,7 +179,7 @@ export class Dashboard extends Component {
 		return (
 		  <div>
 			
-			<ReactGridLayout  className="layout" cols={this.state.dashboard_columns} rowHeight={this.state.dashboard_row_height} width={this.state.dashboard_width}>
+			<ReactGridLayout  className="layout" cols={this.state.dashboard_columns} rowHeight={this.state.dashboard_row_height} width={this.state.dashboard_width} draggableHandle={this.props.draggable_handle}>
 				{this.state.rendered_widgets}
 			</ReactGridLayout >
 					

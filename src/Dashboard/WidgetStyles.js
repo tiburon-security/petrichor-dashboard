@@ -22,7 +22,7 @@ class WidgetHeader extends Component {
 	render() {
 		return ( 
 				
-			<div className="x_title">
+			<div className="x_title widget_draggabble_area">
 			
 				<h2>{this.props.title}</h2>
 				
