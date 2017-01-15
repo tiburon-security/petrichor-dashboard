@@ -101,23 +101,28 @@ class SidebarMenu extends Component {
 		this.state = {childrenElements: null};
 	}
 	
+	propTypes: {
+		menu_full_size : React.PropTypes.bool.isRequired,
+	}
+	
+	static defaultProps = {
+		menu_full_size : false		
+	}
+	
+	
 	/**
 	 * Ensures that only the most recently opened submenu is marked as 'active' 
 	 */
 	submenuOpened(key){
 		
-		// React.map version of ES6 map doesn't allow context to be passed in...
-		let self = this;
-		
 		// Iterate all children nodes
-		let childrenElements = React.Children.map(this.props.children, function (c, index) {
+		let childrenElements = this.state.childrenElements.map(function (c, index) {
 			
 			// Determine if it's the one that was just opened
-			let newlyOpened = (c.props.title === key ? true : false);
+			let newlyOpened = (c.props.title === key && !c.props.active ? true : false);
 			
 			let props = {
 				active : newlyOpened,
-				linkClicked: self.submenuOpened.bind(self)
 			};
 			
 			// Set to active if its the one that was just opened
@@ -129,26 +134,71 @@ class SidebarMenu extends Component {
 			
 	}
 	
+	
+	/**
+	 * Minimizes all submenus
+	 */
+	minimizeSubmenu(){
+		
+		// Iterate all children nodes
+		let childrenElements = this.state.childrenElements.map(function (c, index) {
+			
+			let props = {
+				active : false,
+			};
+			
+			// Set to active if its the one that was just opened
+			return React.cloneElement(c, props);
+		});
+		
+		// Update DOM
+		this.setState({childrenElements : childrenElements});
+	}
+	
+	
+	/**
+	 * Modify all children to add a click listener
+	 */
 	componentDidMount(){
-					
-			// React.map version of ES6 map doesn't allow context to be passed in...
-		    let self = this;
-			
-			// Modify children element's to trigger submenuOpened() when clicked
-			let childrenElements = React.Children.map(this.props.children, function (c, index) {
-				return React.cloneElement(c, {                    
-					linkClicked: self.submenuOpened.bind(self)
-				});
+		
+		// React.map version of ES6 map doesn't allow context to be passed in...
+		let self = this;
+		
+		// Modify children element's to trigger submenuOpened() when clicked
+		let childrenElements = React.Children.map(this.props.children, function (c, index) {
+			return React.cloneElement(c, {                    
+				linkClicked: self.submenuOpened.bind(self)
 			});
-			
-			this.setState({childrenElements: childrenElements});
+		});
+		
+		this.setState({childrenElements: childrenElements});
 		
 	}
 	
+	
+	/**
+	 * If the menu is large and is then minimized but a submenu was previously open, close it
+	 */
+	componentDidUpdate(prevProps, prevState){
+		if(prevProps.menu_full_size && !this.props.menu_full_size){
+			this.minimizeSubmenu();
+		}
+	}
+	
+	
+	/**
+	 * Minimizes any submenus if the menu is small and the user clicks out of the menu
+	 */
+	contextBlur(){
+		if(!this.props.menu_full_size){
+			this.minimizeSubmenu();
+		}
+	}
+	
+	
 	render(){
-		
 		return (
-			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu">
+			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu" onBlur={this.contextBlur.bind(this)}>
 				<div className="menu_section">
 					<h3>General</h3>
 					<ul id="sidebard-menu-data" className="nav side-menu">
@@ -170,11 +220,20 @@ class SidebarMenu extends Component {
  */
 class DynamicSidebarMenu extends Component {
 	
+	propTypes: {
+		menu_full_size : React.PropTypes.bool.isRequired,
+	}
+	
+	static defaultProps = {
+		menu_full_size : false		
+	}
+	
 	render() {
 		let currentRoute = this.props.current_route;
 		let menu = [];
 		let uniqueKey = 0;
 		let allRoutes = window.app_config.routes;
+		let menuFullSize = this.props.menu_full_size;
 		
 		menu.push(<MenuItem key="256" title={window.app_config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={window.app_config.index_route.menu_font_awesome_icon} />);
 
@@ -223,7 +282,7 @@ class DynamicSidebarMenu extends Component {
 				uniqueKey++;
 				
 				// Generate menu heading component
-				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelLink} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
+				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelLink} active={false} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
 				menu.push(menuItem);
 			
 			}
@@ -231,7 +290,7 @@ class DynamicSidebarMenu extends Component {
 		}
 		
 		return (
-			<SidebarMenu>
+			<SidebarMenu menu_full_size={menuFullSize}>
 				{menu}
 			</SidebarMenu>
 		);
