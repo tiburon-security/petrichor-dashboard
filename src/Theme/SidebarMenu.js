@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -65,8 +66,13 @@ class MenuItem extends Component {
 		
 		// Determine if there are any child elements
 		let hasChildren = (this.props.children !== undefined && this.props.children.length > 0);
+		var childMenu = (hasChildren && this.props.active ? <ul className="nav child_menu" style={{'display' : 'block'}}>{this.props.children}</ul> : null);
+
 		
 		return (
+		
+
+        
 			<li className={(this.props.active === true ? 'active' : null)}>
 				<a href={(!hasChildren && this.props.url != null ? this.props.url : "#")} onClick={this.openSubmenu.bind(this)}>
 				
@@ -80,10 +86,17 @@ class MenuItem extends Component {
 				
 				</a>
 				
+							        <ReactCSSTransitionGroup
+          transitionName="slide"
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
+        >
+		
 				{/* Add submenu URLs if there are any */}
-				{hasChildren ? <ul className="nav child_menu" style={(this.props.active === true ? {'display' : 'block'} : {'display':'none'})}>{this.props.children}</ul> : null}
-					
-				
+					{childMenu}
+				</ReactCSSTransitionGroup>
 			</li>
 		
 		)

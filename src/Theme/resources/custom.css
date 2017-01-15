@@ -4133,3 +4133,29 @@ ul.notifications {
   border: 1px solid #e5e5e5; }
 
 /** /Dropzone.js **/
+
+.slide-appear {
+  opacity    : 0;
+  transition : opacity 1s ease-in;
+}
+
+.slide-appear.slide-appear-active {
+  opacity : 1;
+}
+
+.slide-enter {
+  max-height : 0;
+  transition : all 2s ease-in;
+}
+
+.slide-enter.slide-enter-active {
+  max-height : 1000px;
+}
+
+.slide-leave {
+  transition : all 3s ease-out;
+}
+
+.slide-leave.slide-leave-active {
+  max-height : 0;
+}
