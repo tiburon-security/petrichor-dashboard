@@ -15,12 +15,6 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
  */
 
  
- /* TODO:
- 
- - mimick jquery slideup, slidedown animations when menu item with children links clicked
- 
- */
- 
  
 /**
  * Represents the link under a menu heading
@@ -74,7 +68,7 @@ class MenuItem extends Component {
 
         
 			<li className={(this.props.active === true ? 'active' : null)}>
-				<a href={(!hasChildren && this.props.url != null ? this.props.url : "#")} onClick={this.openSubmenu.bind(this)}>
+				<Link to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
 				
 					{/* Add Glypicon if one is supplied */}
 					{this.props.icon ? <i className={this.props.icon}></i> : null}
@@ -84,7 +78,7 @@ class MenuItem extends Component {
 					{/* Add down chevron if there are subitems */}
 					{hasChildren ? <span className="fa fa-chevron-down"></span> : null}
 				
-				</a>
+				</Link>
 				
 							        <ReactCSSTransitionGroup
           transitionName="slide"
