@@ -7,7 +7,7 @@ import Gentella from './Theme/Gentella.js';
 // for referencing by their string name
 import * as routableViews from './RoutableViews.js';
 
-fetch('routes_menu_config.json')
+fetch('/routes_menu_config.json')
 	.then(function(response) {
 		return response.json()
 	})
