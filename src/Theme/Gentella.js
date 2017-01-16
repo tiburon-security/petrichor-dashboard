@@ -20,10 +20,8 @@ export class Gentella extends Component {
 		
 		// Get application configuration from the router
 		this.config = this.props.route.config;
-		console.log("route: ")
 		
 		this.currentRoute = this.props.routes[this.props.routes.length - 1];
-		console.log(this.currentRoute)
 	}
   
   
@@ -48,23 +46,20 @@ export class Gentella extends Component {
 	}
 	
 	componentDidMount(){
-				console.log("route:");
-		console.log(  this.props);
 		// Full size menu by default
 		document.body.classList.add("nav-md");
 	}
 	
   render() {
-	  
-		console.log(this.props)
-	  
+	 
     return (
 		<div className="container body">
 			<div className="main_container">
 				<div className="col-md-3 left_col">
 					<div className="left_col scroll-view">
+					
 						<div className="navbar nav_title" style={{"border": "0"}}>
-							<a href="index.html" className="site_title"><i className="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
+							<span className="site_title"><i className="fa fa-paw"></i> {this.config.website_name}</span>
 						</div>
 
 						<div className="clearfix"></div>
@@ -93,14 +88,12 @@ export class Gentella extends Component {
 					{/* page content */}
 					<div style={{"marginTop" : "50px"}}>
 						{this.props.children}
-
-
 					</div>
 
 				</div>
 				
 				<Footer>
-					Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+					Petrichor Dashboard - by <a href="https://github.com/jovanni-hernandez/petrichor-dashboard">Jovanni Hernandez</a>
 				</Footer>
 
 			</div>

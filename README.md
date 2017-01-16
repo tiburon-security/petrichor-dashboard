@@ -1,6 +1,6 @@
-# Analytics Dashboard
+# Petrichor Dashboard
 
-Analytics Dashboard is a ReactJS application for visualizing data. In essence, you already have some kinda of standalone analytic system processing data (Pandas, Apache Pig, etc...) and a mechanism for exposing the results via a REST interface. This application allows for the creation of widgets that utilize REST to consume the resutls and display them in your desired form (tables, graphics, etc.). Each Widget is a user defined react Component that is rendered onto a dashboard grid. Each widget is movable and resizable. Dashboards can be statically defined in the configuration, allowing the developer to specify which widgets are loaded into the dashboard, and in what layout.
+Petrichor Dashboard is a ReactJS application for visualizing data. In essence, you already have some kinda of standalone analytic system processing data (Pandas, Apache Pig, Spark, etc...) and a mechanism for exposing the results of the analytic via a REST interface or other web-accesible interface. This application allows for the creation of widgets that utilize those pre-existing interfaces to consume the resutls and display them in your desired form (tables, graphics, etc.). Each Widget is a user defined react Component that is rendered onto a dashboard grid. Each widget is movable and resizable. Dashboards can be statically defined in the configuration, allowing the developer to specify which widgets are loaded into the dashboard, and in what layout.
 
 ## Configuration 
 
@@ -12,6 +12,9 @@ The global configuration for the applications is stored in routes_menu_config.js
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
+	"website_name" : {
+	  "type": "string"
+	}
     "index_route": {
       "type": "object",
       "properties": {
@@ -220,4 +223,4 @@ Notifications can be used for showing alerts of you liking, such as application 
 
 ## Technologies
 
-Analytics Dashboard is built entirely in ReactJS, using the ES6 Javascript standard. The current codebase utilizes create-react-app (https://github.com/facebookincubator/create-react-app) to manage compilation and dependencies (Babel, Wepack, JSLint and others under the hood). The Gentella Alella theme (https://github.com/puikinsh/gentelella) was utilized for the user interface, with all JQuery dependencies being re-written in React. The dashboard utilizes react-grid-layout (https://github.com/STRML/react-grid-layout) for the grid implementation. Additionally, Font Awesome, Lodash, and react-bootstrap were utilized for minor functionality.
+Petrichor Dashboard is built entirely in ReactJS, using the ES6 Javascript standard. The current codebase utilizes create-react-app (https://github.com/facebookincubator/create-react-app) to manage compilation and dependencies (Babel, Wepack, JSLint and others under the hood). The Gentelella Alella theme (https://github.com/puikinsh/gentelella) was utilized for the user interface, with all JQuery dependencies being re-written in React. The dashboard utilizes react-grid-layout (https://github.com/STRML/react-grid-layout) for the grid implementation. Additionally, Font Awesome, Lodash, and react-bootstrap were utilized for minor functionality.

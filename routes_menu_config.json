@@ -1,4 +1,5 @@
 {
+	"website_name" : "Petrichor Dashboard",
 	"index_route" : {
 			"route_name" 			  : "home",
             "visible_in_menu"         : true,
