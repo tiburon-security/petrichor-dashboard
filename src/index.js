@@ -1,26 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
-import $ from 'jquery';
 import Gentella from './Theme/Gentella.js';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
 import * as routableViews from './RoutableViews.js';
 
+fetch('routes_menu_config.json')
+	.then(function(response) {
+		return response.json()
+	})
+	.then(bootstrapApplication)
+	
 
-$.get("/routes_menu_config.json", bootstrapApplication);
 
 function bootstrapApplication(config){
-	
+
 	// Store the config as a global,  since it will be reference in othermaybe
 	// parts of the app, maybe there's a better way of doing this...?
 	window.app_config = config;
 	
 	var dynamicRoutesJSX = buildDynamicRoutes(config);
-
-	// Render overall look and theme for gentella
-	//ReactDOM.render(<Gentella/>, document.getElementById('root'));
 
 	// Hook the content body of gentella, this is where page content
 	// will be rendered. Routes control this body content
@@ -66,11 +67,9 @@ function buildDynamicRoutes(config){
 	
 	}
 	
-	let final = <Route path="/" name={config.index_route.route_name} component={Gentella} children={routeJSX} config={config}/>
-
-	
+	let final = <Route path="/" name={config.index_route.route_name} component={Gentella} children={routeJSX} config={config}/>	
 
 	return final;
-
+	
 }
 
