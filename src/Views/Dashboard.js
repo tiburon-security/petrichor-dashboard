@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
-import ReactGridLayout  from 'react-grid-layout';
+import ReactGridLayout, {WidthProvider}  from 'react-grid-layout';
+const AutoWidthReactGridLayout = WidthProvider(ReactGridLayout);
 
 /**
  * View that displays a customizable, draggable dashboard grid of user defined widgets.
@@ -19,7 +20,6 @@ export class Dashboard extends Component {
 			rendered_widgets : [],
 			dashboard_columns : 4,
 			dashboard_row_height : 100,
-			dashboard_width : 1200 
 		};
 		
 	}
@@ -61,14 +61,12 @@ export class Dashboard extends Component {
 		}
 			
 		// Use dashboard settings, if provided
-		let width = (typeof currentDashboard.width !== "undefined" ? currentDashboard.width : this.state.dashboard_width);
 		let rowHeight = (typeof currentDashboard.row_height !== "undefined" ? currentDashboard.rowHeight : this.state.dashboard_row_height);
 		let numColumns = (typeof currentDashboard.number_of_columns !== "undefined" ? currentDashboard.number_of_columns : this.state.dashboard_columns);
 		
 		this.setState({
 			dashboard_columns : numColumns,
 			dashboard_row_height : rowHeight,
-			dashboard_width : width 
 		})
 		
 		// TODO: Write routine for dynamically generating layout
@@ -175,13 +173,14 @@ export class Dashboard extends Component {
 
 	
 	render() {
+		
 
 		return (
 		  <div>
 			
-			<ReactGridLayout  className="layout" cols={this.state.dashboard_columns} rowHeight={this.state.dashboard_row_height} width={this.state.dashboard_width} draggableHandle={this.props.draggable_handle}>
+			<AutoWidthReactGridLayout  measureBeforeMount={true} className="layout" cols={this.state.dashboard_columns} rowHeight={this.state.dashboard_row_height} draggableHandle={this.props.draggable_handle}>
 				{this.state.rendered_widgets}
-			</ReactGridLayout >
+			</AutoWidthReactGridLayout >
 					
 		  </div>
 		);

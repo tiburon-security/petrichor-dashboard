@@ -61,7 +61,6 @@
 			"auto_position_widgets" : true,
 			"number_of_columns" : 6,
 			"row_height" : 50,
-			"width" : 500,
 			"supported_widgets" : [
 				{
 					"name" : "FakeWidget",
