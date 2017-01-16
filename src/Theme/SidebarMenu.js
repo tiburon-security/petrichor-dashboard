@@ -295,7 +295,7 @@ class DynamicSidebarMenu extends Component {
 				uniqueKey++;
 				
 				// Generate menu heading component
-				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelLink} active={false} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
+				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelLink} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
 				menu.push(menuItem);
 			
 			}

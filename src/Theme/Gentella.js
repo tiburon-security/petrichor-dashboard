@@ -48,6 +48,8 @@ export class Gentella extends Component {
 	componentDidMount(){
 		// Full size menu by default
 		document.body.classList.add("nav-md");
+		
+		document.title = this.config.website_name;
 	}
 	
   render() {
