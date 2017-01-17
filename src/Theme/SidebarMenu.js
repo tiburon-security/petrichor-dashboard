@@ -229,6 +229,7 @@ class DynamicSidebarMenu extends Component {
 	
 	propTypes: {
 		menu_full_size : React.PropTypes.bool.isRequired,
+		config : React.PropTypes.array.isRequired,
 	}
 	
 	static defaultProps = {
@@ -239,10 +240,10 @@ class DynamicSidebarMenu extends Component {
 		let currentRoute = this.props.current_route;
 		let menu = [];
 		let uniqueKey = 0;
-		let allRoutes = window.app_config.routes;
+		let allRoutes = this.config.routes;
 		let menuFullSize = this.props.menu_full_size;
 		
-		menu.push(<MenuItem key="256" title={window.app_config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={window.app_config.index_route.menu_font_awesome_icon} />);
+		menu.push(<MenuItem key="256" title={this.config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={this.config.index_route.menu_font_awesome_icon} />);
 
 		
 		// Iteate every top level route

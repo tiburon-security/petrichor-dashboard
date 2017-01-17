@@ -70,7 +70,7 @@ export class Gentella extends Component {
 
 						<br />
 
-						<DynamicSidebarMenu menu_full_size={this.state.menuFullsize} current_route={this.currentRoute}/>
+						<DynamicSidebarMenu menu_full_size={this.state.menuFullsize} current_route={this.currentRoute} config={this.config}/>
 
 						<MenuFooter/>
 
