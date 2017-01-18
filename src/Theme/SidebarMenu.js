@@ -240,10 +240,10 @@ class DynamicSidebarMenu extends Component {
 		let currentRoute = this.props.current_route;
 		let menu = [];
 		let uniqueKey = 0;
-		let allRoutes = this.config.routes;
+		let allRoutes = this.props.config.routes;
 		let menuFullSize = this.props.menu_full_size;
 		
-		menu.push(<MenuItem key="256" title={this.config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={this.config.index_route.menu_font_awesome_icon} />);
+		menu.push(<MenuItem key="256" title={this.props.config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={this.props.config.index_route.menu_font_awesome_icon} />);
 
 		
 		// Iteate every top level route
