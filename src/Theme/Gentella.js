@@ -88,7 +88,7 @@ export class Gentella extends Component {
 				<div className="right_col" role="main" id="gentella_content_body">
 
 					{/* page content */}
-					<div style={{"marginTop" : "50px"}}>
+					<div>
 						{this.props.children}
 					</div>
 

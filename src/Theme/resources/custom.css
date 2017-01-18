@@ -187,7 +187,6 @@
   float: left;
   background: #EDEDED;
   border-bottom: 1px solid #D9DEE4;
-  margin-bottom: 10px;
   width: 100%;
   position: relative; }
 
@@ -208,7 +207,8 @@
   position: fixed; }
 
 body .container.body .right_col {
-  background: #F7F7F7; }
+  background: #F7F7F7; 
+  flex:1;}
 
 .nav-md .container.body .right_col {
   padding: 10px 20px 0;
@@ -342,6 +342,12 @@ body {
   font-weight: 400;
   line-height: 1.471; }
 
+.main_container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column; 
+  overflow: hidden;}
+  
 .main_container .top_nav {
   display: block;
   margin-left: 230px; }
