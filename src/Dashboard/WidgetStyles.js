@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
+import LoadingIcon from './loading-icon.svg'
 
-
+/**
+ *
+ * Premade widget Styles for uniform display on Dashboard. Usage:
+ * 
+ * <WidgetBody>
+ *   <WidgetHeader title='title'/>
+ *   <WidgetContent>My widget content.</WidgetContent>
+ * </WidgetBody>
+ *
+ * Or use the wrapper:
+ * <FullWidget title='title'>My widget content.</FullWidget>
+ *
+ */
+ 
+ 
 class WidgetHeader extends Component {
 	
   static defaultProps = {
@@ -13,9 +28,9 @@ class WidgetHeader extends Component {
   
   static propTypes = {
     settings_button: React.PropTypes.bool.isRequired,
-    settings_button_clickhandler: React.PropTypes.string,
+    settings_button_clickhandler: React.PropTypes.func,
     close_button: React.PropTypes.bool.isRequired,
-    close_button_clickhandler: React.PropTypes.string,
+    close_button_clickhandler: React.PropTypes.func,
     title: React.PropTypes.string.isRequired
   }
   
@@ -55,7 +70,69 @@ class WidgetContent extends Component {
 		);
 	}
 } 
-export {
-	WidgetHeader, WidgetBody, WidgetContent
+
+
+/**
+ * Full widget style wrapper. Includes additional functionality
+ * to indicate whether the widget is loading.
+ */
+class FullWidget extends Component {
 	
+	constructor(state){
+		super(state)
+		
+		this.state = {loading : this.props.loading};
+	}
+
+	static defaultProps = {
+		settings_button: false,
+		settings_button_clickhandler: null,
+		close_button: false,
+		close_button_clickhandler: null,
+		title: "Default Header",
+		loading: true
+	}
+
+	static propTypes = {
+		settings_button: React.PropTypes.bool.isRequired,
+		settings_button_clickhandler: React.PropTypes.func,
+		close_button: React.PropTypes.bool.isRequired,
+		close_button_clickhandler: React.PropTypes.func,
+		title: React.PropTypes.string.isRequired
+	}
+	
+	
+	/**
+	 * Toggles loading state
+	 */
+	toggleLoading(){
+		this.setState({loading : !this.state.loading});
+	}
+	
+	
+	/**
+	 * Update loading state if props loading props changed
+	 */
+	componentDidUpdate(prevProps, prevState){
+		if(prevProps.loading != this.props.loading){
+			this.setState({loading : this.props.loading});
+		}	
+	}
+	
+	render(){
+		
+		return (
+			<WidgetBody>
+				<WidgetHeader {...this.props}></WidgetHeader>
+					<WidgetContent>
+						{(this.state.loading ? <img className="x_loading_overlay" src={LoadingIcon}/> : null)}
+						<div style={{"display": (this.state.loading ? "none" : null)}}>{this.props.children}</div>
+					</WidgetContent>
+			</WidgetBody>
+		)
+	}
+}
+
+export {
+	WidgetHeader, WidgetBody, WidgetContent, FullWidget
 }

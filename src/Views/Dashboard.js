@@ -34,6 +34,28 @@ export class Dashboard extends Component {
 	
 	
 	/**
+	 * Searches the dashboard for an element with the given key, removing it if found.
+	 */
+	closeWidget(key){
+		
+		let updated_rendered_widgets = [];
+		
+		// Track only widgets that haven't been dismissed
+		for (let widget of this.state.rendered_widgets) {
+			console.log(widget)
+			if(widget.key !== key){
+				updated_rendered_widgets.push(widget);
+			}
+		}
+		
+		// If there actually was a widget that was dismissed, update the state
+		if(this.state.rendered_widgets.length !== updated_rendered_widgets){
+			this.setState({rendered_widgets : updated_rendered_widgets})
+		}
+		
+	}
+	
+	/**
 	 * Renders all of the widgets from the application configuration into the dashboard
 	 */
 	renderWidgets(){
@@ -93,11 +115,14 @@ export class Dashboard extends Component {
 					// TODO: look into absolute reference in ES6/Babel
 					let Widget = require("../" + widgetConfiguration.widget_url);
 					
-					let widgetComponent = <Widget.default key={uniqueId()} route={this.props.route} route_params={this.props.routeParams}/>;
+					let containerKey = uniqueId();
+					let widgetKey = uniqueId();
+					
+					let widgetComponent = <Widget.default key={uniqueId()} route={this.props.route} route_params={this.props.routeParams} close_button_clickhandler={() => { this.closeWidget(containerKey)}} />;
 					
 					// Widget must be wrapped in a div with specs due to the way
 					// react-grid-layout is written
-					let wrappedWidgetComponent = <div key={uniqueId()} data-grid={{x: x, y: y, w: w, h: h}} children={widgetComponent}/>
+					let wrappedWidgetComponent = <div key={containerKey} data-grid={{x: x, y: y, w: w, h: h}} children={widgetComponent}/>
 						
 					// React likes immutable datastructues in state, so rebuild it each time. 
 					// Look into immtuability-helper if this becomes unperformant.

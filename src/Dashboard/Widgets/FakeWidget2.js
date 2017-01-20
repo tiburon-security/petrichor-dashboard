@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import {WidgetHeader, WidgetBody, WidgetContent} from '../WidgetStyles.js'
+import {FullWidget} from '../WidgetStyles.js'
 
 
 class FakeWidget2 extends Component {
+	
+	constructor(state){
+		super(state);
+		
+		this.state = ({loading:false})
+	}
+	
 	
 	componentDidMount(){	
 		console.debug("FakeWidget2 mounted");
@@ -11,10 +18,9 @@ class FakeWidget2 extends Component {
 	render() {
     
 		return (  
-			<WidgetBody>
-				<WidgetHeader settings_button={true} close_button={true} title="FakeWidget2"/>
-				<WidgetContent>Fake data</WidgetContent>
-			</WidgetBody>
+			<FullWidget settings_button={true} close_button={true} title="FakeWidget2" loading={this.state.loading} {...this.props}>
+				Fake data
+			</FullWidget>
 		);
   
 	}
