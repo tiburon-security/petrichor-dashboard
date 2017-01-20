@@ -2,6 +2,8 @@
 
 Petrichor Dashboard is a ReactJS application for visualizing data. In essence, you already have some kinda of standalone analytic system processing data (Pandas, Apache Pig, Spark, etc...) and a mechanism for exposing the results of the analytic via a REST interface or other web-accesible interface. This application allows for the creation of widgets that utilize those pre-existing interfaces to consume the resutls and display them in your desired form (tables, graphics, etc.). Each Widget is a user defined react Component that is rendered onto a dashboard grid. Each widget is movable and resizable. Dashboards can be statically defined in the configuration, allowing the developer to specify which widgets are loaded into the dashboard, and in what layout.
 
+![img](https://zippy.gfycat.com/CrispCarefulAmericancreamdraft.gif)
+
 ## Configuration 
 
 The global configuration for the applications is stored in routes_menu_config.json. This configuration controls routing, menus, notifications, dashboards, and widgets. The following sections will demonstrated how to use correctly use and modify the configuration.
