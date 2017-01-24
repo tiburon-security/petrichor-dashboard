@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
 
@@ -26,6 +27,7 @@ class MenuLink extends Component {
 		url   : React.PropTypes.string.isRequired,
 	}
 	
+	
 	render(){
 		return (
 			<li><Link to={this.props.url}>{this.props.title}</Link></li>
@@ -45,6 +47,7 @@ class MenuItem extends Component {
 		this.state = {submenuOpen: false};
 	}
 	
+	
 	propTypes: {
 		title    : React.PropTypes.string.isRequired,
 		active : React.PropTypes.bool.isRequired,
@@ -52,20 +55,22 @@ class MenuItem extends Component {
 		url : React.PropTypes.string
 	}
 	
+	
 	openSubmenu(e){		
 		this.props.linkClicked(this.props.title);		
 	}
+	
 	
 	render(){
 		
 		// Determine if there are any child elements
 		let hasChildren = (this.props.children !== undefined && this.props.children.length > 0);
-		var childMenu = (hasChildren && this.props.active ? <ul className="nav child_menu" style={{'display' : 'block'}}>{this.props.children}</ul> : null);
+		var childMenu = (hasChildren && this.props.active ? 
+			<ul className="nav child_menu" style={{'display' : 'block'}}>{this.props.children}</ul> 
+			: null);
 
 		
 		return (
-		
-
         
 			<li className={(this.props.active === true ? 'active' : null)}>
 				<Link to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
@@ -80,16 +85,16 @@ class MenuItem extends Component {
 				
 				</Link>
 				
-							        <ReactCSSTransitionGroup
-          transitionName="slide"
-          transitionAppear={true}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
-        >
+				<ReactCSSTransitionGroup
+					transitionName="slide"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
+					transitionEnterTimeout={300}
+					transitionLeaveTimeout={300}>
 		
-				{/* Add submenu URLs if there are any */}
+					{/* Add submenu URLs if there are any */}
 					{childMenu}
+					
 				</ReactCSSTransitionGroup>
 			</li>
 		
@@ -106,11 +111,16 @@ class SidebarMenu extends Component {
 	constructor(props){
 		super(props);
 		this.state = {childrenElements: null};
+		
+		// Binds the click handler to an instance variable
+		this.minimized_menu_click_listener = this.SmallMenuClickHandler.bind(this);
 	}
+	
 	
 	propTypes: {
 		menu_full_size : React.PropTypes.bool.isRequired,
 	}
+	
 	
 	static defaultProps = {
 		menu_full_size : false		
@@ -138,7 +148,12 @@ class SidebarMenu extends Component {
 		
 		// Update DOM
 		this.setState({childrenElements : childrenElements});
-			
+						
+		// If the menu is minimized and a submenu is open, listen for clicks
+		// so we can subsequently close the submenu
+		if(!this.props.menu_full_size){
+			document.body.addEventListener('click', this.minimized_menu_click_listener);
+		}	
 	}
 	
 	
@@ -160,6 +175,7 @@ class SidebarMenu extends Component {
 		
 		// Update DOM
 		this.setState({childrenElements : childrenElements});
+		
 	}
 	
 	
@@ -187,25 +203,29 @@ class SidebarMenu extends Component {
 	 * If the menu is large and is then minimized but a submenu was previously open, close it
 	 */
 	componentDidUpdate(prevProps, prevState){
+		
 		if(prevProps.menu_full_size && !this.props.menu_full_size){
 			this.minimizeSubmenu();
 		}
+
 	}
-	
+
 	
 	/**
 	 * Minimizes any submenus if the menu is small and the user clicks out of the menu
+	 *
+	 * If the menu is small and a submenu is open, a click event listener
+	 * is added so we know when to minimize the submenu
 	 */
-	contextBlur(){
-		if(!this.props.menu_full_size){
-			this.minimizeSubmenu();
-		}
+	SmallMenuClickHandler(event){
+		document.body.removeEventListener('click', this.clickListener);
+		this.minimizeSubmenu()
 	}
 	
 	
 	render(){
 		return (
-			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu" onBlur={this.contextBlur.bind(this)}>
+			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu">
 				<div className="menu_section">
 					<h3>General</h3>
 					<ul id="sidebard-menu-data" className="nav side-menu">
@@ -243,7 +263,7 @@ class DynamicSidebarMenu extends Component {
 		let allRoutes = this.props.config.routes;
 		let menuFullSize = this.props.menu_full_size;
 		
-		menu.push(<MenuItem key="256" title={this.props.config.index_route.menu_title} onClick={this.resetMenu} url="/" icon={this.props.config.index_route.menu_font_awesome_icon} />);
+		menu.push(<MenuItem key="256" title={this.props.config.index_route.menu_title} url="/" icon={this.props.config.index_route.menu_font_awesome_icon} />);
 
 		
 		// Iteate every top level route
@@ -290,7 +310,7 @@ class DynamicSidebarMenu extends Component {
 				uniqueKey++;
 				
 				// Generate menu heading component
-				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} onClick={this.resetMenu} url={topLevelLink} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
+				let menuItem = <MenuItem key={uniqueKey} title={topLevelRoute.menu_title} url={topLevelLink} active={currentlyActive} icon={topLevelRoute.menu_font_awesome_icon} children={children} />;
 				menu.push(menuItem);
 			
 			}
