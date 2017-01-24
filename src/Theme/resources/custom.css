@@ -28,10 +28,10 @@
 .nav-sm .navbar.nav_title {
   width: 70px; }
 
-.nav-sm .navbar.nav_title a span {
+.nav-sm .navbar.nav_title span span {
   display: none; }
 
-.nav-sm .navbar.nav_title a i {
+.nav-sm .navbar.nav_title span i {
   font-size: 27px;
   margin: 13px 0 0 3px; }
 
