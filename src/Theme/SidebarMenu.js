@@ -17,6 +17,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
 
  
  
+ // NOTE, RECLICKING A MINIMIZED MENU MAKES IT DISAPEAR AND REAPPEAR, CONTINE FIXING THIS...
+ 
 /**
  * Represents the link under a menu heading
  */
@@ -30,7 +32,7 @@ class MenuLink extends Component {
 	
 	render(){
 		return (
-			<li><Link to={this.props.url}>{this.props.title}</Link></li>
+			<li><Link to={this.props.url} >{this.props.title}</Link></li>
 		
 		)
 	}
@@ -72,7 +74,7 @@ class MenuItem extends Component {
 		
 		return (
         
-			<li className={(this.props.active === true ? 'active' : null)}>
+			<li className={(this.props.active === true ? 'active' : null)}  >
 				<Link to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
 				
 					{/* Add Glypicon if one is supplied */}
@@ -112,8 +114,9 @@ class SidebarMenu extends Component {
 		super(props);
 		this.state = {childrenElements: null};
 		
-		// Binds the click handler to an instance variable
-		this.minimized_menu_click_listener = this.SmallMenuClickHandler.bind(this);
+		// Track the submenu that is active
+		this.opened_submenu = null;
+
 	}
 	
 	
@@ -130,13 +133,15 @@ class SidebarMenu extends Component {
 	/**
 	 * Ensures that only the most recently opened submenu is marked as 'active' 
 	 */
-	submenuOpened(key){
+	updateMenu(key){
 		
+		let self = this;
+
 		// Iterate all children nodes
 		let childrenElements = this.state.childrenElements.map(function (c, index) {
 			
 			// Determine if it's the one that was just opened
-			let newlyOpened = (c.props.title === key && !c.props.active ? true : false);
+			let newlyOpened = (c.props.title === key && self.opened_submenu !== c.props.title ? true : false);
 			
 			let props = {
 				active : newlyOpened,
@@ -148,34 +153,9 @@ class SidebarMenu extends Component {
 		
 		// Update DOM
 		this.setState({childrenElements : childrenElements});
-						
-		// If the menu is minimized and a submenu is open, listen for clicks
-		// so we can subsequently close the submenu
-		if(!this.props.menu_full_size){
-			document.body.addEventListener('click', this.minimized_menu_click_listener);
-		}	
-	}
-	
-	
-	/**
-	 * Minimizes all submenus
-	 */
-	minimizeSubmenu(){
 		
-		// Iterate all children nodes
-		let childrenElements = this.state.childrenElements.map(function (c, index) {
-			
-			let props = {
-				active : false,
-			};
-			
-			// Set to active if its the one that was just opened
-			return React.cloneElement(c, props);
-		});
-		
-		// Update DOM
-		this.setState({childrenElements : childrenElements});
-		
+		// Set the opened submenu to null if it was already open
+		this.opened_submenu = this.opened_submenu === key ? null : key;
 	}
 	
 	
@@ -187,10 +167,15 @@ class SidebarMenu extends Component {
 		// React.map version of ES6 map doesn't allow context to be passed in...
 		let self = this;
 		
-		// Modify children element's to trigger submenuOpened() when clicked
+		// Modify children element's to trigger updateMenu() when clicked
 		let childrenElements = React.Children.map(this.props.children, function (c, index) {
+			
+			if(c.props.active){
+				self.opened_submenu = c.props.title;
+			}
+			
 			return React.cloneElement(c, {                    
-				linkClicked: self.submenuOpened.bind(self)
+				linkClicked: self.updateMenu.bind(self)
 			});
 		});
 		
@@ -205,7 +190,8 @@ class SidebarMenu extends Component {
 	componentDidUpdate(prevProps, prevState){
 		
 		if(prevProps.menu_full_size && !this.props.menu_full_size){
-			this.minimizeSubmenu();
+			this.opened_submenu = null;
+			this.updateMenu();
 		}
 
 	}
@@ -214,18 +200,20 @@ class SidebarMenu extends Component {
 	/**
 	 * Minimizes any submenus if the menu is small and the user clicks out of the menu
 	 *
-	 * If the menu is small and a submenu is open, a click event listener
-	 * is added so we know when to minimize the submenu
 	 */
-	SmallMenuClickHandler(event){
-		document.body.removeEventListener('click', this.clickListener);
-		this.minimizeSubmenu()
+	contextSwitchHandler(event){
+		
+		if(!this.props.menu_full_size){
+			this.opened_submenu = null; 
+			this.updateMenu(); 
+		}
+		
 	}
 	
 	
 	render(){
 		return (
-			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu">
+			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu" tabIndex="0" onBlur={()=>{	this.contextSwitchHandler();}}>
 				<div className="menu_section">
 					<h3>General</h3>
 					<ul id="sidebard-menu-data" className="nav side-menu">
