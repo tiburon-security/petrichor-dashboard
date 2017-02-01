@@ -15,10 +15,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
  *
  */
 
- 
- 
- // NOTE, RECLICKING A MINIMIZED MENU MAKES IT DISAPEAR AND REAPPEAR, CONTINE FIXING THIS...
- 
+  
 /**
  * Represents the link under a menu heading
  */
