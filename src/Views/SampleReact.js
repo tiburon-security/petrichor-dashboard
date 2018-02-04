@@ -25,7 +25,7 @@ export class App extends Component {
         
 				</p>
 	
-				<div className="Main">{this.props.main}</div>
+				<div className="Main"></div>
       
 			</div>
     

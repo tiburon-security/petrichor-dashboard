@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Link } from 'react-router';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // ES6
+import { Link } from 'react-router-dom'
+import { CSSTransition} from 'react-transition-group' // ES6
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -30,7 +29,6 @@ class MenuLink extends Component {
 	render(){
 		return (
 			<li><Link to={this.props.url} >{this.props.title}</Link></li>
-		
 		)
 	}
 }
@@ -65,14 +63,18 @@ class MenuItem extends Component {
 		// Determine if there are any child elements
 		let hasChildren = (this.props.children !== undefined && this.props.children.length > 0);
 		var childMenu = (hasChildren && this.props.active ? 
-			<ul className="nav child_menu" style={{'display' : 'block'}}>{this.props.children}</ul> 
+			<ul className="nav2 child_menu" style={{'display' : 'block'}}>{this.props.children}</ul> 
 			: null);
+
+		var EntryType = (!hasChildren && this.props.url != null ? Link : "a");
 
 		
 		return (
         
 			<li className={(this.props.active === true ? 'active' : null)}  >
-				<Link to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
+			
+			
+				<EntryType /*to="/"*/ to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
 				
 					{/* Add Glypicon if one is supplied */}
 					{this.props.icon ? <i className={this.props.icon}></i> : null}
@@ -82,19 +84,12 @@ class MenuItem extends Component {
 					{/* Add down chevron if there are subitems */}
 					{hasChildren ? <span className="fa fa-chevron-down"></span> : null}
 				
-				</Link>
+				</EntryType>
 				
-				<ReactCSSTransitionGroup
-					transitionName="slide"
-					transitionAppear={true}
-					transitionAppearTimeout={500}
-					transitionEnterTimeout={300}
-					transitionLeaveTimeout={300}>
-		
-					{/* Add submenu URLs if there are any */}
-					{childMenu}
-					
-				</ReactCSSTransitionGroup>
+				{childMenu}
+				
+
+				
 			</li>
 		
 		)
@@ -210,15 +205,11 @@ class SidebarMenu extends Component {
 	
 	render(){
 		return (
-			<div id="sidebar-menu" className="main_menu_side hidden-print main_menu" tabIndex="0" onBlur={()=>{	this.contextSwitchHandler();}}>
-				<div className="menu_section">
-					<h3>General</h3>
-					<ul id="sidebard-menu-data" className="nav side-menu">
-						{this.state.childrenElements}
-					</ul>
-
-				</div>
-
+			<div id="sidebar-menu" tabIndex="0" onBlur={()=>{	this.contextSwitchHandler();}}>
+				<h3>General</h3>
+				<ul id="sidebar-menu-items" className="nav2 side-menu">
+					{this.state.childrenElements}
+				</ul>
 			</div>
 		
 		)

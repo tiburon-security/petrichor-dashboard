@@ -25,7 +25,7 @@
                     "component"      : "Dashboard"
                 }
             ]
-        },
+        },        
         {
             "route_name"              : "discover",
             "route"                   : "/discover",
@@ -36,7 +36,7 @@
             "child_routes"            :   [             
 				{
                     "route_name"      : "analytics_daily2",
-                    "route"           : "/daily2(/:param)",
+                    "route"           : "/daily2/:pathParam1?",
 					"link" 			  : "/daily2",
                     "visible_in_menu" : true,
                     "menu_title"      : "weekly",

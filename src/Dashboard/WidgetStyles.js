@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import LoadingIcon from './loading-icon.svg'
 
 /**
@@ -27,11 +28,11 @@ class WidgetHeader extends Component {
   }
   
   static propTypes = {
-    settings_button: React.PropTypes.bool.isRequired,
-    settings_button_clickhandler: React.PropTypes.func,
-    close_button: React.PropTypes.bool.isRequired,
-    close_button_clickhandler: React.PropTypes.func,
-    title: React.PropTypes.string.isRequired
+    settings_button: PropTypes.bool.isRequired,
+    settings_button_clickhandler: PropTypes.func,
+    close_button: PropTypes.bool.isRequired,
+    close_button_clickhandler: PropTypes.func,
+    title: PropTypes.string.isRequired
   }
   
 	render() {
@@ -94,11 +95,11 @@ class FullWidget extends Component {
 	}
 
 	static propTypes = {
-		settings_button: React.PropTypes.bool.isRequired,
-		settings_button_clickhandler: React.PropTypes.func,
-		close_button: React.PropTypes.bool.isRequired,
-		close_button_clickhandler: React.PropTypes.func,
-		title: React.PropTypes.string.isRequired
+		settings_button: PropTypes.bool.isRequired,
+		settings_button_clickhandler: PropTypes.func,
+		close_button: PropTypes.bool.isRequired,
+		close_button_clickhandler: PropTypes.func,
+		title: PropTypes.string.isRequired
 	}
 	
 	
@@ -114,7 +115,7 @@ class FullWidget extends Component {
 	 * Update loading state if props loading props changed
 	 */
 	componentDidUpdate(prevProps, prevState){
-		if(prevProps.loading != this.props.loading){
+		if(prevProps.loading !== this.props.loading){
 			this.setState({loading : this.props.loading});
 		}	
 	}
@@ -125,7 +126,7 @@ class FullWidget extends Component {
 			<WidgetBody>
 				<WidgetHeader {...this.props}></WidgetHeader>
 					<WidgetContent>
-						{(this.state.loading ? <img className="x_loading_overlay" src={LoadingIcon}/> : null)}
+						{(this.state.loading ? <img className="x_loading_overlay" alt="Loading Icon" src={LoadingIcon}/> : null)}
 						<div style={{"display": (this.state.loading ? "none" : null)}}>{this.props.children}</div>
 					</WidgetContent>
 			</WidgetBody>

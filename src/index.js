@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Route, Switch } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import Gentella from './Theme/Gentella.js';
+import AddPropsToRoute from './Helpers/AddPropsToRoute.js';
+import {App} from './Views/SampleReact.js';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
@@ -22,33 +25,68 @@ function bootstrapApplication(config){
 	window.app_config = config;
 	
 	var dynamicRoutesJSX = buildDynamicRoutes(config);
-
+	
 	// Hook the content body of gentella, this is where page content
 	// will be rendered. Routes control this body content
 	ReactDOM.render((
-		<Router history={browserHistory}>
-			{dynamicRoutesJSX}
-		</Router>
+		<BrowserRouter>
+		
+			<Switch>
+				{dynamicRoutesJSX}
+			</Switch>
+		
+		</BrowserRouter>
 	     
 	), document.getElementById('root'));
 
 }
-	
+
 
 
 function buildDynamicRoutes(config){
 
 	var routeJSX = [];
 	
+	var uniqueKey = 0;
+	
+
+	
 	// Add the index route
-	routeJSX.push(<IndexRoute component={routableViews[config.index_route.component]} />)
+	routeJSX.push(
+		<Route 
+			exact 
+			path="/" 
+			key={uniqueKey}
+			render={(props)=>(
+					<Gentella config={config} {...props}>
+						{/*routableViews[config.index_route.component]*/}
+						<App/>
+					</Gentella>
+				
+			)}			
+		/>
+	)
+	
+	uniqueKey++;
 	
 	// Iterate all routes and add them to React Router
 	for(var i=0; i < config.routes.length; i++){
 		
 		var route = config.routes[i];
-
-		routeJSX.push(<Route path={route.route} test='dookie' name={route.route_name} components={routableViews[route.component]} key={i}/>); 		
+		
+		routeJSX.push(
+			<Route 
+				path={route.route} 
+				key={uniqueKey} 
+				render={(props)=>(
+					<Gentella config={config} {...props} >
+						{/*routableViews[route.component]*/}
+					</Gentella>
+				)}
+			/>
+		);
+		
+		uniqueKey++;
 
 		// If a child route exists, add it
 		if(route.child_routes != null){
@@ -59,16 +97,34 @@ function buildDynamicRoutes(config){
 				var childRoute = route.child_routes[j];
 				var fullPath = route.route + childRoute.route;
 				
-				routeJSX.push(<Route path={fullPath} name={childRoute.route_name} components={routableViews[childRoute.component]} key={i}/>); 		
+				routeJSX.push(
+					<Route 
+						path={fullPath}  
+						key={uniqueKey}
+						render={(props)=>(
+							<Gentella config={config} {...props} >
+								{routableViews[route.component]}
+							</Gentella>
+						)}
+					/>
+				); 	
+
+				uniqueKey++;				
 				
 			}
 			
 		}
+		
+		
 	
 	}
-	
-	let final = <Route path="/" name={config.index_route.route_name} component={Gentella} children={routeJSX} config={config}/>	
 
+	//let final = <Route path="/" name={config.index_route.route_name} children={routeJSX} component={AddPropsToRoute(Gentella, {'config': config, 'name' : config.index_route.route_name})} />
+	//let final = <Route path="/" name={config.index_route.route_name} children={routeJSX} component={AddPropsToRoute(Gentella, {'config': config})} />
+	console.log(routeJSX)
+	
+	//let final = <div>{routeJSX}</div>
+let final = routeJSX
 	return final;
 	
 }

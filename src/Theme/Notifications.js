@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {Modal, Button} from 'react-bootstrap';
 
 /**
@@ -19,7 +20,7 @@ class Notifications extends Component {
 	}
   
 	static propTypes = {
-		notifications: React.PropTypes.array.isRequired
+		notifications: PropTypes.array.isRequired
 	}
 	
 	millisecondsToHours(millis){
