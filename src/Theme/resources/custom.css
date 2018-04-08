@@ -373,8 +373,7 @@
   padding: 0; }
 
 
-.top_nav .nav2 > li > a:focus, .top_nav .nav2 > li > a:hover, .top_nav .nav2 .open > a, .top_nav .nav2 .open > a:focus, .top_nav .nav2 .open > a:hover {
-  background: #D9DEE4; }
+
 
 body {
   color: #73879C;
@@ -693,7 +692,7 @@ article.media {
 
 
 /* *********  Notification Styles  *************************************** */
-ul.msg_list li {
+.notification_item {
   background: #f7f7f7;
   padding: 5px;
   display: -ms-flexbox;
@@ -705,31 +704,40 @@ ul.msg_list li:last-child {
   margin-bottom: 6px;
   padding: 10px; }
 
-ul.msg_list li a {
+.notification_item li a {
   padding: 3px 5px !important; }
 
-ul.msg_list li a .image img {
+.notification_item .image img {
   border-radius: 2px 2px 2px 2px;
   -webkit-border-radius: 2px 2px 2px 2px;
   float: left;
   margin-right: 10px;
   width: 11%; }
 
-ul.msg_list li a .time {
+.notification_item .time {
   font-size: 11px;
   font-style: italic;
   font-weight: bold;
   position: absolute;
   right: 35px; }
 
-ul.msg_list li a .message {
+.notification_item .message {
   display: block !important;
-  font-size: 11px; }
+  font-size: 11px; 
+}
 
- /*
-.dropdown-menu.msg_list span {
+.notification_item .message:hover {
+  color:black;
+}
+
+.notification_item a {
+	padding: 0px !important;
+	
+}
+.dropdown-menu li a {
   white-space: normal; }
-
+  
+/*
 .dropdown-menu {
   border: medium none;
   box-shadow: none;
@@ -746,14 +754,14 @@ ul.msg_list li a .message {
   border: 1px solid #D9DEE4;
   border-top-left-radius: 0;
   border-top-right-radius: 0; }
-
-.dropdown-menu > li > a {
-  color: #5A738E; }
   */
+.notification_dropdown .dropdown-menu > li > a {
+  color: #5A738E; }
 
-  /*
 
-  bar-nav .open .dropdown-menu {
+  
+
+.notification_dropdown .open .dropdown-menu {
   position: absolute;
   background: #fff;
   margin-top: 0;
@@ -763,8 +771,8 @@ ul.msg_list li a .message {
   left: auto;
   width: 220px; }
 
-.navbar-nav .open .dropdown-menu.msg_list {
-  width: 300px; }*/
+.notification_dropdown .dropdown-menu {
+  width: 300px; }
 
 .info-number .badge {
   font-size: 10px;

@@ -71,7 +71,7 @@ class Notifications extends Component {
 			var shortenedMessage = notification.message.slice(0, 100) + "..."
 			
 			var elems = (
-				<MenuItem eventKey={parseFloat(eventKey + "." + index)} key={index} onSelect={() => this.expandNotification(index)}>
+				<MenuItem eventKey={parseFloat(eventKey + "." + index)} key={index} onSelect={() => this.expandNotification(index)} className="notification_item">
 					<span className="image"><span className={notification.font_awesome_icon}></span></span>
 					<span>
 						<span className="time">{timeAge}</span>
@@ -95,7 +95,7 @@ class Notifications extends Component {
 		)
 		
 		return (
-			<NavDropdown eventKey={eventKey} title={icon} noCaret={true} id="basic-nav-dropdown">
+			<NavDropdown eventKey={eventKey} title={icon} noCaret={true} className="notification_dropdown">
 					{notificationItems}
 			</NavDropdown>
 		);
