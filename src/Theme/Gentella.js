@@ -9,8 +9,9 @@ import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
 import Footer from './Footer';
 import ProfileQuickInfo from './ProfileQuickInfo';
-import Notifications from './Notifications'
-import ProfileDropdown from './ProfileDropdown'
+import Notifications from './Notifications';
+import ProfileDropdown from './ProfileDropdown';
+import PopupModal from './PopupModal';
 
 export class Gentella extends Component {
 	
@@ -117,6 +118,7 @@ export class Gentella extends Component {
 					</TopNavigation>
 
 
+					<PopupModal />
 					
 					<div className="right_col" role="main" id="gentella_content_body">
 
@@ -137,5 +139,6 @@ export class Gentella extends Component {
 	);
   }
 }
+
 
  export default Gentella;

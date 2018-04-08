@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Modal, Button, NavDropdown, MenuItem } from 'react-bootstrap';
+import { NavDropdown, MenuItem } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { openPopupModal } from '../redux/actions/PopupModal.js';
 
 /**
  * Component that shows notifications in the toolbar
@@ -32,41 +34,15 @@ class Notifications extends Component {
 	}
 	
 	
-	/**
-	 * Open/close the notification dropdown menu
-	 */
-	toggleMenuOpen(){
-		this.setState({menu_open:!this.state.menu_open});
-	}
-	
-	
-	/*
-	 * Displays a modal with the full message of a selected notification
-	 */
 	expandNotification(index){
 		console.log(index)
 		var selectedNotification = this.props.notifications[index]
 		
-		var elem = (
-			<div className="static-modal">
-				<Modal.Dialog>
-					<Modal.Header>
-						<Modal.Title>Notification - {selectedNotification.iso_datetime}</Modal.Title>
-					</Modal.Header>
-
-					<Modal.Body>
-						{selectedNotification.message}
-					</Modal.Body>
-
-					<Modal.Footer>
-						<Button onClick={() => this.setState({expanded_notification : null})}>Close</Button>
-					</Modal.Footer>
-
-				</Modal.Dialog>
-			</div>
-		)
-		
-		this.setState({menu_open : false, expanded_notification : elem});
+		var title = "Notification - " + selectedNotification.iso_datetime
+		var body = selectedNotification.message;
+	
+		this.props.openPopupModal(title, body);
+	
 	}
 	
 	render() {  
@@ -77,9 +53,9 @@ class Notifications extends Component {
 		var notificationItems = [];
 		var numWithinLastDay = 0;
 		
+		const FULL_DAY = 60 * 60 * 1000 * 24; // One day in milis
+		
 		for (let [index, notification] of this.props.notifications.entries()) {
-			
-			const FULL_DAY = 60 * 60 * 1000 * 24; // One day in milis
 			
 			var timestamp = new Date(notification.iso_datetime)
 
@@ -95,15 +71,14 @@ class Notifications extends Component {
 			var shortenedMessage = notification.message.slice(0, 100) + "..."
 			
 			var elems = (
-				<MenuItem eventKey={parseFloat(eventKey + "." + index)} onSelect={() => this.expandNotification(index)}>
-						<span className="image"><span className={notification.font_awesome_icon}></span></span>
-						<span>
-							<span className="time">{timeAge}</span>
-						</span>
-						<span className="message">
-							{shortenedMessage}
-						</span>
-
+				<MenuItem eventKey={parseFloat(eventKey + "." + index)} key={index} onSelect={() => this.expandNotification(index)}>
+					<span className="image"><span className={notification.font_awesome_icon}></span></span>
+					<span>
+						<span className="time">{timeAge}</span>
+					</span>
+					<span className="message">
+						{shortenedMessage}
+					</span>
 				</MenuItem>
 			)
 			
@@ -112,33 +87,25 @@ class Notifications extends Component {
 		
 		var hoverNotificationCountMessage = numWithinLastDay + " new notifications in the last day."
 		
-		var test = 	(<a href="#" className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
-					<i className="fa fa-envelope-o"></i>
-					{(numWithinLastDay > 0 ? <span className="badge bg-green">{numWithinLastDay}</span> : null)}
-				</a>)
+		var icon = (
+			<span className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false" title={hoverNotificationCountMessage}>
+				<i className="fa fa-envelope-o"></i>
+				{(numWithinLastDay > 0 ? <span className="badge bg-green">{numWithinLastDay}</span> : null)}
+			</span>
+		)
 		
 		return (
-
-
-				
-				
-
-				<div>
-				<NavDropdown eventKey={3} title={test} id="basic-nav-dropdown">
-					<MenuItem eventKey={3.1}>Action</MenuItem>
-						{notificationItems}
-						{/*<ul id="menu1" className="dropdown-menu list-unstyled msg_list" role="menu">
-					{}
-				</ul>*/}
-				
-				</NavDropdown>
-				{this.state.expanded_notification}
-				</div>
-			
-
-			
+			<NavDropdown eventKey={eventKey} title={icon} noCaret={true} id="basic-nav-dropdown">
+					{notificationItems}
+			</NavDropdown>
 		);
 	}
 }
 
-export default Notifications;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        openPopupModal: (title, body) => dispatch(openPopupModal(title,body)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Notifications);

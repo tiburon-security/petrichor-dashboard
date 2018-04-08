@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Nav, NavItem, Navbar } from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
 
 class TopNavigation extends Component {
 	

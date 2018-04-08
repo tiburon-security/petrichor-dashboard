@@ -5,6 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import Gentella from './Theme/Gentella.js';
 import AddPropsToRoute from './Helpers/AddPropsToRoute.js';
 import {App} from './Views/SampleReact.js';
+import { Provider } from 'react-redux';
+import configureStore from './redux/store/configureStore';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
@@ -17,19 +19,20 @@ fetch('/routes_menu_config.json')
 	.then(bootstrapApplication)
 	
 
-
 function bootstrapApplication(config){
+	
+	const store = configureStore();
 
 	// Store the config as a global,  since it will be reference in othermaybe
 	// parts of the app, maybe there's a better way of doing this...?
 	window.app_config = config;
 	
-	var dynamicRoutesJSX = buildDynamicRoutes(config);
+	var dynamicRoutesJSX = buildDynamicRoutes(config, store);
 	
 	// Hook the content body of gentella, this is where page content
 	// will be rendered. Routes control this body content
 	ReactDOM.render((
-		<BrowserRouter>
+		<BrowserRouter store={store}>
 		
 			<Switch>
 				{dynamicRoutesJSX}
@@ -43,7 +46,7 @@ function bootstrapApplication(config){
 
 
 
-function buildDynamicRoutes(config){
+function buildDynamicRoutes(config, store){
 
 	var routeJSX = [];
 	
@@ -58,11 +61,12 @@ function buildDynamicRoutes(config){
 			path="/" 
 			key={uniqueKey}
 			render={(props)=>(
+				<Provider store={store}>
 					<Gentella config={config} {...props}>
 						{/*routableViews[config.index_route.component]*/}
 						<App/>
 					</Gentella>
-				
+				</Provider>
 			)}			
 		/>
 	)
@@ -79,9 +83,11 @@ function buildDynamicRoutes(config){
 				path={route.route} 
 				key={uniqueKey} 
 				render={(props)=>(
-					<Gentella config={config} {...props} >
-						{/*routableViews[route.component]*/}
-					</Gentella>
+					<Provider store={store}>
+						<Gentella config={config} {...props} >
+							{/*routableViews[route.component]*/}
+						</Gentella>
+					</Provider>
 				)}
 			/>
 		);
@@ -102,9 +108,11 @@ function buildDynamicRoutes(config){
 						path={fullPath}  
 						key={uniqueKey}
 						render={(props)=>(
-							<Gentella config={config} {...props} >
-								{routableViews[route.component]}
-							</Gentella>
+							<Provider store={store}>
+								<Gentella config={config} {...props} >
+									{routableViews[route.component]}
+								</Gentella>
+							</Provider>
 						)}
 					/>
 				); 	
