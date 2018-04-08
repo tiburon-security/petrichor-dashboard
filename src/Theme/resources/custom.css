@@ -138,7 +138,20 @@
 #sidebar-menu > ul {
 	margin-top: 10px; 
 }
+
+.navbar-right a{
+	font-size: 13px;
+	color: #515356 !important;
+}
+
+.navbar-right a i {
+	font-size: 15px;
+}
   
+.navbar-right .dropdown:hover{
+	background: #D9DEE4;
+} 
+ 
 /* Begin Large Menu Styles */
 .nav-md ul.nav2.child_menu li:before {
 	background: #425668;
