@@ -160,7 +160,7 @@
 	content: "";
 	left: 27px;
 	position: absolute;
-	top: 0; 
+	height: 38px;
 }
 
 .nav-md .full_container.body .col-md-3.left_col {
@@ -499,10 +499,6 @@ a:hover, a:focus {
 .nav2.child_menu li.active {
   background-color: rgba(255, 255, 255, 0.06); }
 
-.nav2.child_menu li {
-  padding-left: 36px; }
-
-
 
 .nav2.side-menu > li > a, .nav2.child_menu > li > a {
   color: #E7E7E7;
@@ -756,7 +752,8 @@ ul.msg_list li a .message {
   */
 
   /*
-.navbar-nav .open .dropdown-menu {
+
+  bar-nav .open .dropdown-menu {
   position: absolute;
   background: #fff;
   margin-top: 0;

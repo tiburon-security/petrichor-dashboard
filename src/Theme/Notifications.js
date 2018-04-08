@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal, Button, NavDropdown, MenuItem } from 'react-bootstrap';
 
 /**
  * Component that shows notifications in the toolbar
@@ -44,8 +44,8 @@ class Notifications extends Component {
 	 * Displays a modal with the full message of a selected notification
 	 */
 	expandNotification(index){
-
-	var selectedNotification = this.props.notifications[index]
+		console.log(index)
+		var selectedNotification = this.props.notifications[index]
 		
 		var elem = (
 			<div className="static-modal">
@@ -69,7 +69,10 @@ class Notifications extends Component {
 		this.setState({menu_open : false, expanded_notification : elem});
 	}
 	
-	render() {    
+	render() {  
+
+		// Random number to serve as key for dropdown
+		var eventKey = 5369;
 
 		var notificationItems = [];
 		var numWithinLastDay = 0;
@@ -92,8 +95,7 @@ class Notifications extends Component {
 			var shortenedMessage = notification.message.slice(0, 100) + "..."
 			
 			var elems = (
-				<li key={index}>
-					<a onMouseDown={() => this.expandNotification(index)}>
+				<MenuItem eventKey={parseFloat(eventKey + "." + index)} onSelect={() => this.expandNotification(index)}>
 						<span className="image"><span className={notification.font_awesome_icon}></span></span>
 						<span>
 							<span className="time">{timeAge}</span>
@@ -101,30 +103,39 @@ class Notifications extends Component {
 						<span className="message">
 							{shortenedMessage}
 						</span>
-					</a>
-				</li>				
+
+				</MenuItem>
 			)
 			
 			notificationItems.push(elems);
 		}
 		
 		var hoverNotificationCountMessage = numWithinLastDay + " new notifications in the last day."
-	
-		return (
-
-			<li role="presentation" className={"dropdown " + (this.state.menu_open ? 'open' : '')} title={hoverNotificationCountMessage} onBlur={() => this.setState({menu_open : false})}>
-			
-				{this.state.expanded_notification}
-				
-				<a href="#" className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
+		
+		var test = 	(<a href="#" className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false" onClick={this.toggleMenuOpen.bind(this)}>
 					<i className="fa fa-envelope-o"></i>
 					{(numWithinLastDay > 0 ? <span className="badge bg-green">{numWithinLastDay}</span> : null)}
-				</a>
+				</a>)
+		
+		return (
+
+
 				
-				<ul id="menu1" className="dropdown-menu list-unstyled msg_list" role="menu">
-					{notificationItems}
-				</ul>
-			</li>
+				
+
+				<div>
+				<NavDropdown eventKey={3} title={test} id="basic-nav-dropdown">
+					<MenuItem eventKey={3.1}>Action</MenuItem>
+						{notificationItems}
+						{/*<ul id="menu1" className="dropdown-menu list-unstyled msg_list" role="menu">
+					{}
+				</ul>*/}
+				
+				</NavDropdown>
+				{this.state.expanded_notification}
+				</div>
+			
+
 			
 		);
 	}
