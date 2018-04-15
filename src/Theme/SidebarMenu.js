@@ -233,14 +233,11 @@ class DynamicSidebarMenu extends Component {
 	}
 	
 	render() {
-		let currentRoute = this.props.current_route;
+		let currentRoute = this.props.route_name;
 		let menu = [];
 		let uniqueKey = 0;
 		let allRoutes = this.props.config.routes;
 		let menuFullSize = this.props.menu_full_size;
-		
-		menu.push(<MenuItem key="256" title={this.props.config.index_route.menu_title} url="/" icon={this.props.config.index_route.menu_font_awesome_icon} />);
-
 		
 		// Iteate every top level route
 		for (let topLevelRoute of allRoutes) {
@@ -254,10 +251,10 @@ class DynamicSidebarMenu extends Component {
 				var topLevelLink = (topLevelRoute.link ? topLevelRoute.link : topLevelRoute.route);
 		
 				// If the menu item has a submenu
-				if(topLevelRoute.child_routes !== null){
+				if(topLevelRoute.routes !== null && "routes" in topLevelRoute ){
 			
 					// Iterate every child route
-					for (let childRoute of topLevelRoute.child_routes) {
+					for (let childRoute of topLevelRoute.routes) {
 
 						if(childRoute.visible_in_menu === true){
 							uniqueKey++;
@@ -269,7 +266,7 @@ class DynamicSidebarMenu extends Component {
 							children.push(<MenuLink key={uniqueKey} title={childRoute.menu_title} url={path} />)
 							
 							// Determine whether child is the currently active route
-							if(currentRoute.name === childRoute.route_name){
+							if(currentRoute === childRoute.route_name){
 								currentlyActive = true;
 							}
 							
@@ -278,8 +275,9 @@ class DynamicSidebarMenu extends Component {
 					
 				}
 				
+				console.log(currentRoute)
 				// Determine whether parent is the currently active route
-				if(topLevelRoute.route_name === currentRoute.name){
+				if(topLevelRoute.route_name === currentRoute){
 					currentlyActive = true;
 				}
 				

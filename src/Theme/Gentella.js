@@ -12,16 +12,25 @@ import ProfileQuickInfo from './ProfileQuickInfo';
 import Notifications from './Notifications';
 import ProfileDropdown from './ProfileDropdown';
 import PopupModal from './PopupModal';
+import { Route, Switch } from 'react-router';
+import { uniqueId } from 'lodash'
+
+import  { recursivelyWalkRoutes } from '../Helpers/Routes';
+
+
+// Brings all components used in dynamic routes into namespace
+// for referencing by their string name
+import * as routableViews from '../RoutableViews.js';
 
 export class Gentella extends Component {
 	
 	constructor(props) {
 		super(props);
 		this.state = {menuFullsize : true};
-		console.log(this)
+		//console.log(this)
 		// Get application configuration from the router
 		//this.config = this.props.config;
-		console.log(this.props.match.path)
+		//console.log(this.props.match.path)
 		//this.currentRoute = this.props.routes[this.props.routes.length - 1];
 		//this.currentRoute = this.props
 		
@@ -85,7 +94,9 @@ export class Gentella extends Component {
 	
 	
   render() {
-	 console.log(this.state.menuFullsize)
+	//console.log(this.props)
+	//console.log(this.state.menuFullsize)
+	 	 
     return (
 		
 		<div className={(this.state.menuFullsize ? 'nav-md' : 'nav-sm')}>
@@ -103,9 +114,23 @@ export class Gentella extends Component {
 							<ProfileQuickInfo user_name="Jovanni Hernandez" image_path={profile_pic}/>
 
 							<br />
-
-							<DynamicSidebarMenu menu_full_size={this.state.menuFullsize} current_route={this.props.match.path} config={this.props.config}/>
-
+							
+							<Switch>
+								{/* TODO: drop DynamicSideBar and just build the SideBar here*/}
+								{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
+									return (
+										<Route 
+											exact
+											path={fullPath}
+											key={index}
+											render={(props)=>(
+												<DynamicSidebarMenu menu_full_size={this.state.menuFullsize} route_name={obj.route_name} config={this.props.config}/>
+											)}
+										/>
+									)
+								})}
+							</Switch>
+							
 							<MenuFooter/>
 
 						</div>
@@ -124,7 +149,23 @@ export class Gentella extends Component {
 
 						{/* page content */}
 						<div>
-							{this.props.children}
+						<Switch>
+								{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
+									
+									let ChildComponentRender = routableViews[obj.component];
+									
+									return (
+										<Route 
+											exact
+											path={fullPath}
+											key={uniqueId()}
+											render={(props)=>(
+												<ChildComponentRender route_name={obj.route_name} {...props} />
+											)}
+										/>
+									)
+								})}
+								</Switch>
 						</div>
 
 					</div>

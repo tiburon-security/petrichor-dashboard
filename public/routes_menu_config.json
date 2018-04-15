@@ -1,13 +1,15 @@
 {
 	"website_name" : "Petrichor Dashboard",
-	"index_route" : {
-			"route_name" 			  : "home",
-            "visible_in_menu"         : true,
-            "menu_title"              : "Home",
-            "menu_font_awesome_icon"  : "fa fa-home",
-            "component"              : "App"
-	},
+
     "routes" : [
+		{
+			"route_name" 			  : "home",
+			"route"					  : "/",
+			"visible_in_menu"         : true,
+			"menu_title"              : "Home",
+			"menu_font_awesome_icon"  : "fa fa-home",
+			"component"              : "App"
+		},
         {
             "route_name"              : "analytics",
             "route"                   : "/analytics",
@@ -15,8 +17,7 @@
             "menu_title"              : "Analytics",
             "menu_font_awesome_icon"  : "fa fa-bar-chart",
             "component"              : "Dashboard",
-            "template"                : null,
-            "child_routes" : [
+            "routes" : [
                 {
                     "route_name"      : "analytics_daily" ,
                     "route"           : "/daily",
@@ -33,7 +34,7 @@
             "menu_title"              : "Discover",
             "menu_font_awesome_icon"  : "fa fa-search",
             "component"              : "Dashboard",
-            "child_routes"            :   [             
+            "routes"            :   [             
 				{
                     "route_name"      : "analytics_daily2",
                     "route"           : "/daily2/:pathParam1?",
@@ -51,7 +52,7 @@
             "menu_title"              : "Gentella",
             "menu_font_awesome_icon"  : "fa fa-search",
             "component"              : "Dashboard",
-            "child_routes"            : null		
+            "routes"            : null		
 		}
     ],
 	

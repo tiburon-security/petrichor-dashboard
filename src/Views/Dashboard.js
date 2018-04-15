@@ -60,7 +60,7 @@ export class Dashboard extends Component {
 	 */
 	renderWidgets(){
 		
-		let currentRouteName = this.props.route.name;		
+		let currentRouteName = this.props.route_name;		
 		var renderedWidgets = [];
 		
 		// Finds config info for the current dashboard
@@ -152,7 +152,7 @@ export class Dashboard extends Component {
 	 * and there were new widgetw added to the state
 	 */
 	shouldComponentUpdate(nextProps, nextState){
-		
+		console.log(nextProps)
 		// Determine if the rendered widgets actually changed
 		var equal = true;
 		if(this.state.rendered_widgets.length === nextState.rendered_widgets.length){
@@ -169,7 +169,7 @@ export class Dashboard extends Component {
 		}
 			
 		
-		if(this.props.route.name === nextProps.route.name && this.props.route.path === nextProps.route.path){
+		if(this.props.route_name === nextProps.route_name && this.props.location.pathname === nextProps.location.pathname){
 			
 			if(equal){
 				return false;
@@ -189,7 +189,7 @@ export class Dashboard extends Component {
 	 */
 	componentDidUpdate(prevProps, prevState){
 				
-		if(this.props.route.name !== prevProps.route.name && this.props.route.path !== prevProps.route.path){
+		if(this.props.route_name !== prevProps.route_name && this.props.location.pathname !== prevProps.location.pathname){
 			// Clear state before re-rendering widgets
 			this.setState({rendered_widgets: []}, () => { this.renderWidgets(); });
 		}
@@ -199,7 +199,7 @@ export class Dashboard extends Component {
 	
 	render() {
 		
-
+		console.log("render")
 		return (
 		  <div>
 			

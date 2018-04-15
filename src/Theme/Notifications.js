@@ -95,7 +95,7 @@ class Notifications extends Component {
 		)
 		
 		return (
-			<NavDropdown eventKey={eventKey} title={icon} noCaret={true} className="notification_dropdown">
+			<NavDropdown id="notification_dropdown" eventKey={eventKey} title={icon} noCaret={true} className="notification_dropdown">
 					{notificationItems}
 			</NavDropdown>
 		);
