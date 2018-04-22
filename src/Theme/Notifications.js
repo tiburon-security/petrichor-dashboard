@@ -35,7 +35,6 @@ class Notifications extends Component {
 	
 	
 	expandNotification(index){
-		console.log(index)
 		var selectedNotification = this.props.notifications[index]
 		
 		var title = "Notification - " + selectedNotification.iso_datetime

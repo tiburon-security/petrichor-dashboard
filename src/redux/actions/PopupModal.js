@@ -1,8 +1,7 @@
 export function popupIsOpenAction(bool){
-	console.log("weeee")
 	console.log(bool)
 	return {
-		type: 'POPUP_MODAL_IS_OPEN',
+		type: 'POPUP_MODAL_OPEN',
 		isOpen: bool
 	};
 }
@@ -20,8 +19,9 @@ export function addPopupContentAction(title, body){
  */
 export function openPopupModal(title, body){
 	return (dispatch) => {
-		dispatch(addPopupContentAction(title, body));
 		dispatch(popupIsOpenAction(true));
+		dispatch(addPopupContentAction(title, body));
+		
 	}
 }
 

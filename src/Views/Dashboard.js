@@ -149,7 +149,6 @@ export class Dashboard extends Component {
 	 * and there were new widgetw added to the state
 	 */
 	shouldComponentUpdate(nextProps, nextState){
-
 		// Determine if the rendered widgets actually changed
 		var equal = true;
 		if(this.state.rendered_widgets.length === nextState.rendered_widgets.length){
@@ -195,7 +194,6 @@ export class Dashboard extends Component {
 
 	
 	render() {
-		
 		return (
 		  <div>
 			

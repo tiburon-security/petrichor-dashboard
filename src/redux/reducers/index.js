@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import { popupIsOpen, popupContent } from './PopupModal';
+import { popupModal } from './PopupModal';
+import { sidebar } from './SidebarMenu';
 import { routerReducer } from 'react-router-redux'
 
 export default combineReducers({
-	popupIsOpen,
-	popupContent,
+	popupModal,
+	sidebar,
 	routing: routerReducer
 });

@@ -30,9 +30,9 @@ class PopupModal extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        isOpen: state.popupIsOpen,
-		title : state.popupContent.title,
-		body : state.popupContent.body
+        isOpen: state.popupModal.isOpen,
+		title : state.popupModal.title,
+		body : state.popupModal.body
     };
 };
 

@@ -1,23 +1,23 @@
-export function popupIsOpen(state = false, action) {
-
-	switch (action.type) {
-		case 'POPUP_MODAL_IS_OPEN':
-			return action.isOpen
-
-		default:
-			return state
-	}
+const initialState = {
+  isOpen: false,
+  title: "Placeholder",
+  body: "Placeholder"
 }
 
-export function popupContent(state = 
-	{
-		"title" : "Placeholder", 
-		"body" : "Placeholder"
-	}, action) {
+
+export function popupModal(state = initialState, action) {
 
 	switch (action.type) {
+		
+		case 'POPUP_MODAL_OPEN':
+			return {
+				...state,
+				"isOpen" : action.isOpen
+			}
+			
 		case 'POPUP_MODAL_ADD_DATA':
 			return {
+				...state,
 				"title" : action.title,
 				"body" : action.body
 			}

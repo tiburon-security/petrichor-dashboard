@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -11,8 +12,11 @@ import ProfileQuickInfo from './ProfileQuickInfo';
 import Notifications from './Notifications';
 import ProfileDropdown from './ProfileDropdown';
 import PopupModal from './PopupModal';
+import { toggleSidebarSize, setSidebarFullsize } from '../redux/actions/SidebarMenu.js';
 import { Route, Switch } from 'react-router';
 import  { recursivelyWalkRoutes } from '../Helpers/Routes';
+import { connect } from 'react-redux';
+import {uniqueId } from 'lodash';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
@@ -42,8 +46,8 @@ export class Gentella extends Component {
 	 */
   	topNavigationClickHandler(event){
 		
-		// Toggle size state
-		this.setState({menuFullsize : !this.state.menuFullsize});
+		// Toggle size state		
+		this.props.toggleSidebarSize();
 	}
 	
 	
@@ -62,9 +66,10 @@ export class Gentella extends Component {
 	*/
 	updateDimensions() {
 		if(window.innerWidth > 990){
-			this.setState({ menuFullsize: true });
+			this.props.setSidebarFullsize(true);
+			
 		} else {
-			this.setState({ menuFullsize: false });
+			this.props.setSidebarFullsize(false);
 		}
 		
 	}
@@ -76,13 +81,14 @@ export class Gentella extends Component {
 	componentWillUnmount() {
 		window.removeEventListener("resize", this.updateDimensions.bind(this));
 	}
-	
+
 	
   render() {
-
+	console.log(this.props.sidebar_menu_is_fullsize)
+	console.log("rerender gentella")
     return (
 		
-		<div className={(this.state.menuFullsize ? 'nav-md' : 'nav-sm')}>
+		<div className={(this.props.sidebar_menu_is_fullsize ? 'nav-md' : 'nav-sm')}>
 			<div className="full_container body">
 				<div className="main_container">
 					<div className="col-md-3 left_col">
@@ -107,7 +113,7 @@ export class Gentella extends Component {
 											path={fullPath}
 											key={index}
 											render={(props)=>(
-												<DynamicSidebarMenu menu_full_size={this.state.menuFullsize} route_name={obj.route_name} config={this.props.config}/>
+												<DynamicSidebarMenu location={this.props.location} menu_full_size={this.props.sidebar_menu_is_fullsize} route_name={obj.route_name} config={this.props.config}/>
 											)}
 										/>
 									)
@@ -120,7 +126,7 @@ export class Gentella extends Component {
 					</div>
 
 
-					<TopNavigation onClick={this.topNavigationClickHandler.bind(this)} menuFullsize={this.state.menuFullsize}>
+					<TopNavigation onClick={this.topNavigationClickHandler.bind(this)} menuFullsize={this.props.sidebar_menu_is_fullsize}>
 						<Notifications notifications={this.props.config.notifications}/>
 						<ProfileDropdown user_name="Jovanni Hernandez" />
 					</TopNavigation>
@@ -141,7 +147,7 @@ export class Gentella extends Component {
 										<Route 
 											exact
 											path={fullPath}
-											key={index}
+											key={uniqueId()}
 											render={(props)=>(
 												<ChildComponentRender route_name={obj.route_name} {...props} />
 											)}
@@ -165,4 +171,17 @@ export class Gentella extends Component {
 }
 
 
- export default Gentella;
+const mapStateToProps = (state) => {
+    return {
+        sidebar_menu_is_fullsize: state.sidebar.isFullSize,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setSidebarFullsize: (bool) => dispatch(setSidebarFullsize(bool)),
+        toggleSidebarSize: () => dispatch(toggleSidebarSize())		
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Gentella);

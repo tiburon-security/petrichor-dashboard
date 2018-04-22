@@ -193,10 +193,10 @@ class SidebarMenu extends Component {
 	 *
 	 */
 	contextSwitchHandler(event){
-		
+		//console.log
 		if(!this.props.menu_full_size){
-			this.opened_submenu = null; 
-			this.updateMenu(); 
+			//this.opened_submenu = null; 
+			//this.updateMenu(); 
 		}
 		
 	}

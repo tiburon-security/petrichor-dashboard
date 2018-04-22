@@ -14,10 +14,14 @@ const middleware = [
 	routerMiddleware(history)
 ]
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+
 const store = createStore(
 	rootReducer,
 	initialState,
-	applyMiddleware(...middleware)
+	composeEnhancers(
+		applyMiddleware(...middleware)
+	)
 );
 
 export default store;
