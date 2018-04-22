@@ -1,18 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Switch } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
 import Gentella from './Theme/Gentella.js';
-import PropsRoute from './Helpers/PropsRoute.js';
-import {App} from './Views/SampleReact.js';
 import { Provider } from 'react-redux';
 import store, { history } from './redux/store/configureStore';
-import { ConnectedRouter, push } from 'react-router-redux'
-import { uniqueKey } from 'lodash'
-
-// Brings all components used in dynamic routes into namespace
-// for referencing by their string name
-import * as routableViews from './RoutableViews.js';
+import { ConnectedRouter } from 'react-router-redux'
 
 fetch('/routes_menu_config.json')
 	.then(function(response) {

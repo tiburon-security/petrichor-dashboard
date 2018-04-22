@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';
 import profile_pic from './resources/images/img.jpg';
-
 import {DynamicSidebarMenu} from './SidebarMenu';
 import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
@@ -13,10 +12,7 @@ import Notifications from './Notifications';
 import ProfileDropdown from './ProfileDropdown';
 import PopupModal from './PopupModal';
 import { Route, Switch } from 'react-router';
-import { uniqueId } from 'lodash'
-
 import  { recursivelyWalkRoutes } from '../Helpers/Routes';
-
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
@@ -46,23 +42,12 @@ export class Gentella extends Component {
 	 */
   	topNavigationClickHandler(event){
 		
-		/*if(this.state.menuFullsize){
-			document.body.classList.remove("nav-md");
-			document.body.classList.add("nav-sm");
-			
-		}else {
-			document.body.classList.remove("nav-sm");
-			document.body.classList.add("nav-md");
-		}*/
-		
 		// Toggle size state
 		this.setState({menuFullsize : !this.state.menuFullsize});
 	}
 	
 	
 	componentDidMount(){
-		// Full size menu by default
-		//document.body.classList.add("nav-md");
 		
 		document.title = this.props.config.website_name;
 		
@@ -94,9 +79,7 @@ export class Gentella extends Component {
 	
 	
   render() {
-	//console.log(this.props)
-	//console.log(this.state.menuFullsize)
-	 	 
+
     return (
 		
 		<div className={(this.state.menuFullsize ? 'nav-md' : 'nav-sm')}>
@@ -149,7 +132,7 @@ export class Gentella extends Component {
 
 						{/* page content */}
 						<div>
-						<Switch>
+							<Switch>
 								{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
 									
 									let ChildComponentRender = routableViews[obj.component];
@@ -158,14 +141,14 @@ export class Gentella extends Component {
 										<Route 
 											exact
 											path={fullPath}
-											key={uniqueId()}
+											key={index}
 											render={(props)=>(
 												<ChildComponentRender route_name={obj.route_name} {...props} />
 											)}
 										/>
 									)
 								})}
-								</Switch>
+							</Switch>
 						</div>
 
 					</div>

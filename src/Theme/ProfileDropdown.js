@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 /**
- * Component that shows notifications in the toolbar
+ * Component that shows profile dropdown in the toolbar
  */
 class ProfileDropdown extends Component {
-	
-	constructor(props) {
-		super(props);
-	}
 	
 	propTypes: {
 		image_path    : React.PropTypes.string,

@@ -42,7 +42,6 @@ export class Dashboard extends Component {
 		
 		// Track only widgets that haven't been dismissed
 		for (let widget of this.state.rendered_widgets) {
-			console.log(widget)
 			if(widget.key !== key){
 				updated_rendered_widgets.push(widget);
 			}
@@ -59,7 +58,7 @@ export class Dashboard extends Component {
 	 * Renders all of the widgets from the application configuration into the dashboard
 	 */
 	renderWidgets(){
-		
+				
 		let currentRouteName = this.props.route_name;		
 		var renderedWidgets = [];
 		
@@ -116,12 +115,10 @@ export class Dashboard extends Component {
 					let Widget = require("../" + widgetConfiguration.widget_url);
 					
 					let containerKey = uniqueId();
-					let widgetKey = uniqueId();
 					
 					let widgetComponent = <Widget.default key={uniqueId()} route={this.props.route} route_params={this.props.routeParams} close_button_clickhandler={() => { this.closeWidget(containerKey)}} />;
 					
-					// Widget must be wrapped in a div with specs due to the way
-					// react-grid-layout is written
+					// Widget must be wrapped in a div with specs due to the way react-grid-layout is written
 					let wrappedWidgetComponent = <div key={containerKey} data-grid={{x: x, y: y, w: w, h: h}} children={widgetComponent}/>
 						
 					// React likes immutable datastructues in state, so rebuild it each time. 
@@ -152,7 +149,7 @@ export class Dashboard extends Component {
 	 * and there were new widgetw added to the state
 	 */
 	shouldComponentUpdate(nextProps, nextState){
-		console.log(nextProps)
+
 		// Determine if the rendered widgets actually changed
 		var equal = true;
 		if(this.state.rendered_widgets.length === nextState.rendered_widgets.length){
@@ -199,7 +196,6 @@ export class Dashboard extends Component {
 	
 	render() {
 		
-		console.log("render")
 		return (
 		  <div>
 			

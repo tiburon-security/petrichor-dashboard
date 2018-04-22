@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { CSSTransition} from 'react-transition-group' // ES6
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -275,7 +274,6 @@ class DynamicSidebarMenu extends Component {
 					
 				}
 				
-				console.log(currentRoute)
 				// Determine whether parent is the currently active route
 				if(topLevelRoute.route_name === currentRoute){
 					currentlyActive = true;

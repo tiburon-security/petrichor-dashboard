@@ -22,7 +22,7 @@ class FakeWidget4 extends Component {
 		return (  
 			<FullWidget settings_button={true} close_button={true} title="FakeWidget4" {...this.props} loading={this.state.loading}>
 				<span>Fake data</span>
-				<a href="#" onClick={() =>{this.setState({loading:!this.state.loading})}}>click</a>
+				<button onClick={() =>{this.setState({loading:!this.state.loading}); setTimeout(() => { this.setState({loading:false}) }, 5000);}}>click to fake loading data</button>
 			</FullWidget>
 		);
   

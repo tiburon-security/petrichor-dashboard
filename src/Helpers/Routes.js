@@ -1,6 +1,7 @@
 /**
  * Helper function for recursively walking routes structure
- * and applying a user-defined function to each route
+ * and applying a user-defined function(UDF) to each route, output of
+ * UDF appened to array and returned as final output.
  */
 export function recursivelyWalkRoutes(array, func, key="routes", fullPath = null, level = 0, data = []){
 	
