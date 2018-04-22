@@ -7,7 +7,6 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 class ProfileDropdown extends Component {
 	
 	propTypes: {
-		image_path    : React.PropTypes.string,
 		user_name : React.PropTypes.string,		
 	}
 	
@@ -18,9 +17,17 @@ class ProfileDropdown extends Component {
 	
 	render() { 
 	
+		let title = (
+			<span>
+				<i className="fa fa-user"></i>
+				{" "}
+				{this.props.user_name}
+			</span>
+		)
+	
 		return (
 		
-			<NavDropdown eventKey={4} title={this.props.user_name} id="basic-nav-dropdown" >
+			<NavDropdown eventKey={4} title={title} id="basic-nav-dropdown" >
 				<MenuItem eventKey={4.1}>Profile</MenuItem>
 				<MenuItem eventKey={4.2}>                      
 					<span className="badge bg-red pull-right">50%</span>

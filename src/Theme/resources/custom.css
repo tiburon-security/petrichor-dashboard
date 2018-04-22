@@ -139,7 +139,7 @@
 	margin-top: 10px; 
 }
 
-.navbar-right a{
+#top-navbar .navbar-right a{
 	font-size: 13px;
 	color: #515356 !important;
 }
@@ -945,7 +945,19 @@ span.right {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap; }
+  white-space: nowrap; 
+  width: 62%;
+}
+
+.nav-md .x_title h2{
+	  font-size: 18px; 
+  font-weight: 400; 
+}
+
+.nav-sm .x_title h2{
+  font-size: 17px; 
+  font-weight: 0; 
+}
 
 .x_title h2 small {
   margin-left: 10px; }
