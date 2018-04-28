@@ -1,5 +1,6 @@
 const initialState = {
-  isFullSize: true
+	isFullSize: true,
+	openMenu: null
 }
 
 export function sidebar(state = initialState, action) {
@@ -17,6 +18,12 @@ export function sidebar(state = initialState, action) {
 			return {
 				...state,
 				isFullSize: !state.isFullSize
+			}			
+			
+		case 'SIDEBAR_OPEN_MENU':
+			return {
+				...state,
+				openMenu: action.openMenu
 			}			
 
 		default:

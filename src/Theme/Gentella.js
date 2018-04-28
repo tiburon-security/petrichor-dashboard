@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';
 import profile_pic from './resources/images/img.jpg';
-import {DynamicSidebarMenu} from './SidebarMenu';
+import DynamicSidebarMenu from './DynamicSidebarMenu';
 import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
 import Footer from './Footer';
@@ -113,7 +113,10 @@ export class Gentella extends Component {
 											path={fullPath}
 											key={index}
 											render={(props)=>(
-												<DynamicSidebarMenu location={this.props.location} menu_full_size={this.props.sidebar_menu_is_fullsize} route_name={obj.route_name} config={this.props.config}/>
+												<DynamicSidebarMenu 
+													location={this.props.location} 
+													route_name={obj.route_name} 
+													config={this.props.config}/>
 											)}
 										/>
 									)

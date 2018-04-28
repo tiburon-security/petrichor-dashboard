@@ -10,3 +10,10 @@ export function toggleSidebarSize(){
 		type: 'SIDEBAR_TOGGLE',
 	};
 }
+
+export function setOpenMenu(routeNameStr){
+	return {
+		type: 'SIDEBAR_OPEN_MENU',
+		openMenu: routeNameStr 
+	};
+}
