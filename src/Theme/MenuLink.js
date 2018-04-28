@@ -28,7 +28,7 @@ class MenuLink extends Component {
 	render(){
 		
 		return (
-			<li> <a onMouseDown={()=>{this.props.pushURL(this.props.url)}}> hh</a></li>
+			<li> <a onMouseDown={()=>{this.props.pushURL(this.props.url)}}>{this.props.title}</a></li>
 		)
 	}
 }
