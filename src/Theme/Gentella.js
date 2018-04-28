@@ -83,8 +83,7 @@ export class Gentella extends Component {
 
 	
   render() {
-	console.log(this.props.sidebar_menu_is_fullsize)
-	console.log("rerender gentella")
+
     return (
 		
 		<div className={(this.props.sidebar_menu_is_fullsize ? 'nav-md' : 'nav-sm')}>
