@@ -17,25 +17,6 @@ import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 
   
 /**
- * Represents the link under a menu heading
- */
-class MenuLink extends Component {
-	
-	propTypes: {
-		title : React.PropTypes.string.isRequired,
-		url   : React.PropTypes.string.isRequired,
-	}
-	
-	
-	render(){
-		return (
-			<li><Link to={this.props.url} >{this.props.title}</Link></li>
-		)
-	}
-}
-
-
-/**
  * Represents a top level menu heading/URL
  */
 class MenuItem extends Component {
@@ -55,8 +36,8 @@ class MenuItem extends Component {
 	}
 	
 	
-	openSubmenu(e){		
-		//this.props.linkClicked(this.props.title);	
+	openSubmenu(e){	
+		console.log("mousedown")
 		this.props.openMenu(this.props.name)
 	}
 	
@@ -70,14 +51,13 @@ class MenuItem extends Component {
 			: null);
 
 		var EntryType = (!hasChildren && this.props.url != null ? Link : "a");
-
 		
 		return (
         
 			<li className={(this.props.active === true ? 'active' : null)}  >
 			
 			
-				<EntryType to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
+				<EntryType to={(!hasChildren && this.props.url != null ? this.props.url : null)} onMouseDown={this.openSubmenu.bind(this)}>
 				
 					{/* Add Glypicon if one is supplied */}
 					{this.props.icon ? <i className={this.props.icon}></i> : null}
@@ -91,8 +71,6 @@ class MenuItem extends Component {
 				
 				{childMenu}
 				
-
-				
 			</li>
 		
 		)
@@ -105,8 +83,5 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const ConnectedMenuItem = connect(null ,mapDispatchToProps) (MenuItem);
 
-
-
-export { MenuLink, ConnectedMenuItem };
+export default connect(null ,mapDispatchToProps) (MenuItem);

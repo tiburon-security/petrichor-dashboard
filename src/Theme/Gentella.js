@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';

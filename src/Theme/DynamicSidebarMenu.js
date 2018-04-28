@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { SidebarMenu, ConnectedMenuItem, MenuLink } from './SidebarMenu';
+import MenuItem from './MenuItem';
+import MenuLink from './MenuLink';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 
-  
+/**
+ * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
+ * Includes abstractions of DOM elements for ease of use:
+ *
+ * <SidebarMenu>
+ *	<MenuItem>
+ *		<MenuLink/>
+ *	</MenuItem>
+ * </SidebarMenu>
+ *
+ */
+ 
+ 
 /**
  * Dynamically generates SidebardMenu component corresponding to application routes defined in
  * routes_menu_config
@@ -31,17 +43,16 @@ class DynamicSidebarMenu extends Component {
 	 *
 	 */
 	contextSwitchHandler(event){
-		
-		this.props.openMenu(null);
+		console.log("onblur")
+		//this.props.openMenu(null);
 		if(!this.props.sidebar_menu_is_fullsize){
 			//this.opened_submenu = null; 
 			//this.updateMenu(); 
-			
+			this.props.openMenu(null)
 			/*setTimeout(()=>{
-				this.opened_submenu = null; 
-				this.updateMenu(); 	
-			}, 1000);*/
-
+				this.props.openMenu(null)
+			}, 100);
+			*/
 		}
 		
 	} 
@@ -66,7 +77,6 @@ class DynamicSidebarMenu extends Component {
 		let menu = [];
 		let uniqueKey = 0;
 		let allRoutes = this.props.config.routes;
-		let menuFullSize = this.props.sidebar_menu_is_fullsize;
 		
 		// Iteate every top level route
 		for (let topLevelRoute of allRoutes) {
@@ -113,7 +123,7 @@ class DynamicSidebarMenu extends Component {
 				uniqueKey++;
 				
 				// Generate menu heading component
-				let menuItem = <ConnectedMenuItem 
+				let menuItem = <MenuItem 
 									key={uniqueKey} 
 									name={topLevelRoute.route_name} 
 									title={topLevelRoute.menu_title} 
