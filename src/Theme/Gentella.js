@@ -128,7 +128,7 @@ export class Gentella extends Component {
 
 
 					<TopNavigation onClick={this.topNavigationClickHandler.bind(this)} menuFullsize={this.props.sidebar_menu_is_fullsize}>
-						<Notifications notifications={this.props.config.notifications}/>
+						<Notifications notifications_api="/sample_notifications_api.json" notifications={this.props.config.notifications}/>
 						<ProfileDropdown user_name="Jovanni Hernandez" />
 					</TopNavigation>
 

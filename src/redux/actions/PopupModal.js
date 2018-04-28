@@ -1,5 +1,4 @@
 export function popupIsOpenAction(bool){
-	console.log(bool)
 	return {
 		type: 'POPUP_MODAL_OPEN',
 		isOpen: bool

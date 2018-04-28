@@ -13,7 +13,8 @@ class Notifications extends Component {
 		super(props);
 		this.state = {
 			menu_open: false,
-			expanded_notification : null
+			expanded_notification : null,
+			notifications: []
 		};
 	}
 	
@@ -22,6 +23,7 @@ class Notifications extends Component {
 	}
   
 	static propTypes = {
+		notifications_api: PropTypes.string.isRequired,
 		notifications: PropTypes.array.isRequired
 	}
 	
@@ -35,13 +37,23 @@ class Notifications extends Component {
 	
 	
 	expandNotification(index){
-		var selectedNotification = this.props.notifications[index]
+		var selectedNotification = this.state.notifications[index]
 		
 		var title = "Notification - " + selectedNotification.iso_datetime
 		var body = selectedNotification.message;
 	
 		this.props.openPopupModal(title, body);
 	
+	}
+	
+	/**
+	 * Fetch notifications from API
+	 */
+	componentDidMount() {
+		
+		fetch(this.props.notifications_api)
+			.then(response => response.json())
+			.then(data => { this.setState({ notifications: data.data })});
 	}
 	
 	render() {  
@@ -54,7 +66,7 @@ class Notifications extends Component {
 		
 		const FULL_DAY = 60 * 60 * 1000 * 24; // One day in milis
 		
-		for (let [index, notification] of this.props.notifications.entries()) {
+		for (let [index, notification] of this.state.notifications.entries()) {
 			
 			var timestamp = new Date(notification.iso_datetime)
 

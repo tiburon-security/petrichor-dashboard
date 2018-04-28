@@ -1,7 +1,7 @@
 const initialState = {
   isOpen: false,
-  title: "Placeholder",
-  body: "Placeholder"
+  title: null,
+  body: null
 }
 
 
