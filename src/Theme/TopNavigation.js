@@ -1,27 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Nav, Navbar } from 'react-bootstrap';
+import { toggleSidebarSize } from '../redux/actions/SidebarMenu.js';
+import { connect } from 'react-redux';
 
 class TopNavigation extends Component {
-	
-	propTypes: {
-		onClick    : PropTypes.func.isRequired,
-		menuFullsize : PropTypes.bool.isRequired
-	}
-	
-	constructor(props){
-		super(props);
-		
-		this.state = {
-			window_width: window.innerWidth
-		}
-	}
-
 	
 	render() {
 		 
 		let menuStyles = {
-			marginLeft 		: (this.props.menuFullsize ? "230px" : "70px" ),
+			marginLeft 		: (this.props.sidebar_menu_is_fullsize ? "230px" : "70px" ),
 			marginBottom	: "0px",
 			height			: "57px",
 			background		: "#EDEDED",
@@ -35,7 +22,7 @@ class TopNavigation extends Component {
 				<Navbar.Header>
 					<Navbar.Brand>
 						<div className="nav2 toggle">
-							<a id="menu_toggle" onClick={this.props.onClick}><i className="fa fa-bars"></i></a>
+							<a id="menu_toggle" onClick={()=>{this.props.toggleSidebarSize()}}><i className="fa fa-bars"></i></a>
 						</div>
 					</Navbar.Brand>
 		
@@ -51,4 +38,16 @@ class TopNavigation extends Component {
 	}
 }
 
-export default TopNavigation;
+const mapStateToProps = (state) => {
+    return {
+        sidebar_menu_is_fullsize: state.sidebar.isFullSize
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleSidebarSize: () => dispatch(toggleSidebarSize())		
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopNavigation);

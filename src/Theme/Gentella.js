@@ -26,30 +26,10 @@ export class Gentella extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {menuFullsize : true};
-		//console.log(this)
-		// Get application configuration from the router
-		//this.config = this.props.config;
-		//console.log(this.props.match.path)
-		//this.currentRoute = this.props.routes[this.props.routes.length - 1];
-		//this.currentRoute = this.props
-		
-		// TODO use the path to map instead of relying on passing the route name because react router 4 hates me
-		//this.props.match.path
+
 	}
 
 
-	/**
-	 * Toggle the size of the sidebar menu when toggle button clicked. This a very
-	 * non-react solution, but the body tag can't be modified via typicaly react 
-	 * functions. This tag is a carryover from the Gentella theme.
-	 */
-  	topNavigationClickHandler(event){
-		
-		// Toggle size state		
-		this.props.toggleSidebarSize();
-	}
-	
-	
 	componentDidMount(){
 		
 		document.title = this.props.config.website_name;
@@ -103,7 +83,6 @@ export class Gentella extends Component {
 							<br />
 							
 							<Switch>
-								{/* TODO: drop DynamicSideBar and just build the SideBar here*/}
 								{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
 									return (
 										<Route 
@@ -127,7 +106,7 @@ export class Gentella extends Component {
 					</div>
 
 
-					<TopNavigation onClick={this.topNavigationClickHandler.bind(this)} menuFullsize={this.props.sidebar_menu_is_fullsize}>
+					<TopNavigation>
 						<Notifications notifications_api="/sample_notifications_api.json" notifications={this.props.config.notifications}/>
 						<ProfileDropdown user_name="Jovanni Hernandez" />
 					</TopNavigation>
