@@ -7,6 +7,8 @@
  * for more reasoning on this design choice.
  */
 
+import Dashboard from './Views/Dashboard.js';
+ 
 export * from './Views/SampleReact.js';
-export * from './Views/Dashboard.js';
+export { Dashboard };
 

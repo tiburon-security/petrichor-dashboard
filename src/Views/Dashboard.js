@@ -3,27 +3,18 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
 import ReactGridLayout, {WidthProvider}  from 'react-grid-layout';
+import { connect } from 'react-redux';
+import { addDashboardWidget, removeDashboardWidget, removeDashboardWidgetsAll, setDashboardColumnNumber, setDashboardRowHeight } from '../redux/actions/Dashboard.js';
 const AutoWidthReactGridLayout = WidthProvider(ReactGridLayout);
+
 
 /**
  * View that displays a customizable, draggable dashboard grid of user defined widgets.
  * Widgets are loaded according to the global application configuration (routes_menu_config), 
  * which defines what widgets will load on a given route.
  */
-export class Dashboard extends Component {
-	
-	constructor(props){
+class Dashboard extends Component {
 		
-		super(props);
-		
-		this.state = {
-			rendered_widgets : [],
-			dashboard_columns : 4,
-			dashboard_row_height : 100,
-		};
-		
-	}
-	
 	propTypes: {
 		draggable_handle : React.PropTypes.string,
 	}
@@ -54,6 +45,31 @@ export class Dashboard extends Component {
 		
 	}
 	
+	
+	/**
+	 * Selects the current dashboard from the global configuration based on the active route_name
+	 */
+	findCurrentDashboard(currentRouteName){
+		for (let dashboard of window.app_config.dashboards) {
+			if(dashboard.route_name === currentRouteName){
+				return dashboard
+			}
+		};	
+	}
+	
+	
+	/**
+	 * Selects the configuration for a widget in the global configuration based on the widget's name
+	 */
+	findWidgetConfiguration(widgetName){
+		for (let widget of window.app_config.dashboard_widgets) {
+			if(widget.widget_class_name === widgetName){
+				return widget
+			}
+		};			
+	}
+	
+
 	/**
 	 * Renders all of the widgets from the application configuration into the dashboard
 	 */
@@ -63,32 +79,15 @@ export class Dashboard extends Component {
 		var renderedWidgets = [];
 		
 		// Finds config info for the current dashboard
-		let currentDashboard = function(){
-			for (let dashboard of window.app_config.dashboards) {
-				if(dashboard.route_name === currentRouteName){
-					return dashboard
-				}
-			};		
-		}();
+		let currentDashboard = this.findCurrentDashboard(currentRouteName);
 		
-		
-		// Finds config info for a given widget
-		function findWidgetConfiguration(widgetName) {
-			for (let widget of window.app_config.dashboard_widgets) {
-				if(widget.widget_class_name === widgetName){
-					return widget
-				}
-			};		
-		}
-			
 		// Use dashboard settings, if provided
-		let rowHeight = (typeof currentDashboard.row_height !== "undefined" ? currentDashboard.rowHeight : this.state.dashboard_row_height);
-		let numColumns = (typeof currentDashboard.number_of_columns !== "undefined" ? currentDashboard.number_of_columns : this.state.dashboard_columns);
+		let rowHeight = (typeof currentDashboard.row_height !== "undefined" ? currentDashboard.rowHeight : this.props.rowHeight);
+		let numColumns = (typeof currentDashboard.number_of_columns !== "undefined" ? currentDashboard.number_of_columns : this.props.numberOfColumns);
 		
-		this.setState({
-			dashboard_columns : numColumns,
-			dashboard_row_height : rowHeight,
-		})
+		this.props.setDashboardColumnNumber(numColumns)
+		this.props.setDashboardRowHeight(rowHeight)
+
 		
 		// TODO: Write routine for dynamically generating layout
 		if(currentDashboard.auto_position){
@@ -100,7 +99,7 @@ export class Dashboard extends Component {
 			// Iterate every widget and load it
 			for (let widget of currentDashboard.supported_widgets) {	
 			
-				let widgetConfiguration = findWidgetConfiguration(widget.name);
+				let widgetConfiguration = this.findWidgetConfiguration(widget.name);
 
 				let x = widget.layout.x;
 				let y = widget.layout.y;
@@ -111,28 +110,24 @@ export class Dashboard extends Component {
 				require.ensure([], () => {  
 				
 					// Widgets live up one directory from Dashbaord.js in /Dashboard/Widgets/
-					// TODO: look into absolute reference in ES6/Babel
 					let Widget = require("../" + widgetConfiguration.widget_url);
 					
 					let containerKey = uniqueId();
 					
-					let widgetComponent = <Widget.default key={uniqueId()} route={this.props.route} route_params={this.props.routeParams} close_button_clickhandler={() => { this.closeWidget(containerKey)}} />;
+					let widgetComponent = (
+						<Widget.default 
+							key={uniqueId()} 
+							widgetKey={containerKey} 
+							route={this.props.route} 
+							route_params={this.props.routeParams} 
+							close_button_clickhandler={() => { this.closeWidget(containerKey)}} 
+						/>
+					);
 					
-					// Widget must be wrapped in a div with specs due to the way react-grid-layout is written
-					let wrappedWidgetComponent = <div key={containerKey} data-grid={{x: x, y: y, w: w, h: h}} children={widgetComponent}/>
-						
-					// React likes immutable datastructues in state, so rebuild it each time. 
-					// Look into immtuability-helper if this becomes unperformant.
-					// Reference: http://stackoverflow.com/questions/26253351/correct-modification-of-state-arrays-in-reactjs/41445812#41445812
-					renderedWidgets = [ ...renderedWidgets, wrappedWidgetComponent ]; // --> [1,2,3,4]
-
-					this.setState({rendered_widgets : renderedWidgets})
-					
+					this.props.addDashboardWidget(containerKey, x, y, w, h, widgetComponent);
 				}); 
-			
 			}			
 		}
-
 	}
 	
 	
@@ -142,66 +137,47 @@ export class Dashboard extends Component {
 	componentDidMount(){
 		this.renderWidgets()
 	}
-	
-	
-	/**
-	 * Only trigger an update if the route has calling the dashboard has changed
-	 * and there were new widgetw added to the state
-	 */
-	shouldComponentUpdate(nextProps, nextState){
-		// Determine if the rendered widgets actually changed
-		var equal = true;
-		if(this.state.rendered_widgets.length === nextState.rendered_widgets.length){
-
-			for(var i=0; i< this.state.rendered_widgets.length; i++){
-				
-				// Widget keys should be the same unless the entire dashboard has been updated
-				if(this.state.rendered_widgets[i].key !== nextState.rendered_widgets[i].key){
-					equal = false;
-				}
-			}
-		} else {
-			equal = false;
-		}
-			
-		
-		if(this.props.route_name === nextProps.route_name && this.props.location.pathname === nextProps.location.pathname){
-			
-			if(equal){
-				return false;
-			} else {
-				return true;
-			}
-			
-		} else {		
-			return true;
-		}
-		
-	}
-	
-
-	/**
-	 * Clears dashboard if a new route was requested
-	 */
-	componentDidUpdate(prevProps, prevState){
-				
-		if(this.props.route_name !== prevProps.route_name && this.props.location.pathname !== prevProps.location.pathname){
-			// Clear state before re-rendering widgets
-			this.setState({rendered_widgets: []}, () => { this.renderWidgets(); });
-		}
-
-	}
 
 	
 	render() {
 		return (
 		  <div>
+			<AutoWidthReactGridLayout  
+				measureBeforeMount={true} 
+				className="layout" 
+				cols={this.props.numberOfColumns} 
+				rowHeight={this.props.rowHeight} 
+				draggableHandle={this.props.draggable_handle}
+			>
 			
-			<AutoWidthReactGridLayout  measureBeforeMount={true} className="layout" cols={this.state.dashboard_columns} rowHeight={this.state.dashboard_row_height} draggableHandle={this.props.draggable_handle}>
-				{this.state.rendered_widgets}
-			</AutoWidthReactGridLayout >
-					
+				{/* Build widgets based on state */}
+				{this.props.widgets.map((widget, i) => 
+					<div key={widget.id} data-grid={{x: widget.x, y: widget.y, w: widget.w, h: widget.h}} children={widget.component} />
+				)} 
+				
+			</AutoWidthReactGridLayout >	
 		  </div>
 		);
-  }
+	}
 }
+
+const mapStateToProps = (state) => {
+    return {
+        widgets: state.dashboard.widgets,
+        numberOfColumns: state.dashboard.numberOfColumns,
+        rowHeight: state.dashboard.rowHeight
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addDashboardWidget: (id, x, y, w, h, component) => dispatch(addDashboardWidget(id, x, y, w, h, component)),
+        removeDashboardWidget: (id) => dispatch(removeDashboardWidget(id)),
+        removeDashboardWidgetsAll: () => dispatch(removeDashboardWidgetsAll()),
+        setDashboardColumnNumber: (numberOfColumns) => dispatch(setDashboardColumnNumber(numberOfColumns)),
+        setDashboardRowHeight: (rowHeight) => dispatch(setDashboardRowHeight(rowHeight))
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
