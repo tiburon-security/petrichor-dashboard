@@ -28,10 +28,7 @@ export function dashboard(state = initialState, action) {
 		case 'DASHBOARD_WIDGET_REMOVE':
 			return {
 				...state,
-				widgets: [
-					...state.widgets.slice(0, action.id),
-					...state.widgets.slice(action.id + 1)
-				]
+				widgets: state.widgets.filter(element => element.id !== action.id)
 			}		
 			
 			

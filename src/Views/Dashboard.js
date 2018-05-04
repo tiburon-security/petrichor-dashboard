@@ -28,21 +28,7 @@ class Dashboard extends Component {
 	 * Searches the dashboard for an element with the given key, removing it if found.
 	 */
 	closeWidget(key){
-		
-		let updated_rendered_widgets = [];
-		
-		// Track only widgets that haven't been dismissed
-		for (let widget of this.state.rendered_widgets) {
-			if(widget.key !== key){
-				updated_rendered_widgets.push(widget);
-			}
-		}
-		
-		// If there actually was a widget that was dismissed, update the state
-		if(this.state.rendered_widgets.length !== updated_rendered_widgets){
-			this.setState({rendered_widgets : updated_rendered_widgets})
-		}
-		
+		this.props.removeDashboardWidget(key)		
 	}
 	
 	
