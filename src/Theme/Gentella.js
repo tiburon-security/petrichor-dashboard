@@ -15,7 +15,6 @@ import { toggleSidebarSize, setSidebarFullsize } from '../redux/actions/SidebarM
 import { Route, Switch } from 'react-router';
 import  { recursivelyWalkRoutes } from '../Helpers/Routes';
 import { connect } from 'react-redux';
-import {uniqueId } from 'lodash';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
@@ -31,7 +30,7 @@ export class Gentella extends Component {
 
 
 	componentDidMount(){
-		
+		console.log("gentella mounting")
 		document.title = this.props.config.website_name;
 		
 		// Listen to window being resized
@@ -127,7 +126,7 @@ export class Gentella extends Component {
 										<Route 
 											exact
 											path={fullPath}
-											key={uniqueId()}
+											key={index}
 											render={(props)=>(
 												<ChildComponentRender route_name={obj.route_name} {...props} />
 											)}

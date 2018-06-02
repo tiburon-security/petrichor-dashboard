@@ -64,10 +64,23 @@
 			"row_height" : 50,
 			"supported_widgets" : [
 				{
-					"name" : "FakeWidget",
+					"name" : "FilteringWidget",
+					"layout" : {
+						"isDraggable": false, 
+						"isResizable": false,
+						"x" : 1,
+						"y" : 1,
+						"w" : 6,
+						"h" : 1
+					}
+				},				
+				{
+					"name" : "TabularDataFromAPIWidget",
 					"layout" : {
 						"x" : 1,
-						"y" : 1
+						"y" : 1,
+						"w" : 6,
+						"h" : 6
 					}
 				},
 				{
@@ -134,8 +147,16 @@
 	
     "dashboard_widgets" : [
         {
-            "widget_class_name" : "FakeWidget",
-            "widget_url" : "Dashboard/Widgets/FakeWidget.js",
+            "widget_class_name" : "FilteringWidget",
+            "widget_url" : "Dashboard/Widgets/FilteringWidget.js",
+			"min_grid_size" : { 
+				"w": 3, 
+				"h": 1
+			}
+        },           
+		{
+            "widget_class_name" : "TabularDataFromAPIWidget",
+            "widget_url" : "Dashboard/Widgets/TabularDataFromAPIWidget.js",
 			"min_grid_size" : { 
 				"w": 1, 
 				"h": 2

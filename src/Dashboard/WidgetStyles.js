@@ -90,7 +90,7 @@ class FullWidget extends Component {
 		settings_button_clickhandler: null,
 		close_button: false,
 		close_button_clickhandler: null,
-		title: "Default Header",
+		title: null,
 		loading: true
 	}
 
@@ -99,7 +99,7 @@ class FullWidget extends Component {
 		settings_button_clickhandler: PropTypes.func,
 		close_button: PropTypes.bool.isRequired,
 		close_button_clickhandler: PropTypes.func,
-		title: PropTypes.string.isRequired
+		title: PropTypes.string
 	}
 	
 	
@@ -122,13 +122,15 @@ class FullWidget extends Component {
 	
 	render(){
 		
+		let header = (this.props.title !== null ? <WidgetHeader {...this.props}></WidgetHeader> : '')
+		
 		return (
 			<WidgetBody>
-				<WidgetHeader {...this.props}></WidgetHeader>
-					<WidgetContent>
-						{(this.state.loading ? <img className="x_loading_overlay" alt="Loading Icon" src={LoadingIcon}/> : null)}
-						<div style={{"display": (this.state.loading ? "none" : null)}}>{this.props.children}</div>
-					</WidgetContent>
+				{header}
+				<WidgetContent>
+					{(this.state.loading ? <img className="x_loading_overlay" alt="Loading Icon" src={LoadingIcon}/> : null)}
+					<div style={{"display": (this.state.loading ? "none" : null), "height":"100%"}}>{this.props.children}</div>
+				</WidgetContent>
 			</WidgetBody>
 		)
 	}
