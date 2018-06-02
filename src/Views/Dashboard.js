@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import { addDashboardWidget, removeDashboardWidget, removeDashboardWidgetsAll, setDashboardColumnNumber, setDashboardRowHeight } from '../redux/actions/Dashboard.js';
 const AutoWidthReactGridLayout = WidthProvider(ReactGridLayout);
 
+/**
+WIDGETS ARE NEVER BLOWN AWAY ON PAGE CHANGE... ALSO SHOULDCOMPONENT UPDATE IS FORCING THE PAGE TO RELOAD WHEN THE QUERYPARAMS ARE UPDATED...
+**/
 
 /**
  * View that displays a customizable, draggable dashboard grid of user defined widgets.
@@ -68,9 +71,9 @@ class Dashboard extends Component {
 		let currentDashboard = this.findCurrentDashboard(currentRouteName);
 		
 		// Use dashboard settings, if provided
-		let rowHeight = (typeof currentDashboard.row_height !== "undefined" ? currentDashboard.rowHeight : this.props.rowHeight);
+		let rowHeight = (typeof currentDashboard.row_height !== "undefined" ? currentDashboard.row_height : this.props.rowHeight);
 		let numColumns = (typeof currentDashboard.number_of_columns !== "undefined" ? currentDashboard.number_of_columns : this.props.numberOfColumns);
-		
+
 		this.props.setDashboardColumnNumber(numColumns)
 		this.props.setDashboardRowHeight(rowHeight)
 
@@ -83,7 +86,7 @@ class Dashboard extends Component {
 		} else {
 			
 			// Iterate every widget and load it
-			for (let widget of currentDashboard.supported_widgets) {	
+			for (let [index, widget] of currentDashboard.supported_widgets.entries()) {	
 			
 				let widgetConfiguration = this.findWidgetConfiguration(widget.name);
 
@@ -91,6 +94,9 @@ class Dashboard extends Component {
 				let y = widget.layout.y;
 				let w = (typeof widget.layout.w === 'undefined' ? widgetConfiguration.min_grid_size.w : widget.layout.w);
 				let h = (typeof widget.layout.h === 'undefined' ? widgetConfiguration.min_grid_size.h : widget.layout.h);
+				
+				let isDraggable = (typeof widget.layout.isDraggable === 'undefined' ? true : widget.layout.isDraggable);
+				let isResizable = (typeof widget.layout.isResizable === 'undefined' ? true : widget.layout.isResizable);
 
 				// Dynamically load Widget module
 				require.ensure([], () => {  
@@ -99,6 +105,7 @@ class Dashboard extends Component {
 					let Widget = require("../" + widgetConfiguration.widget_url);
 					
 					let containerKey = uniqueId();
+
 					
 					let widgetComponent = (
 						<Widget.default 
@@ -107,13 +114,28 @@ class Dashboard extends Component {
 							route={this.props.route} 
 							route_params={this.props.routeParams} 
 							close_button_clickhandler={() => { this.closeWidget(containerKey)}} 
+							{...this.props}
 						/>
 					);
 					
-					this.props.addDashboardWidget(containerKey, x, y, w, h, widgetComponent);
+					this.props.addDashboardWidget(containerKey, x, y, w, h, isDraggable, isResizable, widgetComponent);
 				}); 
 			}			
 		}
+	}
+	
+	/**
+	 * Clears dashboard if a new route was requested
+	 */
+	componentDidUpdate(prevProps, prevState){
+		if(this.props.route_name !== prevProps.route_name && this.props.match.url !== prevProps.match.url){
+			console.log("clearing")
+			// Clear dashboard re-rendering widgets
+			this.props.removeDashboardWidgetsAll()
+			this.renderWidgets()
+			
+		} 
+
 	}
 	
 	
@@ -121,6 +143,7 @@ class Dashboard extends Component {
 	 * On initial page load, render the dashboard
 	 */
 	componentDidMount(){
+		console.log("dashboard mounted")
 		this.renderWidgets()
 	}
 
@@ -134,11 +157,12 @@ class Dashboard extends Component {
 				cols={this.props.numberOfColumns} 
 				rowHeight={this.props.rowHeight} 
 				draggableHandle={this.props.draggable_handle}
+				onResizeStop={(i, j)=>{console.log(i);console.log(j)}}
 			>
 			
 				{/* Build widgets based on state */}
 				{this.props.widgets.map((widget, i) => 
-					<div key={widget.id} data-grid={{x: widget.x, y: widget.y, w: widget.w, h: widget.h}} children={widget.component} />
+					<div key={widget.id} data-grid={{x: widget.x, y: widget.y, w: widget.w, h: widget.h, isDraggable:widget.isDraggable, isResizable: widget.isResizable}} children={widget.component} />
 				)} 
 				
 			</AutoWidthReactGridLayout >	
@@ -157,7 +181,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addDashboardWidget: (id, x, y, w, h, component) => dispatch(addDashboardWidget(id, x, y, w, h, component)),
+        addDashboardWidget: (id, x, y, w, h, isDraggable, isResizable, component) => dispatch(addDashboardWidget(id, x, y, w, h, isDraggable, isResizable, component)),
         removeDashboardWidget: (id) => dispatch(removeDashboardWidget(id)),
         removeDashboardWidgetsAll: () => dispatch(removeDashboardWidgetsAll()),
         setDashboardColumnNumber: (numberOfColumns) => dispatch(setDashboardColumnNumber(numberOfColumns)),

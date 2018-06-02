@@ -1,11 +1,13 @@
-export function addDashboardWidget(id, x, y, w, h, component){
+export function addDashboardWidget(id, x, y, w, h, isDraggable, isResizable, component){
 	return {
 		type: 'DASHBOARD_WIDGET_ADD',
 		id, 
 		x, 
 		y, 
 		w, 
-		h, 
+		h,
+		isDraggable,
+		isResizable,
 		component
 	};
 }

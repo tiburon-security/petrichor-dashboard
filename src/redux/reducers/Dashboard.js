@@ -19,6 +19,8 @@ export function dashboard(state = initialState, action) {
 						"y" : action.y,
 						"w" : action.w,
 						"h" : action.h,
+						"isDraggable" : action.isDraggable,
+						"isResizable" : action.isResizable,
 						"component" : action.component
 					}
 				]
@@ -46,7 +48,7 @@ export function dashboard(state = initialState, action) {
 			}	
 		
 		
-		case 'DASHBOARD_WIDGET_ADD':
+		case 'DASHBOARD_ROW_HEIGHT':
 			return {
 				...state,
 				"rowHeight" : action.rowHeight,
