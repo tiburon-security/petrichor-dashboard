@@ -920,7 +920,8 @@ span.right {
   height:100%;
   margin-bottom: 10px;
   padding: 10px 17px;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border: 1px solid #E6E9ED;
   -webkit-column-break-inside: avoid;
@@ -969,10 +970,13 @@ span.right {
   padding: 0 5px 6px;
   position: relative;
   width: 100%;
-  height: 90%;
+  height: 100%;
   float: left;
   clear: both;
-  margin-top: 5px; }
+  margin-top: 5px; 
+  display: flex;
+  flex-direction: column;
+}
 
 .x_content h4 {
   font-size: 16px;
