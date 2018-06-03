@@ -1,7 +1,8 @@
 const initialState = {
   widgets: [],
   numberOfColumns: 4, 
-  rowHeight: 100
+  rowHeight: 100,
+  widget_messages: {}
 }
 
 export function dashboard(state = initialState, action) {
@@ -52,7 +53,32 @@ export function dashboard(state = initialState, action) {
 			return {
 				...state,
 				"rowHeight" : action.rowHeight,
+			}			
+			
+		case 'DASHBOARD_SEND_INTERWIDGET_MESSAGE':
+			return {
+				...state,
+				widget_messages: {
+					...state.widget_messages,
+					[action.messageType] : action.message,
+				}
+			}			
+		
+		case 'DASHBOARD_SEND_MULTIPLE_INTERWIDGET_MESSAGES':
+		
+			let updatedMessages = state.widget_messages;
+			
+			for(let i of action.messages){
+				updatedMessages[i.messageType] = i.message;
+			}
+		
+			return {
+				...state,
+				widget_messages: updatedMessages
 			}	
+			
+			
+			
 		default:
 			return state
 	}

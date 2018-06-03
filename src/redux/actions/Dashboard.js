@@ -1,3 +1,10 @@
+export const INTERWIDGET_MESSAGE_TYPES = {
+	
+	START_DATE : "START_DATE",
+	END_DATE : "END_DATE"
+	
+}
+
 export function addDashboardWidget(id, x, y, w, h, isDraggable, isResizable, component){
 	return {
 		type: 'DASHBOARD_WIDGET_ADD',
@@ -36,5 +43,29 @@ export function setDashboardRowHeight(rowHeight){
 	return {
 		type: 'DASHBOARD_ROW_HEIGHT',
 		rowHeight
+	};
+}
+
+export function sendInterwidgetMessage(messageType, message){
+	return {
+		type: 'DASHBOARD_SEND_INTERWIDGET_MESSAGE',
+		messageType,
+		message
+	};
+}
+
+/**
+ * Expects messages in json array:
+   [
+	{
+	  messageType: const,
+	  message: string
+	}
+   ]
+ */
+export function sendMultipleInterwidgetMessages(messages){
+	return {
+		type: 'DASHBOARD_SEND_MULTIPLE_INTERWIDGET_MESSAGES',
+		messages
 	};
 }

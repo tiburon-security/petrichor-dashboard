@@ -67,7 +67,7 @@
 					"name" : "FilteringWidget",
 					"layout" : {
 						"isDraggable": false, 
-						"isResizable": false,
+						"isResizable": true,
 						"x" : 1,
 						"y" : 1,
 						"w" : 6,
