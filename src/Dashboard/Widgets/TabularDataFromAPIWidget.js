@@ -11,23 +11,18 @@ import "react-table/react-table.css";
 
 
 
-/***
-
-1 (DONE) - if the page has no initial date, the start/end doesnt get added to the API call, but if it does have an initial, it does
-2 (DONE) - find a way to parse an url query params from initial load and read them into table configuration (like updating the filter)
-3 - find a way to save table parameters to URL, simply slapping the params passed to the api to the current pages query params is kinda sloppy...
-
-
-
-***/
-
+/**
+ * Component for fetching data from a simple GET-based API and displaying it in a table.
+ * Has support built in for facilitating pagination, filtering & sorting on the server side.
+ */
 class TabularDataFromAPIWidget extends Component {
 				
 	constructor(state){
 		super(state);
 		
 		({defaultPage: this.defaultPage, defaultPageSize: this.defaultPageSize, defaultSorts: this.defaultSorts, defaultFilters: this.defaultFilters} = this.getDefaultTableSettings());	
-
+		console.log(this.defaultPage)
+		console.log(this.defaultPage + this.props.apiPageNumberOffset)
 		this.state = ({
 			loading:false, 
 			table_loading:false, 
@@ -39,27 +34,42 @@ class TabularDataFromAPIWidget extends Component {
 	
 	
 	propTypes: {
-		endpoint : React.PropTypes.string,
-		apiPageNumberVariableName : React.PropTypes.string,
-		apipointPageSizeVariableName : React.PropTypes.string,
-		apipointSortVariableName : React.PropTypes.string,
-		apipointFilterVariableName : React.PropTypes.string,
-		apiResponseDataKey : React.PropTypes.string,
-		apiResponseNumberofPagesKey : React.PropTypes.string,
-		apiPageNumberOffset : React.PropTypes.number,
-		columns : React.PropTypes.array
+		endpoint 						: React.PropTypes.string,
+		apiPageNumberVariableName 		: React.PropTypes.string,
+		apipointPageSizeVariableName 	: React.PropTypes.string,
+		apipointSortVariableName 		: React.PropTypes.string,
+		apipointFilterVariableName 		: React.PropTypes.string,
+		apiResponseDataKey 				: React.PropTypes.string,
+		apiResponseNumberofPagesKey 	: React.PropTypes.string,
+		apiPageNumberOffset 			: React.PropTypes.number,
+		queryStringPageVariableName 	: React.PropTypes.string,
+		queryStringPageSizeVariableName	: React.PropTypes.string,
+		queryStringFilterVariableName	: React.PropTypes.string,
+		queryStringSortVariableName 	: React.PropTypes.string,
+		columns 						: React.PropTypes.array
 	}
 	
 	
 	static defaultProps = {
+		// API Endpoint
 		endpoint : "https://reqres.in/api/users",	
-		apiPageNumberVariableName : "page",
-		apipointPageSizeVariableName : "per_page",
-		apipointSortVariableName : "sort_by",
-		apipointFilterVariableName : "filter_by",
-		apiResponseDataKey : "data",
-		apiResponseNumberofPagesKey : "total_pages",	
-		apiPageNumberOffset : 1,
+		
+		// Parameters that are sent to API
+		apiPageNumberVariableName 		: "page",
+		apipointPageSizeVariableName 	: "per_page",
+		apipointSortVariableName 		: "sort_by",
+		apipointFilterVariableName 		: "filter_by",
+		apiResponseDataKey 				: "data",
+		apiResponseNumberofPagesKey 	: "total_pages",	
+		apiPageNumberOffset 			: 1,
+		
+		// Query String Params that are added to current URL
+		queryStringPageVariableName 	: "dage",
+		queryStringPageSizeVariableName	: "page_size",
+		queryStringFilterVariableName	: "filter_by",
+		queryStringSortVariableName 	: "sort_by",
+		
+		// Columns to display
 		columns : [
 			{
 			  Header: "ID",
@@ -93,11 +103,6 @@ class TabularDataFromAPIWidget extends Component {
 	 */	
 	getDefaultTableSettings(){
 		
-		const PAGE_QUERY_STRING_NAME 		= "page";
-		const PAGE_SIZE_QUERY_STRING_NAME 	= "page_size";
-		const FILTER_QUERY_STRING_NAME 		= "filter_by";
-		const SORT_QUERY_STRING_NAME 		= "sort_by";
-		
 		let defaultPage = 0;
 		let defaultPageSize = 5;
 		let defaultSorts = [];
@@ -109,22 +114,22 @@ class TabularDataFromAPIWidget extends Component {
 		console.log(queryParams)
 		
 		// Parse page number
-		if(queryParams[PAGE_QUERY_STRING_NAME] !== undefined){
-			defaultPage = Number.parseInt(queryParams[PAGE_QUERY_STRING_NAME], 10) - this.props.apiPageNumberOffset;
+		if(queryParams[this.props.queryStringPageVariableName] !== undefined){
+			defaultPage = Number.parseInt(queryParams[this.props.queryStringPageVariableName], 10) - this.props.apiPageNumberOffset;
 		}		
 		
 		// Parse page size number
-		if(queryParams[PAGE_SIZE_QUERY_STRING_NAME] !== undefined){
-			defaultPageSize = Number.parseInt(queryParams[PAGE_SIZE_QUERY_STRING_NAME], 10);
+		if(queryParams[this.props.queryStringPageSizeVariableName] !== undefined){
+			defaultPageSize = Number.parseInt(queryParams[this.props.queryStringPageSizeVariableName], 10);
 		}
 		
 		// Parse out initial sorts
-		if(queryParams[SORT_QUERY_STRING_NAME] !== undefined){
+		if(queryParams[this.props.queryStringSortVariableName] !== undefined){
 			
 			let desc_regex_pattern = /desc\((.*)\)/g;
 			let asc_regex_pattern = /asc\((.*)\)/;
 			
-			defaultSorts = queryParams[SORT_QUERY_STRING_NAME].split(",").map(i=>{
+			defaultSorts = queryParams[this.props.queryStringSortVariableName].split(",").map(i=>{
 				let descMatches = desc_regex_pattern.exec(i);
 				if(descMatches !== null){
 					return {
@@ -142,8 +147,8 @@ class TabularDataFromAPIWidget extends Component {
 		}
 		
 		// Parse out initial filters
-		if(queryParams[FILTER_QUERY_STRING_NAME] !== undefined){
-			defaultFilters = queryParams[FILTER_QUERY_STRING_NAME].split(",").map(i=>{
+		if(queryParams[this.props.queryStringFilterVariableName] !== undefined){
+			defaultFilters = queryParams[this.props.queryStringFilterVariableName].split(",").map(i=>{
 				let split = i.split("[eq]");
 				let column = split[0]
 				let value = split[1]
@@ -163,14 +168,24 @@ class TabularDataFromAPIWidget extends Component {
 	 * Fetch data from API and insert into table
 	 */ 
 	fetchData(state, instance){
+		console.log(state)
+		console.log(instance)
+		//this.setState({ page : state.page })
+	
+		// Tracks query string for the current page
+		let thisQueryStringObj = {};
+		
+		// Trakc the query string that is used as GET parameters for the API
+		let apiQueryStringObj = {};
 		
 		this.setState({table_loading: true})
+		console.log(state.page)
+		console.log(state.page + this.props.apiPageNumberOffset)
+		thisQueryStringObj[this.props.queryStringPageVariableName] 	= state.page + this.props.apiPageNumberOffset;
+		thisQueryStringObj[this.props.queryStringPageSizeVariableName] = state.pageSize;		
 		
-		// Generate query string
-		const queryString = { 
-			[this.props.apiPageNumberVariableName] : state.page + this.props.apiPageNumberOffset, 
-			[this.props.apipointPageSizeVariableName] : state.pageSize,
-		};
+		apiQueryStringObj[this.props.apiPageNumberVariableName] 	= state.page + this.props.apiPageNumberOffset;
+		apiQueryStringObj[this.props.apipointPageSizeVariableName] = state.pageSize;
 
 		// Build sorting query string parameters
 		if(state.sorted.length > 0){
@@ -178,7 +193,9 @@ class TabularDataFromAPIWidget extends Component {
 				let direction = (i.desc ? "desc" : "asc")
 				return `${direction}(${i.id})`
 			}).join(",")
-			queryString[this.props.apipointSortVariableName] = sorts
+			
+			thisQueryStringObj[this.props.queryStringSortVariableName] = sorts
+			apiQueryStringObj[this.props.apipointSortVariableName] = sorts
 		}
 		
 		// Build filtering query string parameters
@@ -198,14 +215,18 @@ class TabularDataFromAPIWidget extends Component {
 		}
 		
 		if(filters.length > 0){
-			queryString[this.props.apipointFilterVariableName] = filters.join(",")
+			thisQueryStringObj[this.props.queryStringFilterVariableName] = filters.join(",")
+			apiQueryStringObj[this.props.apipointFilterVariableName] = filters.join(",")
 		}
 		
-		// Convert query string object into actual GET paramter query string
-		const searchString = qs.stringify(queryString);
-		console.log(searchString)
+		// Convert query string objects into actual GET paramter query strings
+		const thisQueryString = qs.stringify(thisQueryStringObj);
+		const apiQueryString = qs.stringify(apiQueryStringObj);
+		console.log(thisQueryString)
+		console.log(apiQueryString)
 
-		fetch(`${this.props.endpoint}?${searchString}`)
+		// Send request to API
+		fetch(`${this.props.endpoint}?${apiQueryString}`)
 		.then(response => response.json())
 		.then((response) => {
 
@@ -218,7 +239,7 @@ class TabularDataFromAPIWidget extends Component {
 
 		// Add any currently selected parameters to the URL as a query string
 		this.props.pushURL({
-			search: searchString
+			search: thisQueryString
 		})
 	}
 
@@ -238,7 +259,6 @@ class TabularDataFromAPIWidget extends Component {
 					columns={this.props.columns}
 					data={this.state.data} // should default to []
 					
-					page={this.state.page}
 					pages={this.state.pages} // should default to -1 (which means we don't know how many pages we have)
 					loading={this.state.table_loading}
 					minRows={0}
@@ -247,7 +267,6 @@ class TabularDataFromAPIWidget extends Component {
 					onFetchData={(state, instance) => {
 						this.fetchData(state, instance)
 					}}
-					onPageChange={page => this.setState({ page })}
 
 					className="-striped -highlight"
 					style={{
@@ -256,14 +275,11 @@ class TabularDataFromAPIWidget extends Component {
 					
 					defaultFiltered={this.defaultFilters}
 					defaultSorted={this.defaultSorts}
-
-				/>
 				
+				/>	
 			</FullWidget>
 		);
-  
 	}
-
 }
 
 
