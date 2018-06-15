@@ -217,9 +217,9 @@ class TabularDataFromAPIWidget extends Component {
 		})	
 
 		// Add any currently selected parameters to the URL as a query string
-		/*this.props.pushURL({
+		this.props.pushURL({
 			search: searchString
-		})	*/	
+		})
 	}
 
 	

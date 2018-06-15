@@ -66,7 +66,8 @@
 				{
 					"name" : "FilteringWidget",
 					"props" : {
-						"showKeywordFilter" : false
+						"showKeywordFilter" : true,
+						"showDateFilter" : true
 					},
 					"layout" : {
 						"isDraggable": false, 
