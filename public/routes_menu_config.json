@@ -65,6 +65,9 @@
 			"supported_widgets" : [
 				{
 					"name" : "FilteringWidget",
+					"props" : {
+						"showKeywordFilter" : false
+					},
 					"layout" : {
 						"isDraggable": false, 
 						"isResizable": true,

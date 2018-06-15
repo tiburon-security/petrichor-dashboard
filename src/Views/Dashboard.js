@@ -95,6 +95,8 @@ class Dashboard extends Component {
 				let w = (typeof widget.layout.w === 'undefined' ? widgetConfiguration.min_grid_size.w : widget.layout.w);
 				let h = (typeof widget.layout.h === 'undefined' ? widgetConfiguration.min_grid_size.h : widget.layout.h);
 				
+				let widgetProps = (typeof widget.props === 'undefined' ? [] : widget.props)
+				
 				let isDraggable = (typeof widget.layout.isDraggable === 'undefined' ? true : widget.layout.isDraggable);
 				let isResizable = (typeof widget.layout.isResizable === 'undefined' ? true : widget.layout.isResizable);
 
@@ -106,6 +108,7 @@ class Dashboard extends Component {
 					
 					let containerKey = uniqueId();
 
+					console.log(this.props)
 					
 					let widgetComponent = (
 						<Widget.default 
@@ -114,6 +117,7 @@ class Dashboard extends Component {
 							route={this.props.route} 
 							route_params={this.props.routeParams} 
 							close_button_clickhandler={() => { this.closeWidget(containerKey)}} 
+							{...widgetProps}
 							{...this.props}
 						/>
 					);
