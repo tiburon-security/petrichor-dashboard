@@ -25,7 +25,6 @@ export class Gentella extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {menuFullsize : true};
-
 	}
 
 
@@ -44,11 +43,9 @@ export class Gentella extends Component {
 	updateDimensions() {
 		if(window.innerWidth > 990){
 			this.props.setSidebarFullsize(true);
-			
 		} else {
 			this.props.setSidebarFullsize(false);
 		}
-		
 	}
 
 
@@ -75,8 +72,6 @@ export class Gentella extends Component {
 							</div>
 
 							<div className="clearfix"></div>
-
-							<ProfileQuickInfo user_name="Jovanni Hernandez" image_path={profile_pic}/>
 
 							<br />
 							
@@ -106,7 +101,7 @@ export class Gentella extends Component {
 
 					<TopNavigation>
 						<Notifications notifications_api="/sample_notifications_api.json" notifications={this.props.config.notifications}/>
-						<ProfileDropdown user_name="Jovanni Hernandez" />
+						<ProfileDropdown user_name={this.props.user_name} />
 					</TopNavigation>
 
 

@@ -10,11 +10,20 @@ fetch('/routes_menu_config.json')
 	.then(function(response) {
 		return response.json()
 	})
-	.then(bootstrapApplication)
-	
+	.then(function(mainJson){		
+		fetch('/sample_user_api.json')
+		.then(function(userResponse){			
+			return userResponse.json()
+		})
+		.then(function(userJson){
+			bootstrapApplication(mainJson, userJson.data)
+		})
+		
+	})
 
-function bootstrapApplication(config){
 	
+function bootstrapApplication(config, userConfig){
+
 	// Store the config as a global,  since it will be reference in othermaybe
 	// parts of the app, maybe there's a better way of doing this...?
 	window.app_config = config;
@@ -31,7 +40,7 @@ function bootstrapApplication(config){
 			*/}
 			<Route 
 				render={(props)=>(
-					<Gentella config={config} location={props.location} />
+					<Gentella config={config} {...userConfig} location={props.location} />
 				)}
 			/>
 		</ConnectedRouter>
