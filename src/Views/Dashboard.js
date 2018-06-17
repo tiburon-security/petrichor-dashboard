@@ -62,7 +62,6 @@ class Dashboard extends Component {
 	renderWidgets(){
 				
 		let currentRouteName = this.props.route_name;		
-		var renderedWidgets = [];
 		
 		// Finds config info for the current dashboard
 		let currentDashboard = this.findCurrentDashboard(currentRouteName);
@@ -83,7 +82,7 @@ class Dashboard extends Component {
 		} else {
 			
 			// Iterate every widget and load it
-			for (let [index, widget] of currentDashboard.supported_widgets.entries()) {	
+			for (let widget of currentDashboard.supported_widgets) {	
 			
 				let widgetConfiguration = this.findWidgetConfiguration(widget.name);
 

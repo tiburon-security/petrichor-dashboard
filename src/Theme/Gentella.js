@@ -2,12 +2,10 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
 import 'font-awesome/css/font-awesome.min.css';
-import profile_pic from './resources/images/img.jpg';
 import DynamicSidebarMenu from './DynamicSidebarMenu';
 import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
 import Footer from './Footer';
-import ProfileQuickInfo from './ProfileQuickInfo';
 import Notifications from './Notifications';
 import ProfileDropdown from './ProfileDropdown';
 import PopupModal from './PopupModal';
