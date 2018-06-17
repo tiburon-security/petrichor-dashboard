@@ -46,13 +46,7 @@ class DynamicSidebarMenu extends Component {
 		console.log("onblur")
 		//this.props.openMenu(null);
 		if(!this.props.sidebar_menu_is_fullsize){
-			//this.opened_submenu = null; 
-			//this.updateMenu(); 
 			this.props.openMenu(null)
-			/*setTimeout(()=>{
-				this.props.openMenu(null)
-			}, 100);
-			*/
 		}
 		
 	} 
