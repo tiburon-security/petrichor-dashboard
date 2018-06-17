@@ -30,7 +30,6 @@ export class Gentella extends Component {
 
 
 	componentDidMount(){
-		console.log("gentella mounting")
 		document.title = this.props.config.website_name;
 		
 		// Listen to window being resized

@@ -7,9 +7,6 @@ import { connect } from 'react-redux';
 import { addDashboardWidget, removeDashboardWidget, removeDashboardWidgetsAll, setDashboardColumnNumber, setDashboardRowHeight } from '../redux/actions/Dashboard.js';
 const AutoWidthReactGridLayout = WidthProvider(ReactGridLayout);
 
-/**
-WIDGETS ARE NEVER BLOWN AWAY ON PAGE CHANGE... ALSO SHOULDCOMPONENT UPDATE IS FORCING THE PAGE TO RELOAD WHEN THE QUERYPARAMS ARE UPDATED...
-**/
 
 /**
  * View that displays a customizable, draggable dashboard grid of user defined widgets.
