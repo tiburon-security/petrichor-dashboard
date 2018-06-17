@@ -104,8 +104,6 @@ class Dashboard extends Component {
 					let Widget = require("../" + widgetConfiguration.widget_url);
 					
 					let containerKey = uniqueId();
-
-					console.log(this.props)
 					
 					let widgetComponent = (
 						<Widget.default 
@@ -130,7 +128,7 @@ class Dashboard extends Component {
 	 */
 	componentDidUpdate(prevProps, prevState){
 		if(this.props.route_name !== prevProps.route_name && this.props.match.url !== prevProps.match.url){
-			console.log("clearing")
+
 			// Clear dashboard re-rendering widgets
 			this.props.removeDashboardWidgetsAll()
 			this.renderWidgets()
@@ -144,7 +142,6 @@ class Dashboard extends Component {
 	 * On initial page load, render the dashboard
 	 */
 	componentDidMount(){
-		console.log("dashboard mounted")
 		this.renderWidgets()
 	}
 
@@ -158,7 +155,6 @@ class Dashboard extends Component {
 				cols={this.props.numberOfColumns} 
 				rowHeight={this.props.rowHeight} 
 				draggableHandle={this.props.draggable_handle}
-				onResizeStop={(i, j)=>{console.log(i);console.log(j)}}
 			>
 			
 				{/* Build widgets based on state */}
