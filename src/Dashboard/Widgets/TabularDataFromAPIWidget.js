@@ -21,8 +21,7 @@ class TabularDataFromAPIWidget extends Component {
 		super(state);
 		
 		({defaultPage: this.defaultPage, defaultPageSize: this.defaultPageSize, defaultSorts: this.defaultSorts, defaultFilters: this.defaultFilters} = this.getDefaultTableSettings());	
-		console.log(this.defaultPage)
-		console.log(this.defaultPage + this.props.apiPageNumberOffset)
+
 		this.state = ({
 			loading:false, 
 			table_loading:false, 
@@ -110,9 +109,7 @@ class TabularDataFromAPIWidget extends Component {
 		 
 		// Grab initial query string to see if any defaults need to be set for table
 		let queryParams = qs.parse(this.props.location.search)
-		
-		console.log(queryParams)
-		
+				
 		// Parse page number
 		if(queryParams[this.props.queryStringPageVariableName] !== undefined){
 			defaultPage = Number.parseInt(queryParams[this.props.queryStringPageVariableName], 10) - this.props.apiPageNumberOffset;
@@ -168,10 +165,7 @@ class TabularDataFromAPIWidget extends Component {
 	 * Fetch data from API and insert into table
 	 */ 
 	fetchData(state, instance){
-		console.log(state)
-		console.log(instance)
-		//this.setState({ page : state.page })
-	
+
 		// Tracks query string for the current page
 		let thisQueryStringObj = {};
 		
@@ -179,8 +173,7 @@ class TabularDataFromAPIWidget extends Component {
 		let apiQueryStringObj = {};
 		
 		this.setState({table_loading: true})
-		console.log(state.page)
-		console.log(state.page + this.props.apiPageNumberOffset)
+
 		thisQueryStringObj[this.props.queryStringPageVariableName] 	= state.page + this.props.apiPageNumberOffset;
 		thisQueryStringObj[this.props.queryStringPageSizeVariableName] = state.pageSize;		
 		
@@ -222,8 +215,6 @@ class TabularDataFromAPIWidget extends Component {
 		// Convert query string objects into actual GET paramter query strings
 		const thisQueryString = qs.stringify(thisQueryStringObj);
 		const apiQueryString = qs.stringify(apiQueryStringObj);
-		console.log(thisQueryString)
-		console.log(apiQueryString)
 
 		// Send request to API
 		fetch(`${this.props.endpoint}?${apiQueryString}`)
