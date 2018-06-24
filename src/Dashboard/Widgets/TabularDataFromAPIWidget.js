@@ -222,7 +222,7 @@ class TabularDataFromAPIWidget extends Component {
 		.then((response) => {
 
 			this.setState({
-				data: response.data,
+				data: response[this.props.apiResponseDataKey],
 				pages: response[this.props.apiResponseNumberofPagesKey],
 				table_loading: false
 			})
