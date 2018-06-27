@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import qs from 'query-string';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
+import { ArrayTabularDataAccessor } from '../../Helpers/ArrayTabularDataAccessor.js'
 
 // Data Table Imports
 import ReactTable from "react-table";
@@ -81,7 +82,12 @@ class TabularDataFromAPIWidget extends Component {
 			{
 			  Header: "Last Name",
 			  accessor: "last_name"
-			}
+			},
+								{
+								"id" : "test",
+								"Header": "Test",
+								"accessor":  d =>  ArrayTabularDataAccessor(d, "siblings", "first_name") 								
+							}
 		]
 		
 	}

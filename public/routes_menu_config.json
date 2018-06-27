@@ -80,6 +80,11 @@
 				},				
 				{
 					"name" : "TabularDataFromAPIWidget",
+					"props" : {
+						"endpoint" : "/sample_nested_table_data_api.json",	
+						"apiResponseDataKey" : "users"
+
+					},
 					"layout" : {
 						"x" : 1,
 						"y" : 1,
