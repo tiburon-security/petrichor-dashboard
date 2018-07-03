@@ -82,7 +82,42 @@
 					"name" : "TabularDataFromAPIWidget",
 					"props" : {
 						"endpoint" : "/sample_nested_table_data_api.json",	
-						"apiResponseDataKey" : "users"
+						"apiResponseDataKey" : "users",
+						"columns" : [
+							{
+								"label": "ID",
+								"id": "id"
+							},          
+							{
+								"label": "First Name",
+								"id": "first_name"
+							},
+							{
+								"label": "Last Name",
+								"id": "last_name"
+							},
+							{
+								"label" : "Siblings",
+								"id": "siblings",
+								"custom_accessor":  {
+									"method" : "ArrayTabularDataAccessor",
+									"keys" : [
+										{
+											"label" : "First Name",
+											"key" : "first_name"										
+										},										
+										{
+											"label" : "Last Name",
+											"key" : "last_name"										
+										}
+									],
+									"formatter" : {
+										"method": "BulletedListFormatter",
+										"show_label" : false
+									}
+								}
+							}
+						]
 
 					},
 					"layout" : {

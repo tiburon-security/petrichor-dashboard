@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import qs from 'query-string';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
-import { ArrayTabularDataAccessor } from '../../Helpers/ArrayTabularDataAccessor.js'
+import { ArrayTabularDataAccessor, BulletedListFormatter } from '../../Helpers/ReactTableHelpers.js'
 
 // Data Table Imports
 import ReactTable from "react-table";
@@ -30,10 +30,12 @@ class TabularDataFromAPIWidget extends Component {
 			pages:-1,
 			data:[]
 		})
+		
 	}
-	
+		
 	
 	propTypes: {
+		tableName 						: React.PropTypes.string,
 		endpoint 						: React.PropTypes.string,
 		apiPageNumberVariableName 		: React.PropTypes.string,
 		apipointPageSizeVariableName 	: React.PropTypes.string,
@@ -46,11 +48,58 @@ class TabularDataFromAPIWidget extends Component {
 		queryStringPageSizeVariableName	: React.PropTypes.string,
 		queryStringFilterVariableName	: React.PropTypes.string,
 		queryStringSortVariableName 	: React.PropTypes.string,
+		
+		
+		/**
+		 Array of column defintions to display in table
+			[
+			
+				* For a standard column, simply list the display label, and the object key
+				* that is represents within the dataset
+				{
+					"label": "Last Name",
+					"id": "last_name"
+				},
+				
+				* There is also support for custom accessors, for accessing nested data
+				* In this case, use the ArrayTabularDataAccessor, which also requires
+				* that the nested data be identified by a display label and object key.
+				* When using a custom accessor, you likely also need a custom data formatter
+				* to display the data. For example, ArrayTabularDataAccessor returns an array of 
+				* objects, which react-table can't natively display. For this, the BulletedListFormatter 
+				* was developed to display ArrayTabularDataAccessor data as a bulleted list within a single
+				* column in the table.
+				{
+					"label" : "Siblings",
+					"id": "siblings",
+					"custom_accessor":  {
+						"method" : "ArrayTabularDataAccessor",
+						"keys" : [
+							{
+								"label" : "First Name",
+								"key" : "first_name"										
+							},										
+							{
+								"label" : "Last Name",
+								"key" : "last_name"										
+							}
+						],
+						"formatter" : {
+							"method": "BulletedListFormatter",
+							"show_label" : false
+						}
+					}
+				}
+			]		
+		 */
 		columns 						: React.PropTypes.array
 	}
 	
 	
 	static defaultProps = {
+		
+		tableName						: "Sample Table",
+		
 		// API Endpoint
 		endpoint : "https://reqres.in/api/users",	
 		
@@ -82,14 +131,94 @@ class TabularDataFromAPIWidget extends Component {
 			{
 			  Header: "Last Name",
 			  accessor: "last_name"
-			},
-								{
-								"id" : "test",
-								"Header": "Test",
-								"accessor":  d =>  ArrayTabularDataAccessor(d, "siblings", "first_name") 								
-							}
+			}
 		]
+	}
+	
+	
+	/**	
+	 * Turns the custom column proprs format into the column definition required by react-table
+	 * Note: this doesn't fail gracefully if the custom props format isn't perfect
+	 */
+	buildColumns(){
 		
+		let output = []
+		
+		for(let col of this.props.columns){
+			
+			let obj = {
+				Header : col.label,
+				id: col.id,
+				accessor: col.id // Defaulty make accessor the ID
+			}
+			
+			// Determine if a custom accessor function is being utilized
+			if("custom_accessor" in col){
+				
+				switch(col.custom_accessor.method){
+					
+					case "ArrayTabularDataAccessor": {
+						obj["accessor"] =  (d =>  ArrayTabularDataAccessor(d, col.id, col.custom_accessor.keys))
+						break;
+					}					
+				
+					default : {
+						obj["accessor"] = col.id;
+						break;
+					}
+				
+				}
+				
+				// Determine if a custom output formatter function is being utilized
+				if("formatter" in col.custom_accessor){
+					
+					// Generates an array of the target keys that will be displayed
+					let targetKeys = col.custom_accessor.keys.map((i) => {
+						return i["label"]
+					})
+					
+					let showLabel = col.custom_accessor.formatter.show_label;
+					
+					// Filteres a dataset to return only the target data that will be displayed
+					let filterData = ( val => {
+						
+						let targetData = val.row[col.id].map((i) => {
+							let filteredObj = {};
+
+							for(let key of targetKeys){
+								if(key in i){
+									filteredObj[key] = i[key];
+								}
+							}
+							
+							return filteredObj;
+						})						
+						
+						return targetData;
+					})
+					
+					// Display data based on the specified custom formatter
+					switch(col.custom_accessor.formatter.method){
+						
+						case "BulletedListFormatter": {
+							obj["Cell"] = ( val => {
+								
+								let filteredData = filterData(val)								
+								
+								return BulletedListFormatter(filteredData, showLabel)
+							})
+							break;
+						}
+						
+						default : {
+							break;
+						}	
+					}
+				}
+			}
+			output.push(obj)	
+		}
+		return output;
 	}
 	
 	
@@ -162,8 +291,7 @@ class TabularDataFromAPIWidget extends Component {
 			})
 		}
 
-		return {defaultPage, defaultPageSize, defaultSorts, defaultFilters};
-			
+		return {defaultPage, defaultPageSize, defaultSorts, defaultFilters};		
 	}
 	
 	
@@ -242,9 +370,12 @@ class TabularDataFromAPIWidget extends Component {
 
 	
 	render() {
+		
+		let columns = this.buildColumns()
+		
     
 		return (  
-			<FullWidget settings_button={true} close_button={true} title="TabularDataFromAPIWidget" loading={this.state.loading} {...this.props}>
+			<FullWidget settings_button={false} close_button={true} title={this.props.tableName} loading={this.state.loading} {...this.props}>
 				
 				<ReactTable
 				
@@ -253,7 +384,8 @@ class TabularDataFromAPIWidget extends Component {
 				
 					manual // informs React Table that you'll be handling sorting and pagination server-side
 				
-					columns={this.props.columns}
+					//columns={this.props.columns}
+					columns={columns}
 					data={this.state.data} // should default to []
 					
 					pages={this.state.pages} // should default to -1 (which means we don't know how many pages we have)
