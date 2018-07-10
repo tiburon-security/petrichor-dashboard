@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import qs from 'query-string';
+import qs from 'qs';
 import moment from 'moment';
 import { Button, FormControl } from 'react-bootstrap';
 import { sendInterwidgetMessage, sendMultipleInterwidgetMessages, INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';

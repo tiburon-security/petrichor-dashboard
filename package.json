@@ -7,10 +7,11 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "chart.js": "^2.7.2",
     "font-awesome": "*",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",
-    "query-string": "^6.1.0",
+    "qs": "^6.5.2",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-dates": "^16.6.1",

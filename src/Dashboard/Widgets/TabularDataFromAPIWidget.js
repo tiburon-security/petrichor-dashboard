@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {FullWidget} from '../WidgetStyles.js'
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import qs from 'query-string';
+import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { ArrayTabularDataAccessor, BulletedListFormatter } from '../../Helpers/ReactTableHelpers.js'
 
