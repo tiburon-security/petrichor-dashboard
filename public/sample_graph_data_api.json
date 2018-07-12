@@ -1,0 +1,62 @@
+{
+	"results": [
+		{
+			"label" : "series 1",
+			"data": [
+				{
+					"label" : "Red",
+					"data" : 12
+				},		
+				{
+					"label" : "Blue",
+					"data" : 19
+				},		
+				{
+					"label" : "Yellow",
+					"data" : 3
+				},		
+				{
+					"label" : "Green",
+					"data" : 5
+				},		
+				{
+					"label" : "Purple",
+					"data" : 2
+				},		
+				{
+					"label" : "Orange",
+					"data" : 3
+				}
+			]
+		},		
+		{
+			"label" : "series 2",
+			"data": [
+				{
+					"label" : "Red",
+					"data" : 10
+				},		
+				{
+					"label" : "Blue",
+					"data" : 12
+				},		
+				{
+					"label" : "Yellow",
+					"data" : 7
+				},		
+				{
+					"label" : "Green",
+					"data" : 9
+				},		
+				{
+					"label" : "Purple",
+					"data" : 3
+				},		
+				{
+					"label" : "Orange",
+					"data" : 3
+				}
+			]
+		}
+	]
+}

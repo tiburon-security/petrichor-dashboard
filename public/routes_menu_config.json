@@ -126,21 +126,21 @@
 						"w" : 6,
 						"h" : 6
 					}
-				},
+				},					
 				{
-					"name" : "FakeWidget2",
+					"name" : "GraphingChartAPIWidget",
+					"props" : {
+						"endpoint" : "/sample_graph_data_api.json",
+						"apiResponseDataKey" : "results",
+						"graph_type" : "bar"
+					},
 					"layout" : {
 						"x" : 2,
-						"y" : 1
-					}
-				},
-				{
-					"name" : "FakeWidget3",
-					"layout" : {
-						"x" : 3,
-						"y" : 1
-					}
-				}				
+						"y" : 1,
+						"w" : 6,
+						"h" : 6
+					}	
+				}			
 			]
 		},
 		{
@@ -201,6 +201,14 @@
 		{
             "widget_class_name" : "TabularDataFromAPIWidget",
             "widget_url" : "Dashboard/Widgets/TabularDataFromAPIWidget.js",
+			"min_grid_size" : { 
+				"w": 1, 
+				"h": 2
+			}
+        },		
+		{
+            "widget_class_name" : "GraphingChartAPIWidget",
+            "widget_url" : "Dashboard/Widgets/GraphingChartAPIWidget.js",
 			"min_grid_size" : { 
 				"w": 1, 
 				"h": 2
