@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import {FullWidget} from '../WidgetStyles.js'
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
-import { ArrayTabularDataAccessor, BulletedListFormatter } from '../../Helpers/ReactTableHelpers.js'
 import Chart from 'chart.js';
- 
+import * as chroma from 'chroma-js';
 
-// Data Table Imports
-import ReactTable from "react-table";
-import "react-table/react-table.css";
 
 /*
 
-I DONT LIKE HOW MY JSON DOUBLE DEFINES LABELS WITHIN EACH SERISE... THINK ABOUT THIS A LITTLE BIT MORE
-
+TODO:
+- create props for toggling legend, start_from_zero(applicable for bar graphs)
+- add support for date ranges i.e., DateRangeFilter picks a date, relay selected date to the API backing this widget so the data reflects it. Use standard filter syntax used by other sample widgets
 */
 
 /**
@@ -32,7 +28,10 @@ class GraphingChartAPIWidget extends Component {
 			table_loading:false, 
 			data : {},
 			options : {
-				maintainAspectRatio: false
+				maintainAspectRatio: false,
+				legend: {
+					display: false
+				}
 			}
 		})
 		
@@ -42,20 +41,13 @@ class GraphingChartAPIWidget extends Component {
 	propTypes: {
 		chartName 						: React.PropTypes.string,
 		endpoint 						: React.PropTypes.string,
-		apiPageNumberVariableName 		: React.PropTypes.string,
-		apipointPageSizeVariableName 	: React.PropTypes.string,
-		apipointSortVariableName 		: React.PropTypes.string,
+		graph_type 						: React.PropTypes.string,
+		graph_colors 					: React.PropTypes.array,
+		graph_border_colors				: React.PropTypes.array,
+		
 		apipointFilterVariableName 		: React.PropTypes.string,
 		apiResponseDataKey 				: React.PropTypes.string,
-		apiResponseNumberofPagesKey 	: React.PropTypes.string,
-		apiPageNumberOffset 			: React.PropTypes.number,
-		queryStringPageVariableName 	: React.PropTypes.string,
-		queryStringPageSizeVariableName	: React.PropTypes.string,
-		queryStringFilterVariableName	: React.PropTypes.string,
-		queryStringSortVariableName 	: React.PropTypes.string,
-		
-		
-		
+
 	}
 	
 	
@@ -66,21 +58,30 @@ class GraphingChartAPIWidget extends Component {
 		// API Endpoint
 		endpoint : "https://reqres.in/api/users",	
 		
+		// Type of graph to display (bar || pie || line)
+		graph_type				 		: "bar",
+		
+		// Possible colors for the graph elements, defined as Hex strings
+		graph_colors					: [
+			"#26b99a",
+			"#3498db",
+			"#455c73",
+			"#9b59b6",
+			"#bdc3c7"
+		],		
+		
+		// Possible colors for the graph elements, defined as Hex strings
+		graph_border_colors					: [
+			"#26b99a",
+			"#3498db",
+			"#455c73",
+			"#9b59b6",
+			"#bdc3c7"
+		],
+		
 		// Parameters that are sent to API
-		apiPageNumberVariableName 		: "page",
-		apipointPageSizeVariableName 	: "per_page",
-		apipointSortVariableName 		: "sort_by",
 		apipointFilterVariableName 		: "filter_by",
 		apiResponseDataKey 				: "data",
-		apiResponseNumberofPagesKey 	: "total_pages",	
-		apiPageNumberOffset 			: 1,
-		
-		// Query String Params that are added to current URL
-		queryStringPageVariableName 	: "dage",
-		queryStringPageSizeVariableName	: "page_size",
-		queryStringFilterVariableName	: "filter_by",
-		queryStringSortVariableName 	: "sort_by",
-		
 
 	}
 
@@ -94,9 +95,6 @@ class GraphingChartAPIWidget extends Component {
 			this.refReactTable.fireFetchData()
 		} 
 	}
-	
-	
-
 	
 	
 	/**
@@ -126,11 +124,95 @@ class GraphingChartAPIWidget extends Component {
 
 	}
 	
+	
+	/**
+	 * Function for ensuring that each series has a different set of colors based on some user
+	 * defined set of colors; this is done by modifying the saturation. Also ensures that the same 
+	 * color isn't reused within each dataset by darkening it
+	 */
+	generateColors(baseColors, numberOfDatasets, numberOfElementsPerDataset){
+		
+		let increasePerPass = .1;
+		let decreasePerDataset = 5;
+		
+		let output = {};
+		
+		
+		// Step 1 - Determine how much we need to lighten each dataset by so they each have unique colors
+		let datasetDecreases = Array(numberOfDatasets) // Looping over range of datasets
+			.fill() // Fill array with nothing
+			.map((_, i) => {
+				return i * decreasePerDataset
+			});
+			
+		
+		// Step 2 - Track base colors for each dataset & initiate counter of number of times each color has been used
+		let numberOfPasses = {}
+		for(let i=0; i<numberOfDatasets; i++){
+						
+			let currentDataset = {}
+			
+			for(let j=0; j<baseColors.length; j++){
+
+				let lightenedBaseColor = chroma(baseColors[j]).saturate(i * decreasePerDataset).hex()
+				currentDataset[lightenedBaseColor] = 0
+			}
+			
+			numberOfPasses[i] = currentDataset;
+		}
+		
+
+		// Step 3 - Generate new color sets
+		for(let i=0; i<numberOfDatasets; i++){
+						
+			let currentDataset = numberOfPasses[i];
+			let currentDataSetKeys = Object.keys(currentDataset)
+			
+			let newColors = []
+			
+			for(let j=0; j<numberOfElementsPerDataset; j++){
+
+				let currentItemKey = currentDataSetKeys[j % baseColors.length]
+				let currentItem = currentDataset[currentItemKey]
+				let darkenedColor = null;
+				
+				if(currentItem === 0){
+					
+					darkenedColor = currentItemKey
+					
+					// Update color counter
+					numberOfPasses[i][currentItemKey] = numberOfPasses[i][currentItemKey] + 1
+					
+				} else {
+								
+					console.log(currentItemKey)
+					console.log(currentItem + increasePerPass)
+					darkenedColor = chroma(currentItemKey).darken(currentItem + increasePerPass).hex()
+					
+					// Update color counter
+					numberOfPasses[i][currentItemKey] = numberOfPasses[i][currentItemKey] + 1
+				}
+				
+				newColors.push(darkenedColor)
+				
+			}
+			
+			output[i] = newColors
+		}	
+
+		console.log(output)
+		
+		return output
+		
+	}
+	
 	drawGraph(){
 		
 		var context = document.getElementById("chartjs3")
 		
-		let myChart = Chart.Bar(context, {
+		console.log(this.props.graph_type)
+		let myChart = new Chart(context, {
+			type: this.props.graph_type,
 			options: this.state.options,
 			data: this.state.data
 		});
@@ -142,57 +224,53 @@ class GraphingChartAPIWidget extends Component {
 
 		let labels = [];
 		let all_axis_data = [];
-		console.log(customFormat)
 		
-		for(let [index, series] of customFormat.entries()){
-			
+		let dataToParse = []
 
+		// If the graph type is a pie, we only select the first series, 
+		// if multiple are provided by the user
+		if(this.props.graph_type === 'pie'){
+			dataToParse.push(customFormat[0])
+		} else {
+			dataToParse = customFormat;
+		}
+		
+		let backgroundColors = this.generateColors(this.props.graph_colors, dataToParse.length, dataToParse[0].data.length)
+		
+		for(let [index, series] of dataToParse.entries()){
 			
-			
-			let series_label = series.label;
-			let series_data = []
-			console.log(series)
-			//let series_data = []
-			//labels.push(item.label)
-			
-			
-			for(let current_series_data of series.data){
+			let seriesLabel = series.label;
+			let seriesData = []
+
+			for(let currentSeriesData of series.data){
 				
 				if(index === 0){
-					labels.push(current_series_data.label)
-				//get full graph labels
+					labels.push(currentSeriesData.label)
 				}
 				
-				/*
-				console.log(data)
-				
-				series_data.push({
-					"x" : data.label,
-					"y": data.data
-				})
-				
-				*/
-				
-				series_data.push(current_series_data.data)
+				seriesData.push(currentSeriesData.data)
 			
 			}
 			
+			// Set colors for elements
+			let seriesColors = []
+			for(let [seriesDataIndex, seriesDataItem] of seriesData.entries()){
+				seriesColors.push(this.props.graph_colors[seriesDataIndex % this.props.graph_colors.length]);
+			}
+			
 			all_axis_data.push({
-				label: series_label,
-				data:series_data
+				label: seriesLabel,
+				data:seriesData,
+				backgroundColor: backgroundColors[index]
 			})
 		}
-		
-		console.log(all_axis_data)
-		
+				
 		let data = {
 			labels,
 			datasets:all_axis_data
 			
 		}
-  
-		console.log(data)
-		
+  		
 		return data
 	}
 
@@ -202,10 +280,6 @@ class GraphingChartAPIWidget extends Component {
 
 	
 	render() {
-		
-		//let columns = this.buildColumns()
-		//
-		
     
 		return (  
 			<FullWidget settings_button={false} close_button={true} title={this.props.tableName} loading={this.state.loading} {...this.props}>
@@ -228,11 +302,4 @@ const mapStateToProps = (state) => {
 };
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-		pushURL: (url) => dispatch(push(url)),
-	};
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(GraphingChartAPIWidget);
+export default connect(mapStateToProps, null)(GraphingChartAPIWidget);

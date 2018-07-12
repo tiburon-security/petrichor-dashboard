@@ -1,7 +1,7 @@
 {
 	"results": [
 		{
-			"label" : "series 1",
+			"label" : "Sample Series 1",
 			"data": [
 				{
 					"label" : "Red",
@@ -30,7 +30,7 @@
 			]
 		},		
 		{
-			"label" : "series 2",
+			"label" : "Sample series 2",
 			"data": [
 				{
 					"label" : "Red",
