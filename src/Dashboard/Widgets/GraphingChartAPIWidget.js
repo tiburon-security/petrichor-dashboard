@@ -130,23 +130,15 @@ class GraphingChartAPIWidget extends Component {
 	 * defined set of colors; this is done by modifying the saturation. Also ensures that the same 
 	 * color isn't reused within each dataset by darkening it
 	 */
-	generateColors(baseColors, numberOfDatasets, numberOfElementsPerDataset){
+	generateColors(baseColors, opacity, numberOfDatasets, numberOfElementsPerDataset){
 		
 		let increasePerPass = .1;
 		let decreasePerDataset = 5;
 		
 		let output = {};
-		
-		
-		// Step 1 - Determine how much we need to lighten each dataset by so they each have unique colors
-		let datasetDecreases = Array(numberOfDatasets) // Looping over range of datasets
-			.fill() // Fill array with nothing
-			.map((_, i) => {
-				return i * decreasePerDataset
-			});
 			
 		
-		// Step 2 - Track base colors for each dataset & initiate counter of number of times each color has been used
+		// Step 1 - Track base colors for each dataset & initiate counter of number of times each color has been used
 		let numberOfPasses = {}
 		for(let i=0; i<numberOfDatasets; i++){
 						
@@ -162,7 +154,7 @@ class GraphingChartAPIWidget extends Component {
 		}
 		
 
-		// Step 3 - Generate new color sets
+		// Step 2 - Generate new color sets
 		for(let i=0; i<numberOfDatasets; i++){
 						
 			let currentDataset = numberOfPasses[i];
@@ -185,8 +177,6 @@ class GraphingChartAPIWidget extends Component {
 					
 				} else {
 								
-					console.log(currentItemKey)
-					console.log(currentItem + increasePerPass)
 					darkenedColor = chroma(currentItemKey).darken(currentItem + increasePerPass).hex()
 					
 					// Update color counter
@@ -199,8 +189,26 @@ class GraphingChartAPIWidget extends Component {
 			
 			output[i] = newColors
 		}	
+		
+		// Step 3 - Apply opacities, if one provided
+		if(opacity !== null){
+			
+			let outputWithOpacity = {}
+			
+			for(let series of Object.keys(output)){
+				
+				let updatedColorArray = [];
+				
+				for(let color of output[series]){
+					updatedColorArray.push(chroma(color).alpha(opacity).css())
+				}
+				
+				outputWithOpacity[series] = updatedColorArray;
+				
+			}
 
-		console.log(output)
+			output = outputWithOpacity;
+		}
 		
 		return output
 		
@@ -210,8 +218,7 @@ class GraphingChartAPIWidget extends Component {
 		
 		var context = document.getElementById("chartjs3")
 		
-		console.log(this.props.graph_type)
-		let myChart = new Chart(context, {
+		new Chart(context, {
 			type: this.props.graph_type,
 			options: this.state.options,
 			data: this.state.data
@@ -225,18 +232,47 @@ class GraphingChartAPIWidget extends Component {
 		let labels = [];
 		let all_axis_data = [];
 		
-		let dataToParse = []
+		let dataToParse = null
+		let backgroundColors = null;
+		let borderColors = null;
 
-		// If the graph type is a pie, we only select the first series, 
-		// if multiple are provided by the user
+		// Options vary slightly between pie, bar, and line charts
 		if(this.props.graph_type === 'pie'){
-			dataToParse.push(customFormat[0])
-		} else {
+			
+			// If the graph type is a pie, we only select the first series, 
+			// if multiple are provided by the user
+			dataToParse = customFormat[0]
+			
+			backgroundColors = (this.props.graph_colors.length > 0 ? this.generateColors(this.props.graph_colors, null, dataToParse.length, dataToParse[0].data.length) : [])
+			borderColors = (this.props.graph_border_colors.length > 0 ? this.generateColors(this.props.graph_border_colors, null, dataToParse.length, dataToParse[0].data.length) : [])
+		
+		} else if(this.props.graph_type === 'bar'){
+			
+			// Keep all the series if it's a bar or line
 			dataToParse = customFormat;
+			
+			backgroundColors = (this.props.graph_colors.length > 0 ? this.generateColors(this.props.graph_colors, null, dataToParse.length, dataToParse[0].data.length) : [])
+			borderColors = (this.props.graph_border_colors.length > 0 ? this.generateColors(this.props.graph_border_colors, null, dataToParse.length, dataToParse[0].data.length) : [])
+			
+		} else if (this.props.graph_type === 'line'){
+			
+			// Keep all the series if it's a bar or line
+			dataToParse = customFormat;
+			
+			// Force the opacity to be half for the background
+			let opacity = .5;
+			
+			// Entire series line has to be the same color, so we coerce this
+			// by indicating to the color generator function that there is only a single
+			// element in the series
+			let numberOfElementsPerDataset = 1;
+			
+			backgroundColors = (this.props.graph_colors.length > 0 ? this.generateColors(this.props.graph_colors, opacity, dataToParse.length, numberOfElementsPerDataset) : [])
+			borderColors = (this.props.graph_border_colors.length > 0 ? this.generateColors(this.props.graph_border_colors, null, dataToParse.length, numberOfElementsPerDataset) : [])
+			
 		}
-		
-		let backgroundColors = this.generateColors(this.props.graph_colors, dataToParse.length, dataToParse[0].data.length)
-		
+
+		// Build the actual serise data required by chartjs
 		for(let [index, series] of dataToParse.entries()){
 			
 			let seriesLabel = series.label;
@@ -254,21 +290,21 @@ class GraphingChartAPIWidget extends Component {
 			
 			// Set colors for elements
 			let seriesColors = []
-			for(let [seriesDataIndex, seriesDataItem] of seriesData.entries()){
-				seriesColors.push(this.props.graph_colors[seriesDataIndex % this.props.graph_colors.length]);
+			for(let i=0; i<seriesData.length; i++){
+				seriesColors.push(this.props.graph_colors[i % this.props.graph_colors.length]);
 			}
 			
 			all_axis_data.push({
 				label: seriesLabel,
 				data:seriesData,
-				backgroundColor: backgroundColors[index]
+				backgroundColor: backgroundColors[index],
+				borderColor: borderColors[index]
 			})
 		}
 				
 		let data = {
 			labels,
 			datasets:all_axis_data
-			
 		}
   		
 		return data
@@ -282,7 +318,7 @@ class GraphingChartAPIWidget extends Component {
 	render() {
     
 		return (  
-			<FullWidget settings_button={false} close_button={true} title={this.props.tableName} loading={this.state.loading} {...this.props}>
+			<FullWidget settings_button={false} close_button={true} title={this.props.chartName} loading={this.state.loading} {...this.props}>
 				
 				<div style={{"position":"relative", "height":"100%"}}>
 					<canvas id="chartjs3"></canvas>
