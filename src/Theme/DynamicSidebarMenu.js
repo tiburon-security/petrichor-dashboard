@@ -43,8 +43,7 @@ class DynamicSidebarMenu extends Component {
 	 *
 	 */
 	contextSwitchHandler(event){
-		console.log("onblur")
-		//this.props.openMenu(null);
+
 		if(!this.props.sidebar_menu_is_fullsize){
 			this.props.openMenu(null)
 		}

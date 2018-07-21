@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
+import { withRouter } from 'react-router';
+
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -21,12 +23,6 @@ import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
  */
 class MenuItem extends Component {
 	
-	constructor(props) {
-		super(props);
-		this.state = {submenuOpen: false};
-	}
-	
-	
 	propTypes: {
 		name   	: React.PropTypes.string.isRequired,
 		title	: React.PropTypes.string.isRequired,
@@ -37,7 +33,6 @@ class MenuItem extends Component {
 	
 	
 	openSubmenu(e){	
-		console.log("mousedown")
 		this.props.openMenu(this.props.name)
 	}
 	
@@ -57,7 +52,7 @@ class MenuItem extends Component {
 			<li className={(this.props.active === true ? 'active' : null)}  >
 			
 			
-				<EntryType to={(!hasChildren && this.props.url != null ? this.props.url : null)} onMouseDown={this.openSubmenu.bind(this)}>
+				<EntryType to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
 				
 					{/* Add Glypicon if one is supplied */}
 					{this.props.icon ? <i className={this.props.icon}></i> : null}
@@ -83,4 +78,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null ,mapDispatchToProps) (MenuItem);
+export default withRouter(connect(null, mapDispatchToProps)(MenuItem))

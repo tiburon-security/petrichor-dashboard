@@ -18,7 +18,13 @@ class FilteringWidget extends Component {
 	constructor(state){
 		super(state);
 		
-		this.getDefaultFilters();
+		let { searchValue, startDate, endDate } = this.getDefaultFilters();
+		
+		this.state = {
+			startDate, 
+			endDate,
+			searchValue
+		}
 
 	}
 	
@@ -75,12 +81,11 @@ class FilteringWidget extends Component {
 			this.props.sendInterwidgetMessage(INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH, keyword)
 		}
 		
-		this.state = ({
-			loading:false, 
+		return {
 			searchValue:keyword, 
 			startDate, 
 			endDate
-		})
+		}
 	}
 	
 	
@@ -91,9 +96,6 @@ class FilteringWidget extends Component {
 		let startDate = null;
 		let endDate = null;
 		let searchValue = null;
-		
-		console.log(this.props.location.search)
-		console.log(query)
 		
 		// Proccess start/end date
 		if(this.state.startDate !== null && this.state.endDate !== null){
@@ -114,7 +116,6 @@ class FilteringWidget extends Component {
 
 		}
 		
-		console.log(query)
 		// Add query data to URL if there are any filters applied
 		if(Object.keys(query).length > 0){
 			const searchString = qs.stringify(query);
@@ -122,22 +123,21 @@ class FilteringWidget extends Component {
 			this.props.history.push({search: searchString})
 		}
 
-
-			// Send message to other widgets
-			this.props.sendMultipleInterwidgetMessages([
-				{
-					messageType:INTERWIDGET_MESSAGE_TYPES.START_DATE,
-					message:startDate
-				},			
-				{
-					messageType:INTERWIDGET_MESSAGE_TYPES.END_DATE,
-					message:endDate
-				},
-				{
-					messageType:INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH,
-					message:searchValue
-				}
-			])
+		// Send message to other widgets
+		this.props.sendMultipleInterwidgetMessages([
+			{
+				messageType:INTERWIDGET_MESSAGE_TYPES.START_DATE,
+				message:startDate
+			},			
+			{
+				messageType:INTERWIDGET_MESSAGE_TYPES.END_DATE,
+				message:endDate
+			},
+			{
+				messageType:INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH,
+				message:searchValue
+			}
+		])
 		
 	}	
 	

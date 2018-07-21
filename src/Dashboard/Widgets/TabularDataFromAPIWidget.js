@@ -12,7 +12,6 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 
-
 /**
  * Component for fetching data from a simple GET-based API and displaying it in a table.
  * Has support built in for facilitating pagination, filtering & sorting on the server side.
@@ -300,13 +299,12 @@ class TabularDataFromAPIWidget extends Component {
 	 * Fetch data from API and insert into table
 	 */ 
 	fetchData(state, instance){
-		console.log("fetching data")
-		console.log(this.props.location.search)
+
 		// Tracks query string for the current page
 		let thisQueryStringObj = qs.parse(stripQueryStringSeperator(this.props.location.search))
 		let thisQueryStringObjFilters = []
-		console.log(thisQueryStringObj)
-		// Trakc the query string that is used as GET parameters for the API
+
+		// Track the query string that is used as GET parameters for the API
 		let apiQueryStringObj = {};
 		let apiQueryStringObjFilters = [];
 		

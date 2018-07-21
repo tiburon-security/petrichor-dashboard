@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import Gentella from './Theme/Gentella.js';
 import { Provider } from 'react-redux';
 import store from './redux/store/configureStore';
-import { ConnectedRouter } from 'react-router-redux'
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
