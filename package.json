@@ -22,7 +22,6 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.9",
     "react-table": "^6.8.2",
     "react-transition-group": "*",
     "redux": "^3.7.2",
