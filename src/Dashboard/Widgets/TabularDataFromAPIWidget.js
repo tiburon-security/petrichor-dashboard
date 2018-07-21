@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {FullWidget} from '../WidgetStyles.js'
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { ArrayTabularDataAccessor, BulletedListFormatter } from '../../Helpers/ReactTableHelpers.js'
@@ -300,12 +300,15 @@ class TabularDataFromAPIWidget extends Component {
 	 * Fetch data from API and insert into table
 	 */ 
 	fetchData(state, instance){
-
+		console.log("fetching data")
+		console.log(this.props.location.search)
 		// Tracks query string for the current page
-		let thisQueryStringObj = {};
-		
+		let thisQueryStringObj = qs.parse(stripQueryStringSeperator(this.props.location.search))
+		let thisQueryStringObjFilters = []
+		console.log(thisQueryStringObj)
 		// Trakc the query string that is used as GET parameters for the API
 		let apiQueryStringObj = {};
+		let apiQueryStringObjFilters = [];
 		
 		this.setState({table_loading: true})
 
@@ -326,25 +329,29 @@ class TabularDataFromAPIWidget extends Component {
 			apiQueryStringObj[this.props.apipointSortVariableName] = sorts
 		}
 		
-		// Build filtering query string parameters
-		let filters = []
 		
 		// Build filters caused by an table-specific actions
 		if(state.filtered.length > 0){
-			filters = state.filtered.map(i=>{
+			let tableFilters = state.filtered.map(i=>{
 				return `${i.id}[eq]${i.value}`
 			})
+			
+			thisQueryStringObjFilters = tableFilters;
+			apiQueryStringObjFilters = tableFilters;
 		}
-		
+
 		// Build filters cause by external actions (i.e. date being dispatched by FilteringWidget)
 		if(this.props.startDate !== undefined && this.props.endDate !== undefined){
-			filters.push(`start_date[eq]${this.props.startDate}`)
-			filters.push(`end_date[eq]${this.props.endDate}`)
+			apiQueryStringObjFilters.push(`start_date[eq]${this.props.startDate}`)
+			apiQueryStringObjFilters.push(`end_date[eq]${this.props.endDate}`)
 		}
 		
-		if(filters.length > 0){
-			thisQueryStringObj[this.props.queryStringFilterVariableName] = filters.join(",")
-			apiQueryStringObj[this.props.apipointFilterVariableName] = filters.join(",")
+		if(thisQueryStringObjFilters.length > 0){
+			thisQueryStringObj[this.props.queryStringFilterVariableName] = thisQueryStringObjFilters.join(",")
+		}		
+		
+		if(apiQueryStringObjFilters.length > 0){
+			apiQueryStringObj[this.props.apipointFilterVariableName] = apiQueryStringObjFilters.join(",")
 		}
 		
 		// Convert query string objects into actual GET paramter query strings
@@ -362,11 +369,8 @@ class TabularDataFromAPIWidget extends Component {
 				table_loading: false
 			})
 		})	
-
-		// Add any currently selected parameters to the URL as a query string
-		this.props.pushURL({
-			search: thisQueryString
-		})
+		
+		this.props.history.push({search: thisQueryString})
 	}
 
 	
@@ -385,7 +389,6 @@ class TabularDataFromAPIWidget extends Component {
 				
 					manual // informs React Table that you'll be handling sorting and pagination server-side
 				
-					//columns={this.props.columns}
 					columns={columns}
 					data={this.state.data} // should default to []
 					
@@ -421,11 +424,4 @@ const mapStateToProps = (state) => {
 };
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-		pushURL: (url) => dispatch(push(url)),
-	};
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(TabularDataFromAPIWidget);
+export default withRouter(connect(mapStateToProps, null)(TabularDataFromAPIWidget))

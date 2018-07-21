@@ -5,9 +5,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Gentella from './Theme/Gentella.js';
 import { Provider } from 'react-redux';
-import store, { history } from './redux/store/configureStore';
+import store from './redux/store/configureStore';
 import { ConnectedRouter } from 'react-router-redux'
 import { Route } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 fetch('/routes_menu_config.json')
 	.then(function(response) {
@@ -35,7 +36,7 @@ function bootstrapApplication(config, userConfig){
 	// will be rendered. Routes control this body content
 	ReactDOM.render((
 	<Provider store={store}>
-		<ConnectedRouter history={history}>
+		<BrowserRouter>
 		
 			{/*
 			Pathless route to ensure child components are re-rendered on location changes when using React-Redux
@@ -46,7 +47,7 @@ function bootstrapApplication(config, userConfig){
 					<Gentella config={config} {...userConfig} location={props.location} />
 				)}
 			/>
-		</ConnectedRouter>
+		</BrowserRouter>
 		</Provider>
 	     
 	), document.getElementById('root'));

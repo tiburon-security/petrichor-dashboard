@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import qs from 'qs';
 import moment from 'moment';
 import { Button, FormControl } from 'react-bootstrap';
 import { sendInterwidgetMessage, sendMultipleInterwidgetMessages, INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
+import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 
 // Date Picket Imports
 import 'react-dates/lib/css/_datepicker.css';
@@ -49,7 +50,7 @@ class FilteringWidget extends Component {
 	getDefaultFilters(){
 		
 		// Get date & search parameters from URL
-		let queryParams = qs.parse(this.props.location.search)
+		let queryParams = qs.parse(stripQueryStringSeperator(this.props.location.search))
 		
 		let keyword 	= (queryParams[this.props.queryStringKeyword] === undefined) 	? "" : queryParams[this.props.queryStringKeyword]
 		let startDate 	= (queryParams[this.props.queryStringStartDate] === undefined) 	? null : moment(queryParams[this.props.queryStringStartDate])
@@ -85,14 +86,43 @@ class FilteringWidget extends Component {
 	
 	filter(){
 		
-		let query = qs.parse(this.props.location.search);
-
+		let query = qs.parse(stripQueryStringSeperator(this.props.location.search));
+		
+		let startDate = null;
+		let endDate = null;
+		let searchValue = null;
+		
+		console.log(this.props.location.search)
+		console.log(query)
+		
 		// Proccess start/end date
 		if(this.state.startDate !== null && this.state.endDate !== null){
 			
-			let startDate = this.state.startDate.format('YYYY-MM-DD');
-			let endDate = this.state.endDate.format('YYYY-MM-DD');
+			startDate = this.state.startDate.format('YYYY-MM-DD');
+			endDate = this.state.endDate.format('YYYY-MM-DD');
 			
+
+			query[this.props.queryStringStartDate] = startDate;
+			query[this.props.queryStringEndDate] = endDate;
+		}
+			
+
+		// Process keyword search
+		if(this.state.searchValue !== ""){
+			searchValue = this.state.searchValue;
+			query[this.props.queryStringKeyword] = searchValue;
+
+		}
+		
+		console.log(query)
+		// Add query data to URL if there are any filters applied
+		if(Object.keys(query).length > 0){
+			const searchString = qs.stringify(query);
+			
+			this.props.history.push({search: searchString})
+		}
+
+
 			// Send message to other widgets
 			this.props.sendMultipleInterwidgetMessages([
 				{
@@ -102,30 +132,13 @@ class FilteringWidget extends Component {
 				{
 					messageType:INTERWIDGET_MESSAGE_TYPES.END_DATE,
 					message:endDate
+				},
+				{
+					messageType:INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH,
+					message:searchValue
 				}
 			])
-			
-			query[this.props.queryStringStartDate] = startDate;
-			query[this.props.queryStringEndDate] = endDate;
-			
-		}
-
-		// Process keyword search
-		if(this.state.searchValue !== ""){
-			// Send message to other widgets
-			this.props.sendInterwidgetMessage(INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH, this.state.searchValue)
-			query[this.props.queryStringKeyword] = this.state.searchValue;
-
-			}
 		
-		// Add query data to URL if there are any filters applied
-		if(Object.keys(query).length > 0){
-			const searchString = qs.stringify(query);
-
-			this.props.pushURL({
-				search: searchString
-			})
-		}	
 	}	
 	
 	
@@ -203,10 +216,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        pushURL: (url) => dispatch(push(url)),
         sendInterwidgetMessage: (messageType, message) => dispatch(sendInterwidgetMessage(messageType, message)),
         sendMultipleInterwidgetMessages: (messages) => dispatch(sendMultipleInterwidgetMessages(messages)),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilteringWidget);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FilteringWidget))

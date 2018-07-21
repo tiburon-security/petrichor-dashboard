@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
+import { withRouter } from 'react-router';
 
 
 /**
@@ -29,7 +29,7 @@ class MenuLink extends Component {
 	
 	mouseDownEvent(){
 		
-		this.props.pushURL(this.props.url);
+		this.props.history.push(this.props.url);
 		
 		if(!this.props.sidebar_menu_is_fullsize){
 			this.props.openMenu(null);
@@ -54,9 +54,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        pushURL: (url) => dispatch(push(url)),
 		openMenu: (str) => dispatch(setOpenMenu(str))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuLink);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MenuLink))
