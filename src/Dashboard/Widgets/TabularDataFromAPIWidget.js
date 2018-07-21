@@ -5,6 +5,7 @@ import { push } from 'react-router-redux';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { ArrayTabularDataAccessor, BulletedListFormatter } from '../../Helpers/ReactTableHelpers.js'
+import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 
 // Data Table Imports
 import ReactTable from "react-table";
@@ -113,7 +114,7 @@ class TabularDataFromAPIWidget extends Component {
 		apiPageNumberOffset 			: 1,
 		
 		// Query String Params that are added to current URL
-		queryStringPageVariableName 	: "dage",
+		queryStringPageVariableName 	: "page",
 		queryStringPageSizeVariableName	: "page_size",
 		queryStringFilterVariableName	: "filter_by",
 		queryStringSortVariableName 	: "sort_by",
@@ -243,8 +244,8 @@ class TabularDataFromAPIWidget extends Component {
 		let defaultFilters = []; 
 		 
 		// Grab initial query string to see if any defaults need to be set for table
-		let queryParams = qs.parse(this.props.location.search)
-				
+		let queryParams = qs.parse(stripQueryStringSeperator(this.props.location.search))
+
 		// Parse page number
 		if(queryParams[this.props.queryStringPageVariableName] !== undefined){
 			defaultPage = Number.parseInt(queryParams[this.props.queryStringPageVariableName], 10) - this.props.apiPageNumberOffset;
