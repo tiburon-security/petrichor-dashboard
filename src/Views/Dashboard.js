@@ -127,7 +127,6 @@ class Dashboard extends Component {
 	 */
 	componentDidUpdate(prevProps, prevState){
 		if(this.props.route_name !== prevProps.route_name && this.props.match.url !== prevProps.match.url){
-
 			// Clear dashboard re-rendering widgets
 			this.props.removeDashboardWidgetsAll()
 			this.renderWidgets()
@@ -142,6 +141,14 @@ class Dashboard extends Component {
 	 */
 	componentDidMount(){
 		this.renderWidgets()
+	}
+	
+	
+	/**
+	 *Clears dashboard if a non-dashboard UI is being displayed
+	 */
+	componentWillUnmount(){
+		this.props.removeDashboardWidgetsAll()
 	}
 
 	
