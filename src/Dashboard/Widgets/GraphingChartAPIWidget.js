@@ -85,10 +85,9 @@ class GraphingChartAPIWidget extends Component {
 	
 	componentDidUpdate(prevProps, prevState) {
 				
-		/* Manually forcing a data fetch if requested dates change; during a rerender the onFetchData method of react-table isn't automatically called
-		 */
+		// Manually forcing a data fetch if requested dates change
 		if(this.props.startDate !== prevProps.startDate || this.props.endDate !== prevProps.endDate){
-			//this.refReactTable.fireFetchData()
+			this.fetchData()
 		} 
 	}
 	
