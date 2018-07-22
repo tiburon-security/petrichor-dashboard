@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
@@ -15,8 +16,8 @@ const AutoWidthReactGridLayout = WidthProvider(ReactGridLayout);
  */
 class Dashboard extends Component {
 		
-	propTypes: {
-		draggable_handle : React.PropTypes.string,
+	static propTypes = {
+		draggable_handle : PropTypes.string,
 	}
 	
 	static defaultProps = {

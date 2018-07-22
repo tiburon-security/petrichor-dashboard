@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 import { withRouter } from 'react-router';
@@ -22,9 +23,9 @@ import { withRouter } from 'react-router';
  */
 class MenuLink extends Component {
 	
-	propTypes: {
-		title : React.PropTypes.string.isRequired,
-		url   : React.PropTypes.string.isRequired,
+	static propTypes = {
+		title : PropTypes.string.isRequired,
+		url   : PropTypes.string.isRequired,
 	}
 	
 	mouseDownEvent(){

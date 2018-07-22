@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class ProfileQuickInfo extends Component {	
 
-	propTypes: {
-		image_path    : React.PropTypes.string,
-		user_name : React.PropTypes.string,
-		
+	static propTypes = {
+		image_path    : PropTypes.string,
+		user_name : PropTypes.string,
 	}
 	
 	static defaultProps = {

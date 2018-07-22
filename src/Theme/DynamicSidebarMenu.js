@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import MenuItem from './MenuItem';
 import MenuLink from './MenuLink';
 import { connect } from 'react-redux';
@@ -33,8 +34,8 @@ class DynamicSidebarMenu extends Component {
 		
 	}
 	
-	propTypes: {
-		config : React.PropTypes.array.isRequired,
+	static propTypes = {
+		config : PropTypes.object.isRequired,
 	}
 	
 	

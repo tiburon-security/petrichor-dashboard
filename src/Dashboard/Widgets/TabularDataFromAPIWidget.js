@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {FullWidget} from '../WidgetStyles.js'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -34,20 +35,20 @@ class TabularDataFromAPIWidget extends Component {
 	}
 		
 	
-	propTypes: {
-		tableName 						: React.PropTypes.string,
-		endpoint 						: React.PropTypes.string,
-		apiPageNumberVariableName 		: React.PropTypes.string,
-		apipointPageSizeVariableName 	: React.PropTypes.string,
-		apipointSortVariableName 		: React.PropTypes.string,
-		apipointFilterVariableName 		: React.PropTypes.string,
-		apiResponseDataKey 				: React.PropTypes.string,
-		apiResponseNumberofPagesKey 	: React.PropTypes.string,
-		apiPageNumberOffset 			: React.PropTypes.number,
-		queryStringPageVariableName 	: React.PropTypes.string,
-		queryStringPageSizeVariableName	: React.PropTypes.string,
-		queryStringFilterVariableName	: React.PropTypes.string,
-		queryStringSortVariableName 	: React.PropTypes.string,
+	static propTypes = {
+		tableName 						: PropTypes.string,
+		endpoint 						: PropTypes.string,
+		apiPageNumberVariableName 		: PropTypes.string,
+		apipointPageSizeVariableName 	: PropTypes.string,
+		apipointSortVariableName 		: PropTypes.string,
+		apipointFilterVariableName 		: PropTypes.string,
+		apiResponseDataKey 				: PropTypes.string,
+		apiResponseNumberofPagesKey 	: PropTypes.string,
+		apiPageNumberOffset 			: PropTypes.number,
+		queryStringPageVariableName 	: PropTypes.string,
+		queryStringPageSizeVariableName	: PropTypes.string,
+		queryStringFilterVariableName	: PropTypes.string,
+		queryStringSortVariableName 	: PropTypes.string,
 		
 		
 		/**
@@ -92,7 +93,7 @@ class TabularDataFromAPIWidget extends Component {
 				}
 			]		
 		 */
-		columns 						: React.PropTypes.array
+		columns 						: PropTypes.array
 	}
 	
 	

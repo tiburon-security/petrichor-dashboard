@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 /**
@@ -6,8 +7,8 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
  */
 class ProfileDropdown extends Component {
 	
-	propTypes: {
-		user_name : React.PropTypes.string,		
+	static propTypes = {
+		user_name : PropTypes.string,		
 	}
 	
 	static defaultProps = {

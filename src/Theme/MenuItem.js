@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
@@ -23,12 +24,12 @@ import { withRouter } from 'react-router';
  */
 class MenuItem extends Component {
 	
-	propTypes: {
-		name   	: React.PropTypes.string.isRequired,
-		title	: React.PropTypes.string.isRequired,
-		active	: React.PropTypes.bool.isRequired,
-		icon	: React.PropTypes.string,
-		url		: React.PropTypes.string
+	static propTypes = {
+		name   	: PropTypes.string.isRequired,
+		title	: PropTypes.string.isRequired,
+		active	: PropTypes.bool.isRequired,
+		icon	: PropTypes.string,
+		url		: PropTypes.string
 	}
 	
 	

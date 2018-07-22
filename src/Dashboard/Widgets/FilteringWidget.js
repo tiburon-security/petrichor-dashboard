@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import qs from 'qs';
@@ -29,12 +30,12 @@ class FilteringWidget extends Component {
 	}
 	
 	
-	propTypes: {
-		showKeywordFilter 		: React.PropTypes.bool,
-		showDateFilter 			: React.PropTypes.bool,
-		queryStringKeyword		: React.PropTypes.string,
-		queryStringStartDate	: React.PropTypes.string,
-		queryStringEndDate		: React.PropTypes.string,
+	static propTypes = {
+		showKeywordFilter 		: PropTypes.bool,
+		showDateFilter 			: PropTypes.bool,
+		queryStringKeyword		: PropTypes.string,
+		queryStringStartDate	: PropTypes.string,
+		queryStringEndDate		: PropTypes.string,
 
 	}
 	
