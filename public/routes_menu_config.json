@@ -72,8 +72,8 @@
 					"layout" : {
 						"isDraggable": false, 
 						"isResizable": true,
-						"x" : 1,
-						"y" : 1,
+						"x" : 0,
+						"y" : 0,
 						"w" : 6,
 						"h" : 1
 					}
@@ -121,8 +121,8 @@
 
 					},
 					"layout" : {
-						"x" : 1,
-						"y" : 1,
+						"x" : 0,
+						"y" : 6,
 						"w" : 6,
 						"h" : 6
 					}
@@ -137,10 +137,43 @@
 						"start_from_zero" : true
 					},
 					"layout" : {
+						"x" : 0,
+						"y" : 1,
+						"w" : 2,
+						"h" : 5
+					}	
+				},				
+				{
+					"name" : "GraphingChartAPIWidget",
+					"props" : {
+						"chart_name" : "Sample Line Graph",
+						"endpoint" : "/sample_graph_data_api.json",
+						"api_response_data_key" : "results",
+						"graph_type" : "line",
+						"start_from_zero" : true
+					},
+					"layout" : {
 						"x" : 2,
 						"y" : 1,
-						"w" : 6,
-						"h" : 6
+						"w" : 2,
+						"h" : 5
+					}	
+				},				
+				{
+					"name" : "GraphingChartAPIWidget",
+					"props" : {
+						"chart_name" : "Sample Pie Graph",
+						"endpoint" : "/sample_graph_data_api.json",
+						"api_response_data_key" : "results",
+						"graph_type" : "pie",
+						"start_from_zero" : false,
+						"show_legend" : true
+					},
+					"layout" : {
+						"x" : 4,
+						"y" : 1,
+						"w" : 2,
+						"h" : 5
 					}	
 				}			
 			]
