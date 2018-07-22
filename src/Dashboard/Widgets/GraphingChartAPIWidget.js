@@ -255,7 +255,7 @@ class GraphingChartAPIWidget extends Component {
 			
 			// If the graph type is a pie, we only select the first series, 
 			// if multiple are provided by the user
-			dataToParse = customFormat[0]
+			dataToParse = [customFormat[0]]
 			
 			backgroundColors = (this.props.graph_colors.length > 0 ? this.generateColors(this.props.graph_colors, null, dataToParse.length, dataToParse[0].data.length) : [])
 			borderColors = (this.props.graph_border_colors.length > 0 ? this.generateColors(this.props.graph_border_colors, null, dataToParse.length, dataToParse[0].data.length) : [])
@@ -330,19 +330,31 @@ class GraphingChartAPIWidget extends Component {
 	 */
 	convertToChartOptions(){
 		
-		return {
+		let options =  {
 			maintainAspectRatio: false,
 			legend: {
 				display: this.props.show_legend
 			},
-			scales: {
+			/*scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: this.props.start_from_zero
+					}
+				}]
+			}*/
+		}	
+
+		if(this.props.start_from_zero){
+			options["scales"] = {
 				yAxes: [{
 					ticks: {
 						beginAtZero: this.props.start_from_zero
 					}
 				}]
 			}
-		}			
+		}
+		
+		return options;
 		
 	}
 
