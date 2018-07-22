@@ -31,21 +31,21 @@ class FilteringWidget extends Component {
 	
 	
 	static propTypes = {
-		showKeywordFilter 		: PropTypes.bool,
-		showDateFilter 			: PropTypes.bool,
-		queryStringKeyword		: PropTypes.string,
-		queryStringStartDate	: PropTypes.string,
-		queryStringEndDate		: PropTypes.string,
+		show_keyword_filter 	: PropTypes.bool,
+		show_date_filter 		: PropTypes.bool,
+		query_string_keyword	: PropTypes.string,
+		query_string_start_date	: PropTypes.string,
+		query_string_end_date	: PropTypes.string,
 
 	}
 	
 	
 	static defaultProps = {
-		showKeywordFilter 		: true,
-		showDateFilter 			: true,
-		queryStringKeyword		: "search",
-		queryStringStartDate	: "start_date",
-		queryStringEndDate		: "end_date"
+		show_keyword_filter 	: true,
+		show_date_filter 		: true,
+		query_string_keyword	: "search",
+		query_string_start_date	: "start_date",
+		query_string_end_date	: "end_date"
 	}
 	
 	
@@ -59,9 +59,9 @@ class FilteringWidget extends Component {
 		// Get date & search parameters from URL
 		let queryParams = qs.parse(stripQueryStringSeperator(this.props.location.search))
 		
-		let keyword 	= (queryParams[this.props.queryStringKeyword] === undefined) 	? "" : queryParams[this.props.queryStringKeyword]
-		let startDate 	= (queryParams[this.props.queryStringStartDate] === undefined) 	? null : moment(queryParams[this.props.queryStringStartDate])
-		let endDate 	= (queryParams[this.props.queryStringEndDate] === undefined) 	? null : moment(queryParams[this.props.queryStringEndDate])
+		let keyword 	= (queryParams[this.props.query_string_keyword] === undefined) 	? "" : queryParams[this.props.query_string_keyword]
+		let startDate 	= (queryParams[this.props.query_string_start_date] === undefined) 	? null : moment(queryParams[this.props.query_string_start_date])
+		let endDate 	= (queryParams[this.props.query_string_end_date] === undefined) 	? null : moment(queryParams[this.props.query_string_end_date])
 		
 		// If there's date in the URL - notify other widgets
 		if(startDate !== null && endDate !== null){
@@ -105,15 +105,15 @@ class FilteringWidget extends Component {
 			endDate = this.state.endDate.format('YYYY-MM-DD');
 			
 
-			query[this.props.queryStringStartDate] = startDate;
-			query[this.props.queryStringEndDate] = endDate;
+			query[this.props.query_string_start_date] = startDate;
+			query[this.props.query_string_end_date] = endDate;
 		}
 			
 
 		// Process keyword search
 		if(this.state.searchValue !== ""){
 			searchValue = this.state.searchValue;
-			query[this.props.queryStringKeyword] = searchValue;
+			query[this.props.query_string_keyword] = searchValue;
 
 		}
 		
@@ -151,7 +151,7 @@ class FilteringWidget extends Component {
 				{/* Date Filter */}
 				{
 					(
-						this.props.showDateFilter ? 
+						this.props.show_date_filter ? 
 							<div style={{display:"inline-block", margin : "0 5px"}}>
 
 								<DateRangePicker
@@ -176,7 +176,7 @@ class FilteringWidget extends Component {
 				{/* Keyword Filter */}				
 				{
 					(
-						this.props.showKeywordFilter ?
+						this.props.show_keyword_filter ?
 							<div style={{display:"inline-block", margin : "0 5px"}}>
 								<FormControl
 									type="text"

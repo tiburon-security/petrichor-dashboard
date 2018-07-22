@@ -66,8 +66,8 @@
 				{
 					"name" : "FilteringWidget",
 					"props" : {
-						"showKeywordFilter" : true,
-						"showDateFilter" : true
+						"show_keyword_filter" : true,
+						"show_date_filter" : true
 					},
 					"layout" : {
 						"isDraggable": false, 
@@ -82,7 +82,7 @@
 					"name" : "TabularDataFromAPIWidget",
 					"props" : {
 						"endpoint" : "/sample_nested_table_data_api.json",	
-						"apiResponseDataKey" : "users",
+						"api_response_data_key" : "users",
 						"columns" : [
 							{
 								"label": "ID",
