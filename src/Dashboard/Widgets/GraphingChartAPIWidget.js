@@ -230,7 +230,7 @@ class GraphingChartAPIWidget extends Component {
 	
 	drawGraph(){
 		
-		var context = document.getElementById("chartjs3")
+		var context = document.getElementById("chartjs3-" + this.props.widget_key)
 		
 		new Chart(context, {
 			type: this.props.graph_type,
@@ -357,7 +357,7 @@ class GraphingChartAPIWidget extends Component {
 			<FullWidget settings_button={false} close_button={true} title={this.props.chart_name} loading={this.state.loading} {...this.props}>
 				
 				<div style={{"position":"relative", "height":"100%"}}>
-					<canvas id="chartjs3"></canvas>
+					<canvas id={"chartjs3-" + this.props.widget_key}></canvas>
 				</div>
 				
 			</FullWidget>
