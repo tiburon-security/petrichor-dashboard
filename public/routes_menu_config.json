@@ -132,7 +132,8 @@
 					"props" : {
 						"endpoint" : "/sample_graph_data_api.json",
 						"api_response_data_key" : "results",
-						"graph_type" : "bar"
+						"graph_type" : "bar",
+						"start_from_zero" : true
 					},
 					"layout" : {
 						"x" : 2,

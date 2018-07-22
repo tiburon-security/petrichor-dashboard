@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {FullWidget} from '../WidgetStyles.js'
 import { connect } from 'react-redux';
 import qs from 'qs';
@@ -38,14 +39,16 @@ class GraphingChartAPIWidget extends Component {
 	}
 		
 	
-	propTypes: {
-		chart_name 						: React.PropTypes.string,
-		endpoint 						: React.PropTypes.string,
-		graph_type 						: React.PropTypes.string,
-		graph_colors 					: React.PropTypes.array,
-		graph_border_colors				: React.PropTypes.array,
+	static propTypes = {
+		chart_name 						: PropTypes.string,
+		endpoint 						: PropTypes.string,
+		graph_type 						: PropTypes.oneOf(['bar', 'pie', 'line']),
+		graph_colors 					: PropTypes.array,
+		graph_border_colors				: PropTypes.array,
+		show_legend						: PropTypes.bool,
+		start_from_zero					: PropTypes.bool,
 		
-		api_response_data_key 				: React.PropTypes.string,
+		api_response_data_key 			: PropTypes.string,
 
 	}
 	
@@ -78,6 +81,12 @@ class GraphingChartAPIWidget extends Component {
 			"#bdc3c7"
 		],
 		
+		// Show legend on graph
+		show_legend						: false,
+		
+		// Start graph numbering for zero (bar & graph)
+		start_from_zero					: false,
+		
 		// Parameters that are sent to API
 		api_response_data_key 				: "data",
 
@@ -109,11 +118,12 @@ class GraphingChartAPIWidget extends Component {
 
 		
 			let data = this.convertToChartFormat(response[this.props["api_response_data_key"]])
+			let options = this.convertToChartOptions();
 		
 			this.setState({
 				table_loading: false,
 				data,
-				//options - do this once you can parse out the options correctly
+				options
 			})	
 
 			this.drawGraph()
@@ -306,6 +316,28 @@ class GraphingChartAPIWidget extends Component {
 		}
   		
 		return data
+	}
+	
+	
+	/**
+	 * Generates ChartJS options based on props
+	 */
+	convertToChartOptions(){
+		
+		return {
+			maintainAspectRatio: false,
+			legend: {
+				display: this.props.show_legend
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: this.props.start_from_zero
+					}
+				}]
+			}
+		}			
+		
 	}
 
 	componentDidMount(){
