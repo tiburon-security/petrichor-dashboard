@@ -108,7 +108,7 @@ class Dashboard extends Component {
 					let widgetComponent = (
 						<Widget.default 
 							key={uniqueId()} 
-							widgetKey={containerKey} 
+							widget_key={containerKey} 
 							route={this.props.route} 
 							route_params={this.props.routeParams} 
 							close_button_clickhandler={() => { this.closeWidget(containerKey)}} 
