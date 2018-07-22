@@ -39,21 +39,20 @@ class GraphingChartAPIWidget extends Component {
 		
 	
 	propTypes: {
-		chartName 						: React.PropTypes.string,
+		chart_name 						: React.PropTypes.string,
 		endpoint 						: React.PropTypes.string,
 		graph_type 						: React.PropTypes.string,
 		graph_colors 					: React.PropTypes.array,
 		graph_border_colors				: React.PropTypes.array,
 		
-		apipointFilterVariableName 		: React.PropTypes.string,
-		apiResponseDataKey 				: React.PropTypes.string,
+		api_response_data_key 				: React.PropTypes.string,
 
 	}
 	
 	
 	static defaultProps = {
 		
-		chartName						: "Sample Graph",
+		chart_name						: "Sample Graph",
 		
 		// API Endpoint
 		endpoint : "https://reqres.in/api/users",	
@@ -80,8 +79,7 @@ class GraphingChartAPIWidget extends Component {
 		],
 		
 		// Parameters that are sent to API
-		apipointFilterVariableName 		: "filter_by",
-		apiResponseDataKey 				: "data",
+		api_response_data_key 				: "data",
 
 	}
 
@@ -110,7 +108,7 @@ class GraphingChartAPIWidget extends Component {
 		.then((response) => {
 
 		
-			let data = this.convertToChartFormat(response[this.props["apiResponseDataKey"]])
+			let data = this.convertToChartFormat(response[this.props["api_response_data_key"]])
 		
 			this.setState({
 				table_loading: false,
@@ -318,7 +316,7 @@ class GraphingChartAPIWidget extends Component {
 	render() {
     
 		return (  
-			<FullWidget settings_button={false} close_button={true} title={this.props.chartName} loading={this.state.loading} {...this.props}>
+			<FullWidget settings_button={false} close_button={true} title={this.props.chart_name} loading={this.state.loading} {...this.props}>
 				
 				<div style={{"position":"relative", "height":"100%"}}>
 					<canvas id="chartjs3"></canvas>
