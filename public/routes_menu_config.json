@@ -130,6 +130,7 @@
 				{
 					"name" : "GraphingChartAPIWidget",
 					"props" : {
+						"chart_name" : "Sample Bar Graph",
 						"endpoint" : "/sample_graph_data_api.json",
 						"api_response_data_key" : "results",
 						"graph_type" : "bar",

@@ -8,13 +8,6 @@ import Chart from 'chart.js';
 import * as chroma from 'chroma-js';
 
 
-/*
-
-TODO:
-- create props for toggling legend, start_from_zero(applicable for bar graphs)
-- add support for date ranges i.e., DateRangeFilter picks a date, relay selected date to the API backing this widget so the data reflects it. Use standard filter syntax used by other sample widgets
-*/
-
 /**
  * Component for fetching data from a simple GET-based API and displaying it in a table.
  * Has support built in for facilitating pagination, filtering & sorting on the server side.
@@ -26,18 +19,12 @@ class GraphingChartAPIWidget extends Component {
 
 		this.state = ({
 			loading:false, 
-			table_loading:false, 
 			data : {},
-			options : {
-				maintainAspectRatio: false,
-				legend: {
-					display: false
-				}
-			}
+			options : {}
 		})
 		
 	}
-		
+	
 	
 	static propTypes = {
 		chart_name 						: PropTypes.string,
@@ -49,6 +36,7 @@ class GraphingChartAPIWidget extends Component {
 		start_from_zero					: PropTypes.bool,
 		
 		api_response_data_key 			: PropTypes.string,
+		api_filter_variable_name 		: PropTypes.string,
 
 	}
 	
@@ -89,6 +77,7 @@ class GraphingChartAPIWidget extends Component {
 		
 		// Parameters that are sent to API
 		api_response_data_key 				: "data",
+		api_filter_variable_name 			: "filter",
 
 	}
 
@@ -109,10 +98,27 @@ class GraphingChartAPIWidget extends Component {
 	 */ 
 	fetchData(state, instance){
 		
-		this.setState({table_loading: true})
+		this.setState({loading: true})
+		
+		let apiQueryStringObj = {}
+		let filters = []
+		
+		// Build filters based on date dispatched by FilteringWidget
+		if(this.props.startDate !== undefined && this.props.endDate !== undefined){
+			filters.push(`start_date[eq]${this.props.startDate}`)
+			filters.push(`end_date[eq]${this.props.endDate}`)
+		}
+		
+		// Add filters to query string
+		if(filters.length > 0){
+			apiQueryStringObj[this.props.api_filter_variable_name] = filters.join(",")
+		}
+		
+		// Turn query string object into string
+		let queryString = qs.stringify(apiQueryStringObj)
 
 		// Send request to API
-		fetch(`${this.props.endpoint}`)
+		fetch(`${this.props.endpoint}?${queryString}`)
 		.then(response => response.json())
 		.then((response) => {
 
@@ -121,7 +127,7 @@ class GraphingChartAPIWidget extends Component {
 			let options = this.convertToChartOptions();
 		
 			this.setState({
-				table_loading: false,
+				loading: false,
 				data,
 				options
 			})	
