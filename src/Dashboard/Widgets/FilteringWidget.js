@@ -11,7 +11,7 @@ import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 // Date Picket Imports
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
-import { DateRangePicker, isOutsideRange } from 'react-dates'; 
+import { DateRangePicker } from 'react-dates'; 
 
 
 class FilteringWidget extends Component {

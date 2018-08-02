@@ -162,7 +162,7 @@ class Dashboard extends Component {
 				cols={this.props.numberOfColumns} 
 				rowHeight={this.props.rowHeight} 
 				draggableHandle={this.props.draggable_handle}
-				verticalCompact={false}
+				compactType={null}
 			>
 			
 				{/* Build widgets based on state */}
