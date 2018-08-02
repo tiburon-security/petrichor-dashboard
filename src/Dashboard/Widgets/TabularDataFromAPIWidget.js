@@ -43,13 +43,15 @@ class TabularDataFromAPIWidget extends Component {
 		api_page_size_variable_name 		: PropTypes.string,
 		api_sort_variable_name 				: PropTypes.string,
 		api_filter_variable_name 			: PropTypes.string,
+		api_start_date_variable_name	 	: PropTypes.string,
+		api_end_date_variable_name	 		: PropTypes.string,
 		api_response_data_key 				: PropTypes.string,
 		api_response_number_of_pages_key 	: PropTypes.string,
 		api_page_number_offset 				: PropTypes.number,
 		query_string_page_variable_name 	: PropTypes.string,
 		query_string_page_size_variable_name: PropTypes.string,
 		query_string_filter_variable_name	: PropTypes.string,
-		query_string_filter_variable_name 	: PropTypes.string,
+		query_string_sorts_variable_name 	: PropTypes.string,
 		
 		
 		/**
@@ -112,6 +114,8 @@ class TabularDataFromAPIWidget extends Component {
 		api_page_size_variable_name 		: "per_page",
 		api_sort_variable_name 				: "sort_by",
 		api_filter_variable_name 			: "filter_by",
+		api_start_date_variable_name	 	: "start_date",
+		api_end_date_variable_name	 		: "end_date",
 		api_response_data_key 				: "data",
 		api_response_number_of_pages_key 	: "total_pages",	
 		api_page_number_offset 				: 1,
@@ -120,7 +124,7 @@ class TabularDataFromAPIWidget extends Component {
 		query_string_page_variable_name 	: "page",
 		query_string_page_size_variable_name: "page_size",
 		query_string_filter_variable_name	: "filter_by",
-		query_string_sort_variable_name 	: "sort_by",
+		query_string_sorts_variable_name 	: "sort_by",
 		
 		// Columns to display
 		columns : [
@@ -258,16 +262,18 @@ class TabularDataFromAPIWidget extends Component {
 		if(queryParams[this.props.query_string_page_size_variable_name] !== undefined){
 			defaultPageSize = Number.parseInt(queryParams[this.props.query_string_page_size_variable_name], 10);
 		}
-		
+
 		// Parse out initial sorts
-		if(queryParams[this.props.query_string_filter_variable_name] !== undefined){
-			
-			let desc_regex_pattern = /desc\((.*)\)/g;
+		if(queryParams[this.props.query_string_sorts_variable_name] !== undefined){
+
+		let desc_regex_pattern = /desc\((.*)\)/g;
 			let asc_regex_pattern = /asc\((.*)\)/;
 			
-			defaultSorts = queryParams[this.props.query_string_filter_variable_name].split(",").map(i=>{
+			defaultSorts = queryParams[this.props.query_string_sorts_variable_name].split(",").map(i=>{
 				let descMatches = desc_regex_pattern.exec(i);
+								
 				if(descMatches !== null){
+
 					return {
 						id: descMatches[1],
 						desc: true
@@ -327,7 +333,7 @@ class TabularDataFromAPIWidget extends Component {
 				return `${direction}(${i.id})`
 			}).join(",")
 			
-			thisQueryStringObj[this.props.query_string_sort_variable_name] = sorts
+			thisQueryStringObj[this.props.query_string_sorts_variable_name] = sorts
 			apiQueryStringObj[this.props.api_sort_variable_name] = sorts
 		}
 		
@@ -344,8 +350,8 @@ class TabularDataFromAPIWidget extends Component {
 
 		// Build filters cause by external actions (i.e. date being dispatched by FilteringWidget)
 		if(this.props.startDate !== undefined && this.props.endDate !== undefined){
-			apiQueryStringObjFilters.push(`start_date[ge]${this.props.startDate}`)
-			apiQueryStringObjFilters.push(`end_date[le]${this.props.endDate}`)
+			apiQueryStringObjFilters.push(`${this.props.api_start_date_variable_name}[ge]${this.props.startDate}`)
+			apiQueryStringObjFilters.push(`${this.props.api_end_date_variable_name}[le]${this.props.endDate}`)
 		}
 		
 		if(thisQueryStringObjFilters.length > 0){
