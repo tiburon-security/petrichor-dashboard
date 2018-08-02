@@ -11,7 +11,7 @@ import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 // Date Picket Imports
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
-import { DateRangePicker } from 'react-dates'; 
+import { DateRangePicker, isOutsideRange } from 'react-dates'; 
 
 
 class FilteringWidget extends Component {
@@ -35,8 +35,7 @@ class FilteringWidget extends Component {
 		show_date_filter 		: PropTypes.bool,
 		query_string_keyword	: PropTypes.string,
 		query_string_start_date	: PropTypes.string,
-		query_string_end_date	: PropTypes.string,
-
+		query_string_end_date	: PropTypes.string
 	}
 	
 	
@@ -161,10 +160,11 @@ class FilteringWidget extends Component {
 									startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
 									endDate={this.state.endDate} // momentPropTypes.momentObj or null,
 									endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
-									onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
+									onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // 
 									focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
 									onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
 									anchorDirection="right"
+									isOutsideRange={ ()=> false }
 								/>
 
 							</div>
