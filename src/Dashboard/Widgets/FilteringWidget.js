@@ -91,7 +91,7 @@ class FilteringWidget extends Component {
 	
 	filter(){
 		
-		let query = qs.parse(stripQueryStringSeperator(this.props.location.search));
+		let query = {};
 		
 		let startDate = null;
 		let endDate = null;
@@ -103,24 +103,25 @@ class FilteringWidget extends Component {
 			startDate = this.state.startDate.format('YYYY-MM-DD');
 			endDate = this.state.endDate.format('YYYY-MM-DD');
 			
-
 			query[this.props.query_string_start_date] = startDate;
 			query[this.props.query_string_end_date] = endDate;
 		}
 			
-
 		// Process keyword search
 		if(this.state.searchValue !== ""){
 			searchValue = this.state.searchValue;
 			query[this.props.query_string_keyword] = searchValue;
-
 		}
 		
 		// Add query data to URL if there are any filters applied
 		if(Object.keys(query).length > 0){
-			const searchString = qs.stringify(query);
+			const existingQueryParams = qs.parse(stripQueryStringSeperator(this.props.location.search))
 			
-			this.props.history.push({search: searchString})
+			// Update Query String
+			this.props.history.push({
+			  search: qs.stringify(Object.assign({}, existingQueryParams, query))
+			});			
+			
 		}
 
 		// Send message to other widgets
