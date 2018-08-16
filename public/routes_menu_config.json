@@ -83,6 +83,32 @@
 					"props" : {
 						"endpoint" : "/sample_nested_table_data_api.json",	
 						"api_response_data_key" : "users",
+						"sub_component" : {
+							"method" : "AdditionalDataSubComponent",
+							"columns" : [
+								{
+									"label" : "Yo",
+									"id" : "siblings",
+									"custom_accessor":  {
+										"method" : "ArrayTabularDataAccessor",
+										"keys" : [
+											{
+												"label" : "First Name",
+												"key" : "first_name"										
+											},										
+											{
+												"label" : "Last Name",
+												"key" : "last_name"										
+											}
+										],
+										"formatter" : {
+											"method": "BulletedListFormatter",
+											"show_label" : false
+										}
+									}
+								}
+							]
+						},
 						"columns" : [
 							{
 								"label": "ID",

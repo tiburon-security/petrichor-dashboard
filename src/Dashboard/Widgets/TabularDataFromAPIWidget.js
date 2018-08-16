@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
-import { ArrayTabularDataAccessor, BulletedListFormatter } from '../../Helpers/ReactTableHelpers.js'
+import { ArrayTabularDataAccessor, BulletedListFormatter, AdditionalDataSubComponent } from '../../Helpers/ReactTableHelpers.js'
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 
 // Data Table Imports
@@ -187,7 +187,7 @@ class TabularDataFromAPIWidget extends Component {
 					
 					let showLabel = col.custom_accessor.formatter.show_label;
 					
-					// Filteres a dataset to return only the target data that will be displayed
+					// Filters a dataset to return only the target data that will be displayed
 					let filterData = ( val => {
 						
 						let targetData = val.row[col.id].map((i) => {
@@ -385,7 +385,25 @@ class TabularDataFromAPIWidget extends Component {
 	render() {
 		
 		let columns = this.buildColumns()
+	
+		// Store props that may be dynamically added to react-table
+		let additionalProps = {}
 		
+		// Adds subcomponent to react-table based on props
+		if("sub_component" in this.props){
+			switch(this.props.sub_component.method){
+				
+				case "AdditionalDataSubComponent" : {
+					
+					additionalProps["SubComponent"] =  (row =>  AdditionalDataSubComponent(row, this.props.sub_component.columns))
+					break;
+
+					
+				}
+				
+			}
+		
+		}
     
 		return (  
 			<FullWidget settings_button={false} close_button={true} title={this.props.table_name} loading={this.state.loading} {...this.props}>
@@ -416,6 +434,8 @@ class TabularDataFromAPIWidget extends Component {
 					
 					defaultFiltered={this.defaultFilters}
 					defaultSorted={this.defaultSorts}
+					
+					{...additionalProps}
 				
 				/>	
 			</FullWidget>
