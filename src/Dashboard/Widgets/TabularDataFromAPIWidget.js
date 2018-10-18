@@ -180,40 +180,14 @@ class TabularDataFromAPIWidget extends Component {
 				// Determine if a custom output formatter function is being utilized
 				if("formatter" in col.custom_accessor){
 					
-					// Generates an array of the target keys that will be displayed
-					let targetKeys = col.custom_accessor.keys.map((i) => {
-						return i["label"]
-					})
-					
 					let showLabel = col.custom_accessor.formatter.show_label;
-					
-					// Filters a dataset to return only the target data that will be displayed
-					let filterData = ( val => {
-						
-						let targetData = val.row[col.id].map((i) => {
-							let filteredObj = {};
-
-							for(let key of targetKeys){
-								if(key in i){
-									filteredObj[key] = i[key];
-								}
-							}
-							
-							return filteredObj;
-						})						
-						
-						return targetData;
-					})
-					
+			
 					// Display data based on the specified custom formatter
 					switch(col.custom_accessor.formatter.method){
 						
 						case "BulletedListFormatter": {
-							obj["Cell"] = ( val => {
-								
-								let filteredData = filterData(val)								
-								
-								return BulletedListFormatter(filteredData, showLabel)
+							obj["Cell"] = ( cellData => {
+								return BulletedListFormatter(cellData.value, showLabel)
 							})
 							break;
 						}
@@ -394,11 +368,12 @@ class TabularDataFromAPIWidget extends Component {
 			switch(this.props.sub_component.method){
 				
 				case "AdditionalDataSubComponent" : {
-					
 					additionalProps["SubComponent"] =  (row =>  AdditionalDataSubComponent(row, this.props.sub_component.columns))
 					break;
-
-					
+				}
+				
+				default : {
+					break;
 				}
 				
 			}

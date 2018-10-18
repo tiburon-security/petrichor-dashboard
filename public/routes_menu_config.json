@@ -87,23 +87,27 @@
 							"method" : "AdditionalDataSubComponent",
 							"columns" : [
 								{
-									"label" : "Yo",
-									"id" : "siblings",
+									"label": "First Name",
+									"id": "first_name"
+								},
+								{
+									"label" : "Degrees",
+									"id": "degrees",
 									"custom_accessor":  {
 										"method" : "ArrayTabularDataAccessor",
 										"keys" : [
 											{
-												"label" : "First Name",
-												"key" : "first_name"										
-											},										
+												"label" : "Name",
+												"key" : "name"										
+											},
 											{
-												"label" : "Last Name",
-												"key" : "last_name"										
+												"label" : "Level",
+												"key" : "level"										
 											}
 										],
 										"formatter" : {
 											"method": "BulletedListFormatter",
-											"show_label" : false
+											"show_label" : true
 										}
 									}
 								}
@@ -139,7 +143,7 @@
 									],
 									"formatter" : {
 										"method": "BulletedListFormatter",
-										"show_label" : false
+										"show_label" : true
 									}
 								}
 							}

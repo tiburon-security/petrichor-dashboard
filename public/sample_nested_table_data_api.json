@@ -16,6 +16,21 @@
 					"first_name" : "Gob",
 					"last_name"	:	"Bluth"				
 				}
+			],
+		"degrees":
+			[
+				{
+					"id":1,
+					"name" : "Computer Science",
+					"level" : "Masters"
+				
+				},				
+				{
+					"id":2,
+					"name" : "Computer Science",
+					"level" : "Bachelors"
+				
+				}
 			]
 	}, {
 		"id": 2,
@@ -69,7 +84,22 @@
 		"id": 9,
 		"first_name": "Tobias",
 		"last_name": "Funke",
-		"avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/vivekprvr/128.jpg"
+		"avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/vivekprvr/128.jpg",
+		"degrees":
+			[
+				{
+					"id":1,
+					"name" : "Computer Science",
+					"level" : "Masters"
+				
+				},				
+				{
+					"id":2,
+					"name" : "Computer Science",
+					"level" : "phd"
+				
+				}
+			]
 	}, {
 		"id": 10,
 		"first_name": "Byron",

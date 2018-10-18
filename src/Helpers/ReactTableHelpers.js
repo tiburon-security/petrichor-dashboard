@@ -8,21 +8,22 @@ import React from 'react';
 export function ArrayTabularDataAccessor(data, arrayKey, targetObjectKeys){
 	
 	let output = []
-	
 	if (arrayKey in data){
 		
 		for(let i of data[arrayKey]){
-			
-			let obj = {}
-			
+			let current = []
 			for(let targetObjectKey of targetObjectKeys){
-				obj[targetObjectKey.label] = i[targetObjectKey.key]
+				current.push(
+					{
+						label:targetObjectKey["label"],
+						key:targetObjectKey["key"],
+						data: i[targetObjectKey["key"]]
+					}
+				)
 			}
-						
-			output.push(obj)
+			output.push(current)
 		}
 	}
-	
 	return output
 }
 
@@ -32,22 +33,23 @@ export function ArrayTabularDataAccessor(data, arrayKey, targetObjectKeys){
  * in the object, its displayed as a multi-level bulleted list
  */
 export function BulletedListFormatter(data, showLabel){
-	
 	let output = null;
 	
-	if(data.length > 1){
+	if(data.length >= 1){
 		
 		let numberOfPropertiesInObjects = Object.keys(data[0]).length
 
-		// If there is one property in the object, show it as a single later bulleted list
+		// If there is one property in the object, show it as a single layer bulleted list
 		if(numberOfPropertiesInObjects === 1){
-			
-			let targetKey = Object.keys(data[0])[0];
 			
 			output = (
 				<ul>
+				
 					{data.map((currentData, index) => 
-						<li key={index} >{currentData[targetKey]}</li>
+						<li key={index} >
+							{(showLabel === undefined || showLabel) ? currentData[0]["label"] + ': ' + currentData[0]["data"] : currentData[0]["data"]}
+						</li>
+						
 					)}
 				</ul>
 			);
@@ -56,48 +58,61 @@ export function BulletedListFormatter(data, showLabel){
 		
 		// If there are multiple properties in the object, show it as a multiple
 		// layer bulleted listed
-		else if(numberOfPropertiesInObjects > 1){
-						
-			let targetKeys =  Object.keys(data[0]);
+		else if(numberOfPropertiesInObjects > 1){			
 			
 			output = (
 				<ul>
 					{data.map((currentData, index) => 
-						
 						<li key={index}>
 							<ul>
-								{targetKeys.map((currentKey, subIndex) =>
+								{currentData.map((currentSubdata, subIndex) => 
 									<li key={subIndex}>
-										{(showLabel === undefined || showLabel) ? currentKey + ': ' + currentData[currentKey] : currentData[currentKey]}
+										{(showLabel === undefined || showLabel) ? currentSubdata["label"] + ': ' + currentSubdata["data"] : currentSubdata["data"]}
 									</li>
+									
 								)}
 							</ul>
 						</li>
-						
 					)}
 				</ul>
 			)
 		}
 	}
-	
+	console.log(output)
 	return output
 }
 
 
+export function SubmitAndAdditionalDataSubComponent(tableRow, columns){
+	
+	let data = AdditionalDataSubComponent(tableRow, columns);
+	
+	/*
+	
+		TODO : BUILD ACTUAL TABLE & FUNCTIONING TO SUBMIT DATA FROM WITHIN THE ROW
+	
+	*/
+	
+	return data;
+	
+}
+
+
+/**
+ * Table dropdown row for displaying additional data
+ */
 export function AdditionalDataSubComponent(tableRow, columns){
-	console.log(tableRow.row.first_name)
-	/*return (
-		<div style={{ padding: "20px" }}>
-			Another Sub Component!
-		</div>
-	);*/
 	
 	let output = [];
 	
-	for(let col of columns){
-		
+	for(let [index, col] of columns.entries()){
+
 		let label = col.label
-		let data = col.id;
+		let data = (
+			<ul>
+				<li>{tableRow.row._original[col.id]}</li>
+			</ul>
+		)
 		
 		// Determine if a custom accessor function is being utilized
 		if("custom_accessor" in col){
@@ -107,49 +122,26 @@ export function AdditionalDataSubComponent(tableRow, columns){
 			switch(col.custom_accessor.method){
 				
 				case "ArrayTabularDataAccessor": {
-					rawData =  ArrayTabularDataAccessor(tableRow.row, col.id, col.custom_accessor.keys)
+					rawData =  ArrayTabularDataAccessor(tableRow.row._original, col.id, col.custom_accessor.keys)
 					break;
-				}					
+				}	
+
+				default : {
+					break;
+				}			
 			
 			}
 			
 			// Determine if a custom output formatter function is being utilized
 			if("formatter" in col.custom_accessor){
 				
-				// Generates an array of the target keys that will be displayed
-				let targetKeys = col.custom_accessor.keys.map((i) => {
-					return i["label"]
-				})
-				
 				let showLabel = col.custom_accessor.formatter.show_label;
-				
-				// Filters a dataset to return only the target data that will be displayed
-				let filterData = ( val => {
-					
-					let targetData = val.row[col.id].map((i) => {
-						let filteredObj = {};
-
-						for(let key of targetKeys){
-							if(key in i){
-								filteredObj[key] = i[key];
-							}
-						}
-						
-						return filteredObj;
-					})						
-					
-					return targetData;
-				})
 				
 				// Display data based on the specified custom formatter
 				switch(col.custom_accessor.formatter.method){
 					
 					case "BulletedListFormatter": {
-						console.log(rawData)
-						let filteredData = filterData(rawData)
-						console.log(filteredData)
 						data = BulletedListFormatter(rawData, showLabel)
-						
 						break;
 					}
 					
@@ -158,15 +150,33 @@ export function AdditionalDataSubComponent(tableRow, columns){
 					}	
 				}
 			}
+			
 		}
 		
-		output.push(<li><span>{label}</span>{data}</li>)	
+		// Only append if there's actual data
+		if(data !== null){
+			output.push(
+				<tr key={index}>
+					<td><span>{label}</span></td>
+					<td>{data}</td>			
+				</tr>
+			);	
+			}
 	}
 	
-	return (
-		<ul>
-			{output}
-		</ul>
-	)
+	// Return null if there's no subdata
+	let finalTable = (output.length <= 0) ? null :
+		(
+			<table 
+				style={{
+					"margin": "10px"
+				}}
+			>
+				<tbody>
+					{output}
+				</tbody>
+			</table>
+		)
 	
+	return finalTable;
 }
