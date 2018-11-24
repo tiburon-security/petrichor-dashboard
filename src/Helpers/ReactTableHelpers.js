@@ -1,4 +1,6 @@
 import React from 'react';
+import Form from "react-jsonschema-form";
+
 
 /**
  * A custom data accessor that crawls an array of objects to pull specific key(s)
@@ -78,22 +80,45 @@ export function BulletedListFormatter(data, showLabel){
 			)
 		}
 	}
-	console.log(output)
 	return output
 }
 
-
-export function SubmitAndAdditionalDataSubComponent(tableRow, columns){
+/**
+ * Displays array data as a bulleted list within react-table. If the array of objects
+ * only has one key, the list is displayed as a single level. If multiple keys exist
+ * in the object, its displayed as a multi-level bulleted list.
+ *
+ * In addition, uses the react-jsonschema-form library to display a form for collecting
+ * and submitting data that is posted to a user-defined API
+ */
+export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfiguration){
 	
+	// Additional Data SubComponent
 	let data = AdditionalDataSubComponent(tableRow, columns);
 	
-	/*
-	
-		TODO : BUILD ACTUAL TABLE & FUNCTIONING TO SUBMIT DATA FROM WITHIN THE ROW
-	
-	*/
-	
-	return data;
+	// Build Form elements based on configuration input
+	return (
+		<div>
+			{data}
+			<div style={{"width":"40%", "margin":"10px"}}>
+				<Form 
+					schema={formConfiguration.form_schema} 
+					uiSchema={formConfiguration.ui_schema}
+					onSubmit={(formData,e) =>{
+						
+						//e.preventDefault();
+						
+						fetch(formConfiguration.target_endpoint, {
+							method: 'post',
+							body: JSON.stringify(formData)
+						}).then(function(response) {
+							console.log('Submitted: ', response);
+						});
+					}}
+				/>
+			</div>
+		</div>
+	);
 	
 }
 
@@ -179,4 +204,39 @@ export function AdditionalDataSubComponent(tableRow, columns){
 		)
 	
 	return finalTable;
+}
+
+/**
+ * Custom component for column filters which displays the unique items 
+ * for a column in a drop-down Select menu
+ */
+export function SelectFilter(filter, onChange, allData, column){
+
+	// Pluck target column value from each row via map, then convert to Set to deduplicate
+	var uniqueColumnValues = allData.length > 0 ? [...(new Set(allData.map(row => row[column])))] : [];
+
+	return (
+		<select
+		  onChange={e => onChange(e.target.value)}
+		  style={{  width: '100%'  }}
+		  value={filter ? filter.value : 'all'}
+		>
+			<option value="">Show All</option>
+			{
+				uniqueColumnValues.map( k => {
+					
+					// Validate that column only contains strings or numbers
+					if(
+						(typeof k === "number" && isFinite(k)) || 
+						(typeof k === "string" || k instanceof String)
+					){
+						return <option key={k.toString()} value={k}>{k}</option>
+					} else {
+						return null;
+					}
+				  
+				})
+			}
+		</select>
+	)
 }

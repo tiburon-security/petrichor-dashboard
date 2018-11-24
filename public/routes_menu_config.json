@@ -84,7 +84,7 @@
 						"endpoint" : "/sample_nested_table_data_api.json",	
 						"api_response_data_key" : "users",
 						"sub_component" : {
-							"method" : "AdditionalDataSubComponent",
+							"method" : "SubmitAndAdditionalDataSubComponent",
 							"columns" : [
 								{
 									"label": "First Name",
@@ -111,7 +111,23 @@
 										}
 									}
 								}
-							]
+							],
+							"form_configuration" : {
+								"target_endpoint" : "fake.php",
+								"form_schema" : {
+									"type": "object",
+									"required": ["status", "comments"],
+									"properties": {
+										"status": {"type": "string", "title": "Status", "enum": ["Ongoing", "Complete"]},
+										"comments": {"type": "string", "title": "Comments"}
+									}								
+								},
+								"ui_schema" : {
+									"comments" : {
+										"ui:widget": "textarea"
+									}
+								}
+							}
 						},
 						"columns" : [
 							{
@@ -120,7 +136,8 @@
 							},          
 							{
 								"label": "First Name",
-								"id": "first_name"
+								"id": "first_name",
+								"custom_filter_ui" :"SelectFilter"
 							},
 							{
 								"label": "Last Name",
@@ -129,6 +146,7 @@
 							{
 								"label" : "Siblings",
 								"id": "siblings",
+								"filterable" : false,
 								"custom_accessor":  {
 									"method" : "ArrayTabularDataAccessor",
 									"keys" : [

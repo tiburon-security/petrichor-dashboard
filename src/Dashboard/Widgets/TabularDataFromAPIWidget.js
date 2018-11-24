@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
-import { ArrayTabularDataAccessor, BulletedListFormatter, AdditionalDataSubComponent } from '../../Helpers/ReactTableHelpers.js'
+import { ArrayTabularDataAccessor, BulletedListFormatter, AdditionalDataSubComponent, SubmitAndAdditionalDataSubComponent, SelectFilter } from '../../Helpers/ReactTableHelpers.js'
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 
 // Data Table Imports
@@ -158,6 +158,55 @@ class TabularDataFromAPIWidget extends Component {
 				Header : col.label,
 				id: col.id,
 				accessor: col.id // Defaulty make accessor the ID
+			}
+			
+			// Allow default "filterable" value to be set in configuration
+			if("filterable" in col){
+				obj["filterable"] = col.filterable
+			}			
+			
+			// Allow default "sortable" value to be set in configuration
+			if("sortable" in col){
+				obj["sortable"] = col.sortable
+			}			
+			
+			// Allow default "resizable" value to be set in configuration
+			if("resizable" in col){
+				obj["resizable"] = col.resizable
+			}			
+			
+			// Allow default "width" value to be set in configuration
+			if("width" in col){
+				obj["width"] = col.width
+			}			
+			
+			// Allow default "minWidth" value to be set in configuration
+			if("minWidth" in col){
+				obj["minWidth"] = col.minWidth
+			}			
+			
+			// Allow default "maxWidth" value to be set in configuration
+			if("maxWidth" in col){
+				obj["maxWidth"] = col.maxWidth
+			}  
+ 
+  
+			// Determine if custom Filter UI Component is being utilized
+			if("custom_filter_ui" in col){
+				
+				switch(col.custom_filter_ui){
+					
+					case "SelectFilter" : {
+						obj["Filter"] = (({filter, onChange}) => SelectFilter(filter, onChange, this.state.data, col.id));
+						obj["filterable"] = true;
+						break;
+					}
+					
+					default : {
+						break;
+					}
+				}
+				
 			}
 			
 			// Determine if a custom accessor function is being utilized
@@ -370,6 +419,11 @@ class TabularDataFromAPIWidget extends Component {
 				case "AdditionalDataSubComponent" : {
 					additionalProps["SubComponent"] =  (row =>  AdditionalDataSubComponent(row, this.props.sub_component.columns))
 					break;
+				}				
+				
+				case "SubmitAndAdditionalDataSubComponent" : {
+					additionalProps["SubComponent"] =  (row =>  SubmitAndAdditionalDataSubComponent(row, this.props.sub_component.columns, this.props.sub_component.form_configuration))
+					break;
 				}
 				
 				default : {
@@ -417,7 +471,6 @@ class TabularDataFromAPIWidget extends Component {
 		);
 	}
 }
-
 
 const mapStateToProps = (state) => {
     return {
