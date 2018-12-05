@@ -55,6 +55,13 @@ export function sendInterwidgetMessage(messageType, message){
 	};
 }
 
+export function removeInterwidgetMessage(messageType){
+	return {
+		type: 'DASHBOARD_REMOVE_MULTIPLE_INTERWIDGET_MESSAGES',
+		messageType
+	};
+}
+
 /**
  * Expects messages in json array:
    [
@@ -68,5 +75,20 @@ export function sendMultipleInterwidgetMessages(messages){
 	return {
 		type: 'DASHBOARD_SEND_MULTIPLE_INTERWIDGET_MESSAGES',
 		messages
+	};
+}
+
+/**
+ * Expects messagetypes in array or a single messageType:
+   [
+     messageType1,
+	 messageType2,
+	 ...
+   ]
+ */
+export function removeMultipleInterwidgetMessages(messageTypes){
+	return {
+		type: 'DASHBOARD_REMOVE_MULTIPLE_INTERWIDGET_MESSAGES',
+		messageTypes
 	};
 }

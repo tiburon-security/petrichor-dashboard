@@ -62,7 +62,7 @@ export function dashboard(state = initialState, action) {
 					...state.widget_messages,
 					[action.messageType] : action.message,
 				}
-			}			
+			}					
 		
 		case 'DASHBOARD_SEND_MULTIPLE_INTERWIDGET_MESSAGES':
 		
@@ -75,6 +75,18 @@ export function dashboard(state = initialState, action) {
 			return {
 				...state,
 				widget_messages: updatedMessages
+			}			
+			
+		case 'DASHBOARD_REMOVE_MULTIPLE_INTERWIDGET_MESSAGES':
+		
+			let filteredMessages = Object.keys(state.widget_messages)
+				.filter(k => !action.messageTypes.includes(k))
+				.map(k => Object.assign({}, {[k]: state.widget_messages[k]}))
+				.reduce((res, o) => Object.assign(res, o), {});
+		
+			return {
+				...state,
+				widget_messages: filteredMessages
 			}	
 			
 			

@@ -231,6 +231,21 @@
 			"auto_position_widgets" : true,
 			"supported_widgets" : [
 				{
+					"name" : "FilteringWidget",
+					"props" : {
+						"show_keyword_filter" : true,
+						"show_date_filter" : true
+					},
+					"layout" : {
+						"isDraggable": false, 
+						"isResizable": true,
+						"x" : 0,
+						"y" : 0,
+						"w" : 6,
+						"h" : 1
+					}
+				},			
+				{
 					"name" : "FakeWidget2",
 					"layout" : {
 						"x" : 1,

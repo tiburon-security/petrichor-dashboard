@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import qs from 'qs';
 import moment from 'moment';
 import { Button, FormControl } from 'react-bootstrap';
-import { sendInterwidgetMessage, sendMultipleInterwidgetMessages, INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
+import { sendInterwidgetMessage, sendMultipleInterwidgetMessages, removeMultipleInterwidgetMessages, INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 
 // Date Picket Imports
@@ -26,7 +26,6 @@ class FilteringWidget extends Component {
 			endDate,
 			searchValue
 		}
-
 	}
 	
 	
@@ -52,6 +51,19 @@ class FilteringWidget extends Component {
 		this.setState({searchValue: event.target.value});
 	}
 	
+	
+	/**
+	 * Resets filters when filters when the widget is unmounted
+	 */
+	componentWillUnmount(){
+		
+		this.props.removeMultipleInterwidgetMessages([
+			INTERWIDGET_MESSAGE_TYPES.START_DATE,
+			INTERWIDGET_MESSAGE_TYPES.END_DATE,
+			INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH
+
+		])	
+	}
 	
 	getDefaultFilters(){
 		
@@ -220,6 +232,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         sendInterwidgetMessage: (messageType, message) => dispatch(sendInterwidgetMessage(messageType, message)),
         sendMultipleInterwidgetMessages: (messages) => dispatch(sendMultipleInterwidgetMessages(messages)),
+        removeMultipleInterwidgetMessages: (messageTypes) => dispatch(removeMultipleInterwidgetMessages(messageTypes)),
     };
 };
 
