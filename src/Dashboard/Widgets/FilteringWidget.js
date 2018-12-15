@@ -28,7 +28,6 @@ class FilteringWidget extends Component {
 		}
 	}
 	
-	
 	static propTypes = {
 		show_keyword_filter 	: PropTypes.bool,
 		show_date_filter 		: PropTypes.bool,
@@ -57,12 +56,7 @@ class FilteringWidget extends Component {
 	 */
 	componentWillUnmount(){
 		
-		this.props.removeMultipleInterwidgetMessages([
-			INTERWIDGET_MESSAGE_TYPES.START_DATE,
-			INTERWIDGET_MESSAGE_TYPES.END_DATE,
-			INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH
-
-		])	
+		this.clearFilters()	
 	}
 	
 	getDefaultFilters(){
@@ -99,7 +93,47 @@ class FilteringWidget extends Component {
 			endDate
 		}
 	}
+
 	
+	/**
+	 * Clears filters by notifying widgets, updating the UI, and clearing the query string
+	 */
+	clearFilters(){
+		
+		// Notify other dashboard widgets that filters have been removed
+		this.props.removeMultipleInterwidgetMessages([
+			INTERWIDGET_MESSAGE_TYPES.START_DATE,
+			INTERWIDGET_MESSAGE_TYPES.END_DATE,
+			INTERWIDGET_MESSAGE_TYPES.KEYWORD_SEARCH
+
+		])
+		
+		// Clear the filtering UI components
+		this.setState({
+			startDate 	: null, 
+			endDate 	: null,
+			searchValue : ""
+		});
+		
+		// Clean up the query string to remove filters
+		const existingQueryParams = qs.parse(stripQueryStringSeperator(this.props.location.search))
+		
+		let queryParamsToRemove = [
+			this.props.query_string_start_date,
+			this.props.query_string_end_date,
+			this.props.query_string_keyword
+		]
+				
+		let filteredQueryParams = Object.keys(existingQueryParams)
+				.filter(k => !queryParamsToRemove.includes(k))
+				.map(k => Object.assign({}, {[k]: existingQueryParams[k]}))
+				.reduce((res, o) => Object.assign(res, o), {});
+		
+		this.props.history.push({
+		  search: qs.stringify(filteredQueryParams)
+		});	
+			
+	}
 	
 	filter(){
 		
@@ -158,7 +192,7 @@ class FilteringWidget extends Component {
 	render() {
     
 		return (  
-			<div style={{"maxWidth":"510px", "display":"inline-flex", "float" : "right"}}>
+			<div style={{"maxWidth":"535px", "display":"inline-flex", "float" : "right"}}>
 			
 				{/* Date Filter */}
 				{
@@ -204,7 +238,16 @@ class FilteringWidget extends Component {
 					)
 				}
 				
-				<div style={{display:"inline-block", margin : "0 5px"}} md={1}>
+				<div style={{display:"inline-block", margin : "0 0 0 5px"}} md={1}>
+					<Button 
+						onClick={this.clearFilters.bind(this)}
+						style={{"height" : "36px", "borderRadius" : "0"}}
+					>
+						X
+					</Button>
+				</div>				
+				
+				<div style={{display:"inline-block", margin : "0 5px 0 0"}} md={1}>
 					<Button 
 						onClick={this.filter.bind(this)}
 						style={{"height" : "36px", "borderRadius" : "0"}}
