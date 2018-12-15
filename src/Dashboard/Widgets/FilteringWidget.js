@@ -7,12 +7,13 @@ import moment from 'moment';
 import { Button, FormControl } from 'react-bootstrap';
 import { sendInterwidgetMessage, sendMultipleInterwidgetMessages, removeMultipleInterwidgetMessages, INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
+import { Recent, CalendarYearQuarters, USGovtQuarters } from '../../Helpers/FilterDatePresets';
+import omit from 'lodash/omit';
 
 // Date Picket Imports
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
-import { DateRangePicker } from 'react-dates'; 
-
+import { DateRangePicker, isSameDay } from 'react-dates'; 
 
 class FilteringWidget extends Component {
 		
@@ -26,6 +27,30 @@ class FilteringWidget extends Component {
 			endDate,
 			searchValue
 		}
+		
+		this.renderDatePresets = this.renderDatePresets.bind(this);
+		
+		// Select Applicable Preset
+		this.presets = null;
+		switch(this.props.presets){
+			case null:
+			case "":
+				this.presets = null;
+				break;
+			case "Recent":
+				this.presets = Recent;
+				break;
+			case "CalendarYearQuarters":
+				this.presets = CalendarYearQuarters;
+				break;			
+			case "USGovtQuarters":
+				this.presets = USGovtQuarters;
+				break;
+			default:
+				this.presets = Recent;
+				break;
+		}
+		
 	}
 	
 	static propTypes = {
@@ -54,8 +79,7 @@ class FilteringWidget extends Component {
 	/**
 	 * Resets filters when filters when the widget is unmounted
 	 */
-	componentWillUnmount(){
-		
+	componentWillUnmount(){	
 		this.clearFilters()	
 	}
 	
@@ -124,11 +148,8 @@ class FilteringWidget extends Component {
 			this.props.query_string_keyword
 		]
 				
-		let filteredQueryParams = Object.keys(existingQueryParams)
-				.filter(k => !queryParamsToRemove.includes(k))
-				.map(k => Object.assign({}, {[k]: existingQueryParams[k]}))
-				.reduce((res, o) => Object.assign(res, o), {});
-		
+		let filteredQueryParams = omit(existingQueryParams, queryParamsToRemove)
+
 		this.props.history.push({
 		  search: qs.stringify(filteredQueryParams)
 		});	
@@ -188,6 +209,62 @@ class FilteringWidget extends Component {
 		
 	}	
 	
+	renderDatePresets() {
+		
+		const { startDate, endDate } = this.state;
+
+		return (
+			<div>
+				{this.presets !== null &&
+					<div 
+						style={{
+							 "padding": "0 22px 11px 22px",
+							 "textAlign" : "center"
+						}}
+					>
+						{this.presets.map(({ text, start, end }) => {
+							
+							const isSelected = isSameDay(start, startDate) && isSameDay(end, endDate);
+							
+							let buttonStyle = {
+								"position": "relative",
+								"height": "100%",
+								"textAlign": "center",
+								"background": "none",
+								"border": "2px solid rgb(0, 166, 153)",
+								"color": "rgb(0, 166, 153)",
+								"padding": "4px 12px",
+								"marginRight": 8,
+								"font": "inherit",
+								"fontWeight": 700,
+								"lineHeight": "normal",
+								"overflow": "visible",
+								"boxSizing": "border-box",
+								"cursor": "pointer"
+							}
+							
+							if(isSelected){
+								buttonStyle["color"] = "white";
+								buttonStyle["background"] = "rgb(0, 166, 153)";
+							}
+							
+							return (
+								<button
+									key={text}
+									style={buttonStyle}
+									type="button"
+									onClick={() => this.setState({ startDate:start, endDate:end, focusedInput:null })}
+								>
+								{text}
+								</button>
+							);
+						})}
+					</div>
+				}
+			</div>
+		)
+	}
+
 	
 	render() {
     
@@ -212,6 +289,7 @@ class FilteringWidget extends Component {
 									onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
 									anchorDirection="right"
 									isOutsideRange={ ()=> false }
+									renderCalendarInfo={this.renderDatePresets}
 								/>
 
 							</div>
@@ -256,7 +334,6 @@ class FilteringWidget extends Component {
 					</Button>
 				</div>
 
-				
 			</div>
 		);
   

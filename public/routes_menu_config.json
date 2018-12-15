@@ -67,7 +67,8 @@
 					"name" : "FilteringWidget",
 					"props" : {
 						"show_keyword_filter" : true,
-						"show_date_filter" : true
+						"show_date_filter" : true,
+						"presets" : "USGovtQuarters"
 					},
 					"layout" : {
 						"isDraggable": false, 
@@ -234,7 +235,8 @@
 					"name" : "FilteringWidget",
 					"props" : {
 						"show_keyword_filter" : true,
-						"show_date_filter" : true
+						"show_date_filter" : true,
+						"presets" : "CalendarYearQuarters"
 					},
 					"layout" : {
 						"isDraggable": false, 
