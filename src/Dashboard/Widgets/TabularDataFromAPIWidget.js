@@ -7,6 +7,7 @@ import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { ArrayTabularDataAccessor, BulletedListFormatter, AdditionalDataSubComponent, SubmitAndAdditionalDataSubComponent, UniqueValuesSelectFilter, ArrayValuesSelectFilter } from '../../Helpers/ReactTableHelpers.js'
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
+import pick from 'lodash/pick';
 
 // Data Table Imports
 import ReactTable from "react-table";
@@ -31,6 +32,14 @@ class TabularDataFromAPIWidget extends Component {
 			pages:-1,
 			data:[]
 		})
+		
+		// Enumerates the react-table properties that can be set via props
+		this.supportedReactTableProps = [
+			"showPageSizeOptions",
+			"pageSizeOptions",
+			"defaultPageSize",
+			"minRows"	
+		]
 		
 	}
 		
@@ -448,11 +457,12 @@ class TabularDataFromAPIWidget extends Component {
 				default : {
 					break;
 				}
-				
 			}
-		
 		}
-    
+		
+		// Fetch the supported react-table properties from the parent component
+		let reactTableProps = pick(this.props, this.supportedReactTableProps)
+	
 		return (  
 			<FullWidget settings_button={false} close_button={true} title={this.props.table_name} loading={this.state.loading} {...this.props}>
 				
@@ -482,7 +492,7 @@ class TabularDataFromAPIWidget extends Component {
 					
 					defaultFiltered={this.defaultFilters}
 					defaultSorted={this.defaultSorts}
-					
+					{...reactTableProps}
 					{...additionalProps}
 				
 				/>	
