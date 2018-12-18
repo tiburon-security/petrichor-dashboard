@@ -212,7 +212,7 @@ export function AdditionalDataSubComponent(tableRow, columns){
  * Custom component for column filters which displays the unique items 
  * for a column in a drop-down Select menu
  */
-export function SelectFilter(filter, onChange, allData, column){
+export function UniqueValuesSelectFilter(filter, onChange, allData, column){
 
 	// Pluck target column value from each row via map, then convert to Set to deduplicate
 	var uniqueColumnValues = allData.length > 0 ? [...(new Set(allData.map(row => row[column])))] : [];
@@ -238,6 +238,36 @@ export function SelectFilter(filter, onChange, allData, column){
 					}
 				  
 				})
+			}
+		</select>
+	)
+}
+
+
+/**
+ * Custom component for column filters which displays the user supplied
+ * filters for a column in a drop-down Select menu. Array format:
+ * [
+ *  {
+ *   key : string // key to filter on
+ *   label : string // 'pretty' label for the key
+ *  }
+ * ]
+ */
+export function ArrayValuesSelectFilter(filter, onChange, optionsArray){
+	
+	return (
+		<select
+		onChange={event => onChange(event.target.value)}
+		style={{ width: "100%" }}
+		value={filter ? filter.value : "all"}
+		>
+			<option value="">Show All</option>
+			{
+				optionsArray.map( i => {
+					return <option key={i["key"].toString()} value={i["key"]}>{i["label"]}</option>
+				})
+
 			}
 		</select>
 	)

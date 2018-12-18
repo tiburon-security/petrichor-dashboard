@@ -139,11 +139,22 @@
 							{
 								"label": "First Name",
 								"id": "first_name",
-								"custom_filter_ui" :"SelectFilter"
+								"custom_filter_ui" :"UniqueValuesSelectFilter"
 							},
 							{
 								"label": "Last Name",
-								"id": "last_name"
+								"id": "last_name",
+								"custom_filter_ui" :"ArrayValuesSelectFilter",
+								"custom_filter_array" : [
+									{
+										"key" : "Bluth",
+										"label" : "Bluth"
+									},							
+									{
+										"key" : "Weaver",
+										"label" : "Weaver"
+									}
+								]
 							},
 							{
 								"label" : "Siblings",

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
-import { ArrayTabularDataAccessor, BulletedListFormatter, AdditionalDataSubComponent, SubmitAndAdditionalDataSubComponent, SelectFilter } from '../../Helpers/ReactTableHelpers.js'
+import { ArrayTabularDataAccessor, BulletedListFormatter, AdditionalDataSubComponent, SubmitAndAdditionalDataSubComponent, UniqueValuesSelectFilter, ArrayValuesSelectFilter } from '../../Helpers/ReactTableHelpers.js'
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 
 // Data Table Imports
@@ -196,8 +196,14 @@ class TabularDataFromAPIWidget extends Component {
 				
 				switch(col.custom_filter_ui){
 					
-					case "SelectFilter" : {
-						obj["Filter"] = (({filter, onChange}) => SelectFilter(filter, onChange, this.state.data, col.id));
+					case "UniqueValuesSelectFilter" : {
+						obj["Filter"] = (({filter, onChange}) => UniqueValuesSelectFilter(filter, onChange, this.state.data, col.id));
+						obj["filterable"] = true;
+						break;
+					}					
+					
+					case "ArrayValuesSelectFilter" : {
+						obj["Filter"] = (({filter, onChange}) => ArrayValuesSelectFilter(filter, onChange, col.custom_filter_array));
 						obj["filterable"] = true;
 						break;
 					}
