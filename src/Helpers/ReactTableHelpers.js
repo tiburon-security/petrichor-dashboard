@@ -91,7 +91,7 @@ export function BulletedListFormatter(data, showLabel){
  * In addition, uses the react-jsonschema-form library to display a form for collecting
  * and submitting data that is posted to a user-defined API
  */
-export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfiguration){
+export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfiguration, removeRowWhenSubmitted=false, removeItemFromTableCallback){
 	
 	// Additional Data SubComponent
 	let data = AdditionalDataSubComponent(tableRow, columns);
@@ -106,13 +106,15 @@ export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfi
 					uiSchema={formConfiguration.ui_schema}
 					onSubmit={(formData,e) =>{
 						
-						//e.preventDefault();
-						
 						fetch(formConfiguration.target_endpoint, {
 							method: 'post',
 							body: JSON.stringify(formData)
 						}).then(function(response) {
-							console.log('Submitted: ', response);
+							
+							if(removeRowWhenSubmitted){
+								removeItemFromTableCallback(tableRow["index"])
+							}
+							
 						});
 					}}
 				/>

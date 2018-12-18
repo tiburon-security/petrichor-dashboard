@@ -405,6 +405,19 @@ class TabularDataFromAPIWidget extends Component {
 	}
 
 	
+	/**
+	 * Removes a given index from the data. NOTE: does not actually delete
+	 * the data norm inform the server of a change, this is solely a UI
+	 * deletion; the deleted element will return if an actions causese the data
+	 * to be re-fetched from the API (refresh, sort, filter, etc..)
+	 */
+	removeItemFromTable(index){
+		var currentData = [...this.state.data];
+		currentData.splice(index, 1);
+		this.setState({data:currentData});
+	}
+	
+	
 	render() {
 		
 		let columns = this.buildColumns()
@@ -422,7 +435,7 @@ class TabularDataFromAPIWidget extends Component {
 				}				
 				
 				case "SubmitAndAdditionalDataSubComponent" : {
-					additionalProps["SubComponent"] =  (row =>  SubmitAndAdditionalDataSubComponent(row, this.props.sub_component.columns, this.props.sub_component.form_configuration))
+					additionalProps["SubComponent"] =  (row =>  SubmitAndAdditionalDataSubComponent(row, this.props.sub_component.columns, this.props.sub_component.form_configuration, this.props.sub_component.delete_row_on_submit, this.removeItemFromTable.bind(this)))
 					break;
 				}
 				
