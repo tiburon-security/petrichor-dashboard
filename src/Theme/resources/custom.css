@@ -2,8 +2,6 @@
 .left_col {
   background: #2A3F54; }
 
-
-
 .profile_pic {
   width: 35%;
   float: left; }
@@ -893,10 +891,12 @@ span.right {
   bottom: 0px;
   clear: both;
   display: block;
-  padding: 5px 0 0 0;
+  padding: 13px 0 0 0;
   position: fixed;
   width: 230px;
-  background: #2A3F54; }
+  background: #2A3F54; 
+  height: 50px  
+}
 
 .sidebar-footer a {
   padding: 7px 0 3px;
