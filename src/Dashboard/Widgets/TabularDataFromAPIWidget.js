@@ -160,45 +160,28 @@ class TabularDataFromAPIWidget extends Component {
 	buildColumns(){
 		
 		let output = []
+
+		// Enumerates the react-table properties that can be set via props
+		let supportedReactTableColumnProps = [
+			"filterable",
+			"sortable",
+			"resizable",
+			"width",
+			"minWidth",
+			"maxWidth"
+		]
 		
 		for(let col of this.props.columns){
 			
+			// Fetch the supported react-table properties from the columns
+			let reactTableColumnProps = pick(col, supportedReactTableColumnProps)
+
 			let obj = {
 				Header : col.label,
 				id: col.id,
-				accessor: col.id // Defaulty make accessor the ID
+				accessor: col.id, // Defaulty make accessor the ID
+				...reactTableColumnProps
 			}
-			
-			// Allow default "filterable" value to be set in configuration
-			if("filterable" in col){
-				obj["filterable"] = col.filterable
-			}			
-			
-			// Allow default "sortable" value to be set in configuration
-			if("sortable" in col){
-				obj["sortable"] = col.sortable
-			}			
-			
-			// Allow default "resizable" value to be set in configuration
-			if("resizable" in col){
-				obj["resizable"] = col.resizable
-			}			
-			
-			// Allow default "width" value to be set in configuration
-			if("width" in col){
-				obj["width"] = col.width
-			}			
-			
-			// Allow default "minWidth" value to be set in configuration
-			if("minWidth" in col){
-				obj["minWidth"] = col.minWidth
-			}			
-			
-			// Allow default "maxWidth" value to be set in configuration
-			if("maxWidth" in col){
-				obj["maxWidth"] = col.maxWidth
-			}  
- 
   
 			// Determine if custom Filter UI Component is being utilized
 			if("custom_filter_ui" in col){
