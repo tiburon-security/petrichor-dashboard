@@ -263,28 +263,7 @@ class FilteringWidget extends Component {
 				}
 			</div>
 		)
-	}
-
-	
-	componentWillUnmount(){
-				
-		// Clean up the query string parameters set during lifecycle of this widget
-		const existingQueryParams = qs.parse(stripQueryStringSeperator(this.props.location.search))
-		
-		let queryParamsToRemove = [
-			this.props.query_string_start_date,
-			this.props.query_string_end_date,
-			this.props.query_string_keyword
-		]
-				
-		let filteredQueryParams = omit(existingQueryParams, queryParamsToRemove)
-		
-		this.props.history.push({
-		  search: qs.stringify(filteredQueryParams)
-		});	
-		
-	}
-	
+	}	
 	
 	render() {
     
