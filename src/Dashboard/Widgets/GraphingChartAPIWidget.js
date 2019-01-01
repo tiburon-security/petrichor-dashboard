@@ -36,8 +36,10 @@ class GraphingChartAPIWidget extends Component {
 		start_from_zero					: PropTypes.bool,
 		
 		api_response_data_key 			: PropTypes.string,
-		api_filter_variable_name 		: PropTypes.string,
-
+		
+		api_filter_variable_name 			: PropTypes.string,
+		api_start_date_variable_name	 	: PropTypes.string,
+		api_end_date_variable_name	 		: PropTypes.string,
 	}
 	
 	
@@ -78,7 +80,8 @@ class GraphingChartAPIWidget extends Component {
 		// Parameters that are sent to API
 		api_response_data_key 				: "data",
 		api_filter_variable_name 			: "filter",
-
+		api_start_date_variable_name	 	: "start_date",
+		api_end_date_variable_name	 		: "end_date"
 	}
 
 	
@@ -97,31 +100,30 @@ class GraphingChartAPIWidget extends Component {
 	 */ 
 	fetchData(state, instance){
 		
+		// Track the query string that is used as GET parameters for the API
+		let apiQueryStringObj = {};
+		let apiQueryStringObjFilters = [];
+		
 		this.setState({loading: true})
 		
-		let apiQueryStringObj = {}
-		let filters = []
-		
-		// Build filters based on date dispatched by FilteringWidget
+		// Build filters cause by external actions (i.e. date being dispatched by FilteringWidget)
 		if(this.props.startDate !== undefined && this.props.endDate !== undefined){
-			filters.push(`start_date[eq]${this.props.startDate}`)
-			filters.push(`end_date[eq]${this.props.endDate}`)
+			apiQueryStringObjFilters.push(`${this.props.api_start_date_variable_name}[ge]${this.props.startDate}`)
+			apiQueryStringObjFilters.push(`${this.props.api_end_date_variable_name}[le]${this.props.endDate}`)
+		}
+			
+		if(apiQueryStringObjFilters.length > 0){
+			apiQueryStringObj[this.props.api_filter_variable_name] = apiQueryStringObjFilters.join(",")
 		}
 		
-		// Add filters to query string
-		if(filters.length > 0){
-			apiQueryStringObj[this.props.api_filter_variable_name] = filters.join(",")
-		}
-		
-		// Turn query string object into string
-		let queryString = qs.stringify(apiQueryStringObj)
+		// Convert query string objects into actual GET paramter query strings
+		const apiQueryString = qs.stringify(apiQueryStringObj);
 
 		// Send request to API
-		fetch(`${this.props.endpoint}?${queryString}`)
+		fetch(`${this.props.endpoint}?${apiQueryString}`)
 		.then(response => response.json())
 		.then((response) => {
 
-		
 			let data = this.convertToChartFormat(response[this.props["api_response_data_key"]])
 			let options = this.convertToChartOptions();
 		
