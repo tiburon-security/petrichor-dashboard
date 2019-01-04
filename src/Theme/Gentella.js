@@ -98,7 +98,9 @@ export class Gentella extends Component {
 
 
 					<TopNavigation>
-						<Notifications notifications_api="/sample_notifications_api.json" notifications={this.props.config.notifications}/>
+						{this.props.config.notifications_api_endpoint !== null &&
+							<Notifications notifications_api={this.props.config.notifications_api_endpoint} />
+						}
 						<ProfileDropdown user_name={get(this.props.userConfig, this.props.config.user_api_name_key)} />
 					</TopNavigation>
 

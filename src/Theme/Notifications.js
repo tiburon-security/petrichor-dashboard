@@ -51,9 +51,12 @@ class Notifications extends Component {
 	 */
 	componentDidMount() {
 		
-		fetch(this.props.notifications_api)
-			.then(response => response.json())
-			.then(data => { this.setState({ notifications: data.data })});
+		if(this.props.notifications_api !== null){
+		
+			fetch(this.props.notifications_api)
+				.then(response => response.json())
+				.then(data => { this.setState({ notifications: data.data })});
+		}
 	}
 	
 	render() {  
