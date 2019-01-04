@@ -26,6 +26,10 @@
 				{
 					"label" : "Orange",
 					"data" : 3
+				},			
+				{
+					"label" : "BrownBrownBrownBrownBrownBrown",
+					"data" : 3
 				}
 			]
 		},		
@@ -54,6 +58,10 @@
 				},		
 				{
 					"label" : "Orange",
+					"data" : 3
+				},		
+				{
+					"label" : "BrownBrownBrownBrownBrownBrown",
 					"data" : 3
 				}
 			]

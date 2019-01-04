@@ -230,7 +230,8 @@
 						"api_response_data_key" : "results",
 						"graph_type" : "pie",
 						"start_from_zero" : false,
-						"show_legend" : true
+						"show_legend" : true,
+						"auto_skip_xaxis_labels" : true
 					},
 					"layout" : {
 						"x" : 4,

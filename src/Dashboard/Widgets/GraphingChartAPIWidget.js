@@ -6,7 +6,7 @@ import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import Chart from 'chart.js';
 import * as chroma from 'chroma-js';
-
+import merge from 'lodash/merge';
 
 /**
  * Component for fetching data from a simple GET-based API and displaying it in a table.
@@ -34,7 +34,9 @@ class GraphingChartAPIWidget extends Component {
 		graph_border_colors				: PropTypes.array,
 		show_legend						: PropTypes.bool,
 		start_from_zero					: PropTypes.bool,
-		
+		auto_skip_xaxis_labels			: PropTypes.bool,
+		truncate_xaxis_label_length		: PropTypes.number,
+		custom_chart_options			: PropTypes.object,
 		api_response_data_key 			: PropTypes.string,
 		
 		api_filter_variable_name 			: PropTypes.string,
@@ -76,6 +78,14 @@ class GraphingChartAPIWidget extends Component {
 		
 		// Start graph numbering for zero (bar & graph)
 		start_from_zero					: false,
+		
+		// Maximize space and skip xaxis labels to condense graph
+		auto_skip_xaxis_labels			: false,		
+		
+		// Truncate xaxis labels to this size
+		truncate_xaxis_label_length		: 10,
+		
+		custom_chart_options			: null,
 		
 		// Parameters that are sent to API
 		api_response_data_key 				: "data",
@@ -331,30 +341,81 @@ class GraphingChartAPIWidget extends Component {
 	 */
 	convertToChartOptions(){
 		
+		// Array of option objects that will be deeply merged to form final options object
+		let newOptionsArray = []
+		
 		let options =  {
 			maintainAspectRatio: false,
 			legend: {
 				display: this.props.show_legend
-			},
-			/*scales: {
-				yAxes: [{
-					ticks: {
-						beginAtZero: this.props.start_from_zero
-					}
-				}]
-			}*/
-		}	
-
-		if(this.props.start_from_zero){
-			options["scales"] = {
-				yAxes: [{
-					ticks: {
-						beginAtZero: this.props.start_from_zero
-					}
-				}]
 			}
 		}
+
+		if(this.props.start_from_zero){
+			newOptionsArray.push(
+				{
+					scales : {
+						yAxes: [{
+							ticks: {
+								beginAtZero: this.props.start_from_zero
+							}
+						}]
+					}
+				}
+			);
+		}
 		
+		if(!this.props.auto_skip_xaxis_labels){
+			newOptionsArray.push(
+				{
+					"scales": {
+						"xAxes": [{
+							"ticks": {
+								"autoSkip": false
+							}
+						}]
+					}
+				}
+			);
+		}
+		
+		// Truncate non-pie graphs to user specified length, and enable tooltips showing full title
+		if(this.props.graph_type !== 'pie'){
+		
+			let truncate_length = this.props.truncate_xaxis_label_length;
+			
+			newOptionsArray.push(
+				{
+					"scales": {
+						"xAxes": [{
+							"ticks": {
+								callback: function(value) {
+									return value.substr(0, truncate_length);
+								},
+							}
+						}]
+					},
+					tooltips: {
+						enabled: true,
+						mode: 'label',
+						callbacks: {
+							title: function(tooltipItems, data) {
+								var idx = tooltipItems[0].index;
+								return  data.labels[idx];
+							}
+						}
+					}
+				}
+			);	
+		}
+				
+		// Implement custom override by merging prop controlled options and custom options objects
+		if(this.props.custom_chart_options !== null){
+			newOptionsArray.push(this.props.custom_chart_options)
+		}
+		
+		options = merge(options, ...newOptionsArray)
+		console.log(options)
 		return options;
 		
 	}
