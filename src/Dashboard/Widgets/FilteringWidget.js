@@ -79,9 +79,9 @@ class FilteringWidget extends Component {
 	/**
 	 * Resets filters when filters when the widget is unmounted
 	 */
-	componentWillUnmount(){	
+	/*componentWillUnmount(){	
 		this.clearFilters()	
-	}
+	}*/
 	
 	getDefaultFilters(){
 		
@@ -151,7 +151,7 @@ class FilteringWidget extends Component {
 		let filteredQueryParams = omit(existingQueryParams, queryParamsToRemove)
 
 		this.props.history.push({
-		  search: qs.stringify(filteredQueryParams)
+			search: qs.stringify(filteredQueryParams)
 		});	
 			
 	}
@@ -186,8 +186,8 @@ class FilteringWidget extends Component {
 			
 			// Update Query String
 			this.props.history.push({
-			  search: qs.stringify(Object.assign({}, existingQueryParams, query))
-			});			
+				search: qs.stringify(Object.assign({}, existingQueryParams, query))
+			});
 			
 		}
 

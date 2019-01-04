@@ -46,7 +46,7 @@ export class Gentella extends Component {
 		}
 	}
 
-
+	
 	/**
 	* Remove event listener
 	*/
@@ -82,7 +82,6 @@ export class Gentella extends Component {
 											key={index}
 											render={(props)=>(
 												<DynamicSidebarMenu 
-													location={this.props.location} 
 													route_name={obj.route_name} 
 													config={this.props.config}/>
 											)}
@@ -120,7 +119,7 @@ export class Gentella extends Component {
 											path={fullPath}
 											key={index}
 											render={(props)=>(
-												<ChildComponentRender route_name={obj.route_name} {...props} />
+												<ChildComponentRender route_name={obj.route_name} />
 											)}
 										/>
 									)

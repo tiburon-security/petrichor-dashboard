@@ -5,6 +5,7 @@ import 'react-resizable/css/styles.css';
 import {uniqueId } from 'lodash';
 import ReactGridLayout, {WidthProvider}  from 'react-grid-layout';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { addDashboardWidget, removeDashboardWidget, removeDashboardWidgetsAll, setDashboardColumnNumber, setDashboardRowHeight } from '../redux/actions/Dashboard.js';
 const AutoWidthReactGridLayout = WidthProvider(ReactGridLayout);
 
@@ -113,7 +114,6 @@ class Dashboard extends Component {
 							route_params={this.props.routeParams} 
 							close_button_clickhandler={() => { this.closeWidget(containerKey)}} 
 							{...widgetProps}
-							{...this.props}
 						/>
 					);
 					
@@ -149,6 +149,7 @@ class Dashboard extends Component {
 	 *Clears dashboard if a non-dashboard UI is being displayed
 	 */
 	componentWillUnmount(){
+		this.props.history.push({search: ""});
 		this.props.removeDashboardWidgetsAll()
 	}
 
@@ -195,4 +196,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Dashboard))

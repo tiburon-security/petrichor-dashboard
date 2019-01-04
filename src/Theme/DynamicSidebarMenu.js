@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import MenuItem from './MenuItem';
 import MenuLink from './MenuLink';
@@ -157,4 +158,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DynamicSidebarMenu);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DynamicSidebarMenu));

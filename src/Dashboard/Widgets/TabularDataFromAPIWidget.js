@@ -417,7 +417,7 @@ class TabularDataFromAPIWidget extends Component {
 	
 	
 	render() {
-		
+
 		let columns = this.buildColumns()
 	
 		// Store props that may be dynamically added to react-table

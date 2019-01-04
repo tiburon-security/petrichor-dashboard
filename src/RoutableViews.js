@@ -7,8 +7,9 @@
  * for more reasoning on this design choice.
  */
 
+import App from './Views/SampleReact.js';
 import Dashboard from './Views/Dashboard.js';
  
-export * from './Views/SampleReact.js';
+export { App };
 export { Dashboard };
 

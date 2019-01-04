@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 
-
-export class App extends Component {
+class App extends Component {
   
 
 	render() {
-		console.log(this.props)
 	
 		return (
       
@@ -34,3 +33,5 @@ export class App extends Component {
 	}
 
 }
+
+export default withRouter(App)
