@@ -35,7 +35,7 @@ class GraphingChartAPIWidget extends Component {
 	static propTypes = {
 		chart_name 						: PropTypes.string,
 		endpoint 						: PropTypes.string,
-		graph_type 						: PropTypes.oneOf(['bar', 'pie', 'line']),
+		graph_type 						: PropTypes.oneOf(['bar', 'pie', 'line', 'doughnut']),
 		graph_colors 					: PropTypes.array,
 		graph_border_colors				: PropTypes.array,
 		show_legend						: PropTypes.bool,
@@ -59,7 +59,7 @@ class GraphingChartAPIWidget extends Component {
 		// API Endpoint
 		endpoint : "https://reqres.in/api/users",	
 		
-		// Type of graph to display (bar || pie || line)
+		// Type of graph to display (bar || pie || line || doughnut)
 		graph_type				 		: "bar",
 		
 		// Possible colors for the graph elements, defined as Hex strings
@@ -92,7 +92,7 @@ class GraphingChartAPIWidget extends Component {
 		// Truncate xaxis labels to this size
 		truncate_xaxis_label_length		: 10,
 		
-		// Only applicable for pie graphs
+		// Only applicable for pie and doughnut graphs
 		show_percentage_labels			: true,
 		
 		custom_chart_options			: null,
@@ -255,7 +255,7 @@ class GraphingChartAPIWidget extends Component {
 		
 		let plugins = [];
 		
-		if(this.props.show_percentage_labels && this.props.graph_type === 'pie'){
+		if(this.props.show_percentage_labels && (this.props.graph_type === 'pie' || this.props.graph_type === 'doughnut')){
 			plugins.push(ChartDataLabels)
 		}
 		
@@ -278,10 +278,10 @@ class GraphingChartAPIWidget extends Component {
 		let backgroundColors = null;
 		let borderColors = null;
 
-		// Options vary slightly between pie, bar, and line charts
-		if(this.props.graph_type === 'pie'){
+		// Options vary slightly between pie/doughnut, bar, and line charts
+		if(this.props.graph_type === 'pie' || this.props.graph_type === 'doughnut'){
 			
-			// If the graph type is a pie, we only select the first series, 
+			// If the graph type is a pie/doughnut, we only select the first series, 
 			// if multiple are provided by the user
 			dataToParse = [customFormat[0]]
 			
@@ -399,7 +399,7 @@ class GraphingChartAPIWidget extends Component {
 		}
 		
 		// Truncate non-pie graphs to user specified length, and enable tooltips showing full title
-		if(this.props.graph_type !== 'pie'){
+		if(this.props.graph_type !== 'pie' && this.props.graph_type !== 'doughnut'){
 		
 			let truncate_length = this.props.truncate_xaxis_label_length;
 			
@@ -428,7 +428,7 @@ class GraphingChartAPIWidget extends Component {
 			);	
 		}
 
-		// Shows percentages on pie chart
+		// Shows percentages on pie/doughnut chart
 		if(this.props.show_percentage_labels){
 			newOptionsArray.push(		
 				{
@@ -450,7 +450,7 @@ class GraphingChartAPIWidget extends Component {
 		}
 		
 		options = merge(options, ...newOptionsArray)
-		
+
 		return options;
 		
 	}

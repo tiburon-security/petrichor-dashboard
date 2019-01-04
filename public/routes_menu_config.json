@@ -228,7 +228,7 @@
 						"chart_name" : "Sample Pie Graph",
 						"endpoint" : "/sample_graph_data_api.json",
 						"api_response_data_key" : "results",
-						"graph_type" : "pie",
+						"graph_type" : "doughnut",
 						"start_from_zero" : false,
 						"show_legend" : true,
 						"auto_skip_xaxis_labels" : true
