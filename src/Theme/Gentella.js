@@ -13,6 +13,7 @@ import { toggleSidebarSize, setSidebarFullsize } from '../redux/actions/SidebarM
 import { Route, Switch } from 'react-router';
 import  { recursivelyWalkRoutes } from '../Helpers/Routes';
 import { connect } from 'react-redux';
+import get from 'lodash/get';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
@@ -98,7 +99,7 @@ export class Gentella extends Component {
 
 					<TopNavigation>
 						<Notifications notifications_api="/sample_notifications_api.json" notifications={this.props.config.notifications}/>
-						<ProfileDropdown user_name={this.props.user_name} />
+						<ProfileDropdown user_name={get(this.props.userConfig, this.props.config.user_api_name_key)} />
 					</TopNavigation>
 
 

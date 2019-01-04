@@ -1,6 +1,9 @@
 {
 	"website_name" : "Petrichor Dashboard",
 	"footer_text" : "Petrichor Dashboard - by Jovanni Hernandez",
+	
+	"user_api_endpoint" : "/sample_user_api.json",
+	"user_api_name_key" : "data.user_name",
 
     "routes" : [
 		{

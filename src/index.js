@@ -14,12 +14,12 @@ fetch('/routes_menu_config.json')
 		return response.json()
 	})
 	.then(function(mainJson){		
-		fetch('/sample_user_api.json')
+		fetch(mainJson.user_api_endpoint)
 		.then(function(userResponse){			
 			return userResponse.json()
 		})
 		.then(function(userJson){
-			bootstrapApplication(mainJson, userJson.data)
+			bootstrapApplication(mainJson, userJson)
 		})
 		
 	})
@@ -43,7 +43,7 @@ function bootstrapApplication(config, userConfig){
 			*/}
 			<Route 
 				render={(props)=>(
-					<Gentella config={config} {...userConfig} location={props.location} />
+					<Gentella config={config} userConfig={userConfig} location={props.location} />
 				)}
 			/>
 		</BrowserRouter>
