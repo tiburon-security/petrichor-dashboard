@@ -5,15 +5,21 @@ import { connect } from 'react-redux';
 import qs from 'qs';
 import { INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import * as chroma from 'chroma-js';
 import merge from 'lodash/merge';
+import sum from 'lodash/sum';
+
+// ChartDataLabels plugin registers itself globally, so it's unregsitered and selectively enabled
+Chart.plugins.unregister(ChartDataLabels);
 
 /**
  * Component for fetching data from a simple GET-based API and displaying it in a table.
  * Has support built in for facilitating pagination, filtering & sorting on the server side.
  */
 class GraphingChartAPIWidget extends Component {
-				
+
+
 	constructor(state){
 		super(state);
 
@@ -36,6 +42,7 @@ class GraphingChartAPIWidget extends Component {
 		start_from_zero					: PropTypes.bool,
 		auto_skip_xaxis_labels			: PropTypes.bool,
 		truncate_xaxis_label_length		: PropTypes.number,
+		show_percentage_labels			: PropTypes.bool,
 		custom_chart_options			: PropTypes.object,
 		api_response_data_key 			: PropTypes.string,
 		
@@ -84,6 +91,9 @@ class GraphingChartAPIWidget extends Component {
 		
 		// Truncate xaxis labels to this size
 		truncate_xaxis_label_length		: 10,
+		
+		// Only applicable for pie graphs
+		show_percentage_labels			: true,
 		
 		custom_chart_options			: null,
 		
@@ -243,10 +253,17 @@ class GraphingChartAPIWidget extends Component {
 		
 		var context = document.getElementById("chartjs3-" + this.props.widget_key)
 		
+		let plugins = [];
+		
+		if(this.props.show_percentage_labels && this.props.graph_type === 'pie'){
+			plugins.push(ChartDataLabels)
+		}
+		
 		new Chart(context, {
 			type: this.props.graph_type,
 			options: this.state.options,
-			data: this.state.data
+			data: this.state.data,
+			plugins: plugins
 		});
 
 	}
@@ -351,6 +368,7 @@ class GraphingChartAPIWidget extends Component {
 			}
 		}
 
+		// Force the graph to always start at 0
 		if(this.props.start_from_zero){
 			newOptionsArray.push(
 				{
@@ -365,6 +383,7 @@ class GraphingChartAPIWidget extends Component {
 			);
 		}
 		
+		// Skips xaxis labels to condense space on graph
 		if(!this.props.auto_skip_xaxis_labels){
 			newOptionsArray.push(
 				{
@@ -408,6 +427,22 @@ class GraphingChartAPIWidget extends Component {
 				}
 			);	
 		}
+
+		// Shows percentages on pie chart
+		if(this.props.show_percentage_labels){
+			newOptionsArray.push(		
+				{
+					plugins: {
+						datalabels: {
+							color: '#FFFFFF',
+							formatter: function(value, context) {
+								return + Math.round((value/sum(context.dataset.data))*100) + '%';
+							}
+						}
+					}
+				}
+			)
+		}
 				
 		// Implement custom override by merging prop controlled options and custom options objects
 		if(this.props.custom_chart_options !== null){
@@ -415,7 +450,7 @@ class GraphingChartAPIWidget extends Component {
 		}
 		
 		options = merge(options, ...newOptionsArray)
-		console.log(options)
+		
 		return options;
 		
 	}
