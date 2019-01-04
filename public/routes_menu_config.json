@@ -1,5 +1,6 @@
 {
 	"website_name" : "Petrichor Dashboard",
+	"footer_text" : "Petrichor Dashboard - by Jovanni Hernandez",
 
     "routes" : [
 		{

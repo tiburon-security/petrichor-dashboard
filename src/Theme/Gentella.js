@@ -130,7 +130,7 @@ export class Gentella extends Component {
 					</div>
 					
 					<Footer>
-						Petrichor Dashboard - by <a href="https://github.com/jovanni-hernandez/petrichor-dashboard">Jovanni Hernandez</a>
+						{ this.props.config.footer_text }
 					</Footer>
 
 				</div>
