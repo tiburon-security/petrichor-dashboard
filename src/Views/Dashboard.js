@@ -98,12 +98,9 @@ class Dashboard extends Component {
 				let isDraggable = (typeof widget.layout.isDraggable === 'undefined' ? true : widget.layout.isDraggable);
 				let isResizable = (typeof widget.layout.isResizable === 'undefined' ? true : widget.layout.isResizable);
 
-				// Dynamically load Widget module
-				require.ensure([], () => {  
+				// Dynamically load Widget module, which live up one directory from Dashbaord.js in /Dashboard/Widgets/
+				import("../" + widgetConfiguration.widget_url).then(Widget => {
 				
-					// Widgets live up one directory from Dashbaord.js in /Dashboard/Widgets/
-					let Widget = require("../" + widgetConfiguration.widget_url);
-					
 					let containerKey = uniqueId();
 					
 					let widgetComponent = (
