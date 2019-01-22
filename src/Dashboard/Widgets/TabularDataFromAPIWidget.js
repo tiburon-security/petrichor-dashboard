@@ -179,7 +179,7 @@ class TabularDataFromAPIWidget extends Component {
 			let obj = {
 				Header : col.label,
 				id: col.id,
-				accessor: col.id, // Defaulty make accessor the ID
+				accessor: (d => d[col.id].toString()), // Defaulty make accessor the ID
 				...reactTableColumnProps
 			}
   
@@ -218,7 +218,7 @@ class TabularDataFromAPIWidget extends Component {
 					}					
 				
 					default : {
-						obj["accessor"] = col.id;
+						obj["accessor"] = (d => d[col.id].toString());
 						break;
 					}
 				
