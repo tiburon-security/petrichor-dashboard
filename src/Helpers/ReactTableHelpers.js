@@ -126,7 +126,7 @@ export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfi
 							headers: {
 								"Content-Type" : "application/json"
 							},
-							body: JSON.stringify(formData)
+							body: JSON.stringify(dataToSend)
 						}).then(function(response) {
 							
 							if(removeRowWhenSubmitted){
