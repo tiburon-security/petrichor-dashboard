@@ -124,6 +124,16 @@
 							"delete_row_on_submit" : true,
 							"form_configuration" : {
 								"target_endpoint" : "fake.php",
+								"api_data_to_send" : [
+									{
+										"label" : "name_im_sending_to_api_first",
+										"key" : "first_name"
+									},							
+									{
+										"label" : "name_im_sending_to_api",
+										"key" : "last_name"
+									}
+								],
 								"form_schema" : {
 									"type": "object",
 									"required": ["status", "comments"],

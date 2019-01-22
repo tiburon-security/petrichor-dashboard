@@ -1,5 +1,7 @@
 import React from 'react';
 import Form from "react-jsonschema-form";
+import get from 'lodash/get';
+import merge from 'lodash/merge';
 
 
 /**
@@ -96,6 +98,16 @@ export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfi
 	// Additional Data SubComponent
 	let data = AdditionalDataSubComponent(tableRow, columns);
 	
+	let additionalDataToSend = {}
+	
+	// Adds user specified data from the API call to outgoing POST 
+	if(formConfiguration.api_data_to_send){
+		for(let i of formConfiguration.api_data_to_send){
+			additionalDataToSend[i.label] = get(tableRow.row, i.key)
+		}
+	}
+	
+	
 	// Build Form elements based on configuration input
 	return (
 		<div>
@@ -104,10 +116,16 @@ export function SubmitAndAdditionalDataSubComponent(tableRow, columns, formConfi
 				<Form 
 					schema={formConfiguration.form_schema} 
 					uiSchema={formConfiguration.ui_schema}
-					onSubmit={(formData,e) =>{
+					onSubmit={({formData}) =>{
+						
+						// Merge additional data from API call + data from form
+						let dataToSend = merge(formData, additionalDataToSend)
 						
 						fetch(formConfiguration.target_endpoint, {
 							method: 'post',
+							headers: {
+								"Content-Type" : "application/json"
+							},
 							body: JSON.stringify(formData)
 						}).then(function(response) {
 							
