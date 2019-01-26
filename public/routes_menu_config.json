@@ -6,6 +6,8 @@
 	"user_api_name_key" : "data.user_name",
 	
 	"notifications_api_endpoint" : "/sample_notifications_api.json",
+	
+	"show_menu_footer" : true,
 
     "routes" : [
 		{
@@ -255,7 +257,7 @@
 						"w" : 2,
 						"h" : 5
 					}	
-				}			
+				}
 			]
 		},
 		{

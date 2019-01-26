@@ -164,21 +164,7 @@ body .full_container.body .right_col
   margin-top:10px;
 }
 
-#top-navbar .navbar-right a
-{
-  font-size:13px;
-  color:#515356!important;
-}
 
-.navbar-right a i
-{
-  font-size:15px;
-}
-
-.navbar-right .dropdown:hover
-{
-  background:#D9DEE4;
-}
 
 .nav-md ul.nav2.child_menu li:before
 {

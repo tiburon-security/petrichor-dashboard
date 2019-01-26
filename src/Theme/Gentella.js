@@ -91,7 +91,7 @@ export class Gentella extends Component {
 								})}
 							</Switch>
 							
-							<MenuFooter/>
+							<MenuFooter config={this.props.config} />
 
 						</div>
 					</div>
