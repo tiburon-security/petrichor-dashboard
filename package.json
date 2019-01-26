@@ -1,7 +1,8 @@
 {
-  "name": "petrichor-dashboard",
-  "version": "0.0.1",
-  "private": true,
+  "name": "@tiburon-security/petrichor-dashboard",
+  "version": "0.6.2",
+  "homepage" : "https://github.com/tiburon-security/petrichor-dashboard",
+  "license" : "MIT",
   "devDependencies": {
     "react-scripts": "^2.1.3"
   },
@@ -42,5 +43,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
