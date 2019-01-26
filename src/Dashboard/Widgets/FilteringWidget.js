@@ -222,7 +222,16 @@ class FilteringWidget extends Component {
 							 "textAlign" : "center"
 						}}
 					>
-						{this.presets.map(({ text, start, end }) => {
+						<span 
+							style={{
+								"paddingRight": "10px",
+								"fontWeight": "bold"
+							}}
+						>
+							{this.presets.label}: 
+						</span>
+					
+						{this.presets.data.map(({ text, start, end }) => {
 							
 							const isSelected = isSameDay(start, startDate) && isSameDay(end, endDate);
 							
