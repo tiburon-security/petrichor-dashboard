@@ -94,6 +94,7 @@
 						"defaultPageSize": 500,
 						"endpoint" : "/sample_nested_table_data_api.json",	
 						"api_response_data_key" : "users",
+						"table_name" : "Sample Table 1 (Nested List Example)",
 						"sub_component" : {
 							"method" : "SubmitAndAdditionalDataSubComponent",
 							"columns" : [
@@ -257,7 +258,133 @@
 						"w" : 2,
 						"h" : 5
 					}	
-				}
+				},
+				{
+					"name" : "TabularDataFromAPIWidget",
+					"props" : {
+						"pageSizeOptions": [50, 100, 250, 500, 1000],
+						"defaultPageSize": 500,
+						"endpoint" : "/sample_nested_table_data_api.json",	
+						"api_response_data_key" : "users",
+						"table_name" : "Sample Table 2 (Nested Table Example)",
+						"query_string_page_variable_name"	: "table2_page",
+						"query_string_page_size_variable_name": "table2_page_size",
+						"query_string_filter_variable_name"	: "table2_filter_by",
+						"query_string_sorts_variable_name" 	: "table2_sort_by",
+						"sub_component" : {
+							"method" : "SubmitAndAdditionalDataSubComponent",
+							"columns" : [
+								{
+									"label": "First Name",
+									"id": "first_name"
+								},
+								{
+									"label" : "Degrees",
+									"id": "degrees",
+									"custom_accessor":  {
+										"method" : "ArrayTabularDataAccessor",
+										"keys" : [
+											{
+												"label" : "Name",
+												"key" : "name"										
+											},
+											{
+												"label" : "Level",
+												"key" : "level"										
+											}
+										],
+										"formatter" : {
+											"method": "NestedTableFormatter",
+											"show_label" : true
+										}
+									}
+								}
+							],
+							"delete_row_on_submit" : true,
+							"form_configuration" : {
+								"target_endpoint" : "fake.php",
+								"api_data_to_send" : [
+									{
+										"label" : "name_im_sending_to_api_first",
+										"key" : "first_name"
+									},							
+									{
+										"label" : "name_im_sending_to_api",
+										"key" : "last_name"
+									}
+								],
+								"form_schema" : {
+									"type": "object",
+									"required": ["status", "comments"],
+									"properties": {
+										"status": {"type": "string", "title": "Status", "enum": ["Ongoing", "Complete"]},
+										"comments": {"type": "string", "title": "Comments"}
+									}								
+								},
+								"ui_schema" : {
+									"comments" : {
+										"ui:widget": "textarea"
+									}
+								}
+							}
+						},
+						"columns" : [
+							{
+								"label": "ID",
+								"id": "id"
+							},          
+							{
+								"label": "First Name",
+								"id": "first_name",
+								"custom_filter_ui" :"UniqueValuesSelectFilter"
+							},
+							{
+								"label": "Last Name",
+								"id": "last_name",
+								"custom_filter_ui" :"ArrayValuesSelectFilter",
+								"custom_filter_array" : [
+									{
+										"key" : "Bluth",
+										"label" : "Bluth"
+									},							
+									{
+										"key" : "Weaver",
+										"label" : "Weaver"
+									}
+								]
+							},
+							{
+								"label" : "Siblings",
+								"id": "siblings",
+								"filterable" : false,
+								"custom_accessor":  {
+									"method" : "ArrayTabularDataAccessor",
+									"keys" : [
+										{
+											"label" : "First Name",
+											"key" : "first_name"										
+										},										
+										{
+											"label" : "Last Name",
+											"key" : "last_name"										
+										}
+									],
+									"formatter" : {
+										"method": "BulletedListFormatter",
+										"show_label" : true
+									}
+								}
+							}
+						]
+
+					},
+					"layout" : {
+						"x" : 0,
+						"y" : 12,
+						"w" : 6,
+						"h" : 6
+					}
+				}	
 			]
 		},
 		{

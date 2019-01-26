@@ -2,6 +2,22 @@ import React from 'react';
 import Form from "react-jsonschema-form";
 import get from 'lodash/get';
 import merge from 'lodash/merge';
+import ReactTable from 'react-table';
+
+
+/**
+ * Function for determining width of column based on text length
+ * Modified version of following snippets - https://github.com/react-tools/react-table/issues/94
+ */
+export function ColumnTextAutoWidth(data, accessor, headerText){
+  const maxWidth = 600;
+  const magicSpacing = 10;
+  const cellLength = Math.max(
+    ...data.map(row => (`${row[accessor]}` || '').length)
+);
+
+  return Math.min(maxWidth, cellLength * magicSpacing);
+};
 
 
 /**
@@ -29,6 +45,55 @@ export function ArrayTabularDataAccessor(data, arrayKey, targetObjectKeys){
 		}
 	}
 	return output
+}
+
+/**
+ * Displays array data as a nested react-table within react-table. Can only be used as a formatter in "AdditionalDataSubComponent", not in the column of a table.
+ */
+export function NestedTableFormatter(data){
+	let output = null;
+	
+	if(data.length >= 1){
+		
+		let columns = [];
+		let transformedData = [];
+		
+		// Transform data structure into what's require for react-table
+		for(let row of data){
+			let rowData = {}
+			
+			for(let column of row){
+				rowData[column["key"]] = column["data"]
+			}
+			
+			transformedData.push(rowData)
+		}
+		
+		// Define columns based on labels in first row in dataset
+		for(let column of data[0]){
+			columns.push(
+				{
+					Header : column["label"],
+					accessor : column["key"],
+					width: ColumnTextAutoWidth(transformedData, column["key"], column["label"])
+				}
+			)
+		}
+		
+		output = (
+			<ReactTable
+				columns={columns}
+				data={transformedData}
+				minRows={0}
+				showPagination={false}
+				showPaginationBottom={false}
+				showPageSizeOptions={false}
+			/>
+		)
+		
+	}
+	
+	return output;
 }
 
 /**
@@ -169,7 +234,7 @@ export function AdditionalDataSubComponent(tableRow, columns){
 				case "ArrayTabularDataAccessor": {
 					rawData =  ArrayTabularDataAccessor(tableRow.row._original, col.id, col.custom_accessor.keys)
 					break;
-				}	
+				}
 
 				default : {
 					break;
@@ -187,6 +252,11 @@ export function AdditionalDataSubComponent(tableRow, columns){
 					
 					case "BulletedListFormatter": {
 						data = BulletedListFormatter(rawData, showLabel)
+						break;
+					}
+					
+					case "NestedTableFormatter" : {
+						data = NestedTableFormatter(rawData)	
 						break;
 					}
 					
