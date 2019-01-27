@@ -1,8 +1,68 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavDropdown, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { openPopupModal } from '../redux/actions/PopupModal.js';
+import styled from 'styled-components';
+
+// Button for opening dropdown menu
+const DropdownToggle = styled.button`
+	border: none;
+	cursor: pointer;
+	background: none;
+`;
+
+// Adds styles to react-bootstrap Dropdown
+const CustomDropdown = styled(Dropdown)`	
+	ul {
+		width:300px;
+	}
+	
+	ul li a {
+		color:#5A738E;
+		padding: 0;
+		  white-space:normal;
+
+	}
+`;
+
+// Adds styles to react-bootstrap Dropdown
+const CustomMenuItem = styled(MenuItem)`	
+	background:#f7f7f7;
+	display:flex;
+	width:96%!important;
+	margin:6px 6px 0;
+	padding:5px;
+`;
+
+// The time for each notification
+const NotificationItemTime = styled.span`
+	font-size:11px;
+	font-style:italic;
+	font-weight:700;
+	position:absolute;
+	right:35px;
+`;
+
+// Represents a notification item
+const NotificationItem = styled.span`
+  display:block!important;
+  font-size:11px;
+  
+  :hover {
+	  color: #000;
+  }
+`;
+
+// Style for notifications count
+const NotificationCount = styled.span`
+	font-size: 8px;
+	font-weight: 400;
+	line-height: 13px;
+	position: absolute;
+	right: -10px;
+	top: -10px;
+`;
 
 /**
  * Component that shows notifications in the toolbar
@@ -43,8 +103,8 @@ class Notifications extends Component {
 		var body = selectedNotification.message;
 	
 		this.props.openPopupModal(title, body);
-	
 	}
+	
 	
 	/**
 	 * Fetch notifications from API
@@ -52,10 +112,11 @@ class Notifications extends Component {
 	componentDidMount() {
 		
 		if(this.props.notifications_api !== null){
-		
 			fetch(this.props.notifications_api)
 				.then(response => response.json())
-				.then(data => { this.setState({ notifications: data.data })});
+				.then(data => { 
+					this.setState({ notifications: data.data })
+				});
 		}
 	}
 	
@@ -85,15 +146,22 @@ class Notifications extends Component {
 			var shortenedMessage = notification.message.slice(0, 100) + "..."
 			
 			var elems = (
-				<MenuItem eventKey={parseFloat(eventKey + "." + index)} key={index} onSelect={() => this.expandNotification(index)} className="notification_item">
-					<span className="image"><span className={notification.font_awesome_icon}></span></span>
-					<span>
-						<span className="time">{timeAge}</span>
-					</span>
-					<span className="message">
+				<CustomMenuItem 
+					eventKey={parseFloat(eventKey + "." + index)} 
+					key={index} 
+					onSelect={() => this.expandNotification(index)}
+					className="notification_item"
+				>
+					<span className={notification.font_awesome_icon}></span>
+					
+					<NotificationItemTime>
+						{timeAge}
+					</NotificationItemTime>
+					
+					<NotificationItem>
 						{shortenedMessage}
-					</span>
-				</MenuItem>
+					</NotificationItem>
+				</CustomMenuItem>
 			)
 			
 			notificationItems.push(elems);
@@ -101,17 +169,27 @@ class Notifications extends Component {
 		
 		var hoverNotificationCountMessage = numWithinLastDay + " new notifications in the last day."
 		
-		var icon = (
-			<span className="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false" title={hoverNotificationCountMessage}>
+		var title = (
+			<span title={hoverNotificationCountMessage}>
 				<i className="fa fa-envelope-o"></i>
-				{(numWithinLastDay > 0 ? <span className="badge bg-green">{numWithinLastDay}</span> : null)}
+				{(
+					numWithinLastDay > 0 && 
+						<NotificationCount className="badge bg-green">
+							{numWithinLastDay}
+						</NotificationCount> 
+				)}
 			</span>
 		)
 		
 		return (
-			<NavDropdown id="notification_dropdown" eventKey={eventKey} title={icon} noCaret={true} className="notification_dropdown">
+			<CustomDropdown id="notification_dropdown">
+				<DropdownToggle bsRole="toggle">{title}</DropdownToggle>
+				<Dropdown.Menu
+					className="dropdown-menu-right" // BS 3 style to prevent menu being offscreen 
+				>
 					{notificationItems}
-			</NavDropdown>
+				</Dropdown.Menu>
+			</CustomDropdown>
 		);
 	}
 }

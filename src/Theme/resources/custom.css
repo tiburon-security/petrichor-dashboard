@@ -678,26 +678,6 @@ a,a:visited,a:focus,a:active,:visited,:focus,:active,.btn:focus,.btn:active:focu
   margin-bottom:0!important;
 }
 
-.toggle
-{
-  float:left;
-  padding-top:16px;
-  width:70px;
-  margin:0;
-}
-
-.toggle a
-{
-  cursor:pointer;
-  margin:0;
-  padding:15px 15px 0;
-}
-
-.toggle a i
-{
-  font-size:26px;
-}
-
 .nav2.child_menu > li > a
 {
   color:rgba(255,255,255,0.75);
@@ -793,93 +773,6 @@ footer
   line-height:30px;
   font-weight:700;
   margin:3px 0 7px;
-}
-
-.notification_item
-{
-  background:#f7f7f7;
-  display:flex;
-  width:96%!important;
-  margin:6px 6px 0;
-  padding:5px;
-}
-
-ul.msg_list li:last-child
-{
-  margin-bottom:6px;
-  padding:10px;
-}
-
-.notification_item li a
-{
-  padding:3px 5px!important;
-}
-
-.notification_item .image img
-{
-  border-radius:2px 2px 2px 2px;
-  -webkit-border-radius:2px 2px 2px 2px;
-  float:left;
-  margin-right:10px;
-  width:11%;
-}
-
-.notification_item .time
-{
-  font-size:11px;
-  font-style:italic;
-  font-weight:700;
-  position:absolute;
-  right:35px;
-}
-
-.notification_item .message
-{
-  display:block!important;
-  font-size:11px;
-}
-
-.notification_item .message:hover
-{
-  color:#000;
-}
-
-.dropdown-menu li a
-{
-  white-space:normal;
-}
-
-.notification_dropdown .dropdown-menu > li > a
-{
-  color:#5A738E;
-}
-
-.notification_dropdown .open .dropdown-menu
-{
-  position:absolute;
-  background:#fff;
-  margin-top:0;
-  border:1px solid #D9DEE4;
-  -webkit-box-shadow:none;
-  right:0;
-  left:auto;
-  width:220px;
-}
-
-.notification_dropdown .dropdown-menu
-{
-  width:300px;
-}
-
-.info-number .badge
-{
-  font-size:10px;
-  font-weight:400;
-  line-height:13px;
-  position:absolute;
-  right:2px;
-  top:8px;
-  padding:2px 6px;
 }
 
 .dashboard-widget
@@ -1141,11 +1034,6 @@ span.right
 .nav-sm .profile,.nav-sm #sidebar-menu span.fa,.nav-sm #sidebar-menu h3,.nav2.child_menu
 {
   display:none;
-}
-
-.no-padding,.notification_item a
-{
-  padding:0!important;
 }
 
 .overflow_hidden,.tile
