@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { toggleSidebarSize } from '../redux/actions/SidebarMenu.js';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 const TopNavigationContainer = styled.div`
 	margin-left 	: ${props => props.marginLeft};
@@ -30,6 +32,10 @@ const ToggleButton = styled.button`
 	
 	:hover {
 		color: #23527c;
+	}
+	
+	:focus {
+		outline: none;
 	}
 `;
 
@@ -64,12 +70,8 @@ const RightContainerItem = styled.div`
 
 class TopNavigation extends Component {
 	
-
-	
 	render() {
-		 
-		
-		
+				
 		return (
             
 			<TopNavigationContainer marginLeft={(this.props.sidebar_menu_is_fullsize ? "230px" : "70px" )}>
@@ -77,7 +79,7 @@ class TopNavigation extends Component {
 				<LeftContainer>
 					
 					<ToggleButton onClick={()=>{this.props.toggleSidebarSize()}}>
-						<i className="fa fa-bars"></i>
+						<FontAwesomeIcon icon="bars" />
 					</ToggleButton>
 		
 				</LeftContainer>

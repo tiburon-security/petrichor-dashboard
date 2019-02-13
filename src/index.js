@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store/configureStore';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import { init } from './Helpers/FontAwesomeInit';
 
 fetch('/routes_menu_config.json')
 	.then(function(response) {
@@ -26,6 +27,9 @@ fetch('/routes_menu_config.json')
 
 	
 function bootstrapApplication(config, userConfig){
+	
+	// Initialize font-awesome icons
+	init()
 
 	// Store the config as a global,  since it will be reference in othermaybe
 	// parts of the app, maybe there's a better way of doing this...?

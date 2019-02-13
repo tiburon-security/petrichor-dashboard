@@ -4,16 +4,69 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import qs from 'qs';
 import moment from 'moment';
-import { Button, FormControl } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
 import { sendInterwidgetMessage, sendMultipleInterwidgetMessages, removeMultipleInterwidgetMessages, INTERWIDGET_MESSAGE_TYPES } from '../../redux/actions/Dashboard.js';
 import { stripQueryStringSeperator } from '../../Helpers/Generic.js'
 import { Recent, CalendarYearQuarters, USGovtQuarters } from '../../Helpers/FilterDatePresets';
 import omit from 'lodash/omit';
+import styled from 'styled-components';
 
 // Date Picket Imports
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
 import { DateRangePicker, isSameDay } from 'react-dates'; 
+
+const CustomButton = styled.button`
+    height: 36px;
+    border-radius: 0px;
+	color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+	padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid #ccc;
+	
+	:active {
+		color: #333 !important;
+		background-color: #d4d4d4 !important;
+		border-color: #8c8c8c !important;
+		outline: 0;
+		box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+	}
+	
+	:hover {
+		color: #333;
+		background-color: #e6e6e6;
+		border-color: #adadad;
+	}
+	
+	:focus {
+		color: #333;
+		background-color: #e6e6e6;
+		border-color: #8c8c8c;
+		outline:0;
+		outline-offset: -2px;
+		box-shadow: none;	
+	}
+`;
+
+const CustomInput = styled.input`
+	height: 36px;
+	border-radius: 0px;
+	font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+`;
 
 class FilteringWidget extends Component {
 		
@@ -316,7 +369,7 @@ class FilteringWidget extends Component {
 									value={this.state.searchValue}
 									placeholder="Enter text"
 									onChange={this.handleSearchChange.bind(this)}
-									style={{"height" : "36px", "borderRadius" : "0"}}
+									as={CustomInput}
 								/>
 							</div>
 						:
@@ -325,21 +378,19 @@ class FilteringWidget extends Component {
 				}
 				
 				<div style={{display:"inline-block", margin : "0 0 0 5px"}} md={1}>
-					<Button 
+					<CustomButton 
 						onClick={this.clearFilters.bind(this)}
-						style={{"height" : "36px", "borderRadius" : "0"}}
 					>
 						X
-					</Button>
+					</CustomButton>
 				</div>				
 				
 				<div style={{display:"inline-block", margin : "0 5px 0 0"}} md={1}>
-					<Button 
+					<CustomButton 
 						onClick={this.filter.bind(this)}
-						style={{"height" : "36px", "borderRadius" : "0"}}
 					>
 						Filter
-					</Button>
+					</CustomButton>
 				</div>
 
 			</div>

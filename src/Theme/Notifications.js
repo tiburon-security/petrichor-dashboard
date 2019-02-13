@@ -1,38 +1,46 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, MenuItem } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { openPopupModal } from '../redux/actions/PopupModal.js';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Button for opening dropdown menu
 const DropdownToggle = styled.button`
 	border: none;
 	cursor: pointer;
 	background: none;
-`;
-
-// Adds styles to react-bootstrap Dropdown
-const CustomDropdown = styled(Dropdown)`	
-	ul {
-		width:300px;
+	color:#5A738E;
+	
+	:focus {
+		outline: none;
 	}
 	
-	ul li a {
-		color:#5A738E;
-		padding: 0;
-		  white-space:normal;
-
+	:after {
+		display:none;
 	}
 `;
 
-// Adds styles to react-bootstrap Dropdown
-const CustomMenuItem = styled(MenuItem)`	
+// Adds styles to react-bootstrap Dropdown menu
+const CustomDropDownMenu = styled.div`
+	width:300px;
+	//margin: 25px 0 0 0;
+`;
+
+// Adds styles to react-bootstrap Dropdown item
+const CustomMenuItem = styled(Dropdown.Item)`	
 	background:#f7f7f7;
-	display:flex;
+	display:block;
 	width:96%!important;
 	margin:6px 6px 0;
 	padding:5px;
+	color: #5A738E;
+	
+	:active {
+		background:#f7f7f7;
+		color: #5A738E;
+	}
 `;
 
 // The time for each notification
@@ -48,10 +56,11 @@ const NotificationItemTime = styled.span`
 const NotificationItem = styled.span`
   display:block!important;
   font-size:11px;
-  
+  white-space: normal;
   :hover {
 	  color: #000;
   }
+  
 `;
 
 // Style for notifications count
@@ -60,9 +69,13 @@ const NotificationCount = styled.span`
 	font-weight: 400;
 	line-height: 13px;
 	position: absolute;
-	right: -10px;
-	top: -10px;
+	margin: -10px 10px 0 0;
+
+	background: #1ABB9C!important;
+	border: 1px solid #1ABB9C!important;
+	color: #fff;
 `;
+
 
 /**
  * Component that shows notifications in the toolbar
@@ -150,9 +163,9 @@ class Notifications extends Component {
 					eventKey={parseFloat(eventKey + "." + index)} 
 					key={index} 
 					onSelect={() => this.expandNotification(index)}
-					className="notification_item"
 				>
-					<span className={notification.font_awesome_icon}></span>
+					<span>
+					<FontAwesomeIcon icon={notification.font_awesome_icon} /></span>
 					
 					<NotificationItemTime>
 						{timeAge}
@@ -171,10 +184,10 @@ class Notifications extends Component {
 		
 		var title = (
 			<span title={hoverNotificationCountMessage}>
-				<i className="fa fa-envelope-o"></i>
+				<FontAwesomeIcon icon={["far", "envelope"]} />
 				{(
 					numWithinLastDay > 0 && 
-						<NotificationCount className="badge bg-green">
+						<NotificationCount className="badge">
 							{numWithinLastDay}
 						</NotificationCount> 
 				)}
@@ -182,14 +195,12 @@ class Notifications extends Component {
 		)
 		
 		return (
-			<CustomDropdown id="notification_dropdown">
-				<DropdownToggle bsRole="toggle">{title}</DropdownToggle>
-				<Dropdown.Menu
-					className="dropdown-menu-right" // BS 3 style to prevent menu being offscreen 
-				>
+			<Dropdown>
+				<Dropdown.Toggle as={DropdownToggle}>{title}</Dropdown.Toggle>
+				<Dropdown.Menu as={CustomDropDownMenu} alignRight={true}>
 					{notificationItems}
 				</Dropdown.Menu>
-			</CustomDropdown>
+			</Dropdown>
 		);
 	}
 }

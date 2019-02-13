@@ -389,12 +389,6 @@ body .full_container.body .right_col
   color:#73879C;
 }
 
-.bg-green
-{
-  background:#1ABB9C!important;
-  border:1px solid #1ABB9C!important;
-  color:#fff;
-}
 
 .bg-red
 {
@@ -898,34 +892,6 @@ span.right
 .tile_info a
 {
   text-overflow:ellipsis;
-}
-
-.sidebar-footer
-{
-  bottom:0;
-  clear:both;
-  display:block;
-  position:fixed;
-  width:230px;
-  background:#2A3F54;
-  height:50px;
-  padding:13px 0 0;
-}
-
-.sidebar-footer a
-{
-  text-align:center;
-  width:25%;
-  font-size:17px;
-  display:block;
-  float:left;
-  background:#172D44;
-  padding:7px 0 3px;
-}
-
-.sidebar-footer a:hover
-{
-  background:#425567;
 }
 
 .x_panel
