@@ -1,81 +1,67 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LoadingIcon from './loading-icon.svg'
+import LoadingIconImg from './loading-icon.svg'
+import styled from 'styled-components';
+import WidgetHeader from './WidgetHeader';
+
+ 
+// Overall container for a widget
+const WidgetBody = styled.div`
+	overflow: hidden;
+	position:relative;
+	width:100%;
+	height:100%;
+	margin-bottom:10px;
+	display:flex;
+	flex-direction:column;
+	background:#fff;
+	border:1px solid #E6E9ED;
+	column-break-inside:avoid;
+	opacity:1;
+	transition:all .2s ease;
+	padding:10px 17px;
+`;
+
+// Container for contents of a widget
+const ContentContainer = styled.div`
+	position:relative;
+	width:100%;
+	height:100%;
+	float:left;
+	clear:both;
+	margin-top:5px;
+	display:flex;
+	flex-direction:column;
+	padding:0 5px 6px;
+
+	h4 {
+		font-size:16px;
+		font-weight:500;
+	}
+`;
+
+const Content = styled.div`
+	display : ${props => props.loading && "none"};
+	height : 100%;
+`;
+
+
+const LoadingIcon = styled.img`
+	position:absolute;
+	top:40%;
+	left:50%;
+	margin-top:-24px;
+	margin-left:-24px;
+`;
 
 /**
  *
  * Premade widget Styles for uniform display on Dashboard. Usage:
- * 
- * <WidgetBody>
- *   <WidgetHeader title='title'/>
- *   <WidgetContent>My widget content.</WidgetContent>
- * </WidgetBody>
  *
- * Or use the wrapper:
- * <FullWidget title='title'>My widget content.</FullWidget>
+ * <FullWidget title='title'>
+ * 	My widget content.
+ * </FullWidget>
  *
- */
- 
- 
-class WidgetHeader extends Component {
-	
-  static defaultProps = {
-    settings_button: false,
-	settings_button_clickhandler: null,
-    close_button: false,
-	close_button_clickhandler: null,
-	title: "Default Header"
-  }
-  
-  static propTypes = {
-    settings_button: PropTypes.bool.isRequired,
-    settings_button_clickhandler: PropTypes.func,
-    close_button: PropTypes.bool.isRequired,
-    close_button_clickhandler: PropTypes.func,
-    title: PropTypes.string.isRequired
-  }
-  
-	render() {
-		return ( 
-				
-			<div className="x_title widget_draggabble_area">
-			
-				<h2>{this.props.title}</h2>
-				
-				<ul className="nav navbar-right panel_toolbox">
-				{this.props.settings_button ? <li><a onClick={this.props.settings_button_clickhandler}><i className="fa fa-wrench"></i></a></li> : null}
-				{this.props.close_button ? <li><a onClick={this.props.close_button_clickhandler}><i className="fa fa-close"></i></a></li> : null}
-				</ul>
-				<div className="clearfix"></div>
-				
-			</div>
-			
-		);
-	}
-} 
-
-class WidgetBody extends Component {
-  
-	render() {
-		return ( 
-			<div className="x_panel tile">{this.props.children}</div>			
-		);
-	}
-} 
-
-class WidgetContent extends Component {
-  
-	render() {
-		return ( 
-			<div className="x_content">{this.props.children}</div>			
-		);
-	}
-} 
-
-
-/**
- * Full widget style wrapper. Includes additional functionality
- * to indicate whether the widget is loading.
  */
 class FullWidget extends Component {
 	
@@ -121,21 +107,28 @@ class FullWidget extends Component {
 	}
 	
 	render(){
-		
-		let header = (this.props.title !== null ? <WidgetHeader {...this.props}></WidgetHeader> : '')
-		
+				
 		return (
 			<WidgetBody>
-				{header}
-				<WidgetContent>
-					{(this.state.loading ? <img className="x_loading_overlay" alt="Loading Icon" src={LoadingIcon}/> : null)}
-					<div style={{"display": (this.state.loading ? "none" : null), "height":"100%"}}>{this.props.children}</div>
-				</WidgetContent>
+				
+				{this.props.title && (
+					<WidgetHeader {...this.props}></WidgetHeader>
+				)}
+			
+				<ContentContainer>
+				
+					{ this.state.loading && (
+						<LoadingIcon alt="Loading Icon" src={LoadingIconImg} /> 
+					)}
+					
+					<Content loading={this.state.loading}>
+						{this.props.children}
+					</Content>
+					
+				</ContentContainer>
 			</WidgetBody>
 		)
 	}
 }
 
-export {
-	WidgetHeader, WidgetBody, WidgetContent, FullWidget
-}
+export { FullWidget }

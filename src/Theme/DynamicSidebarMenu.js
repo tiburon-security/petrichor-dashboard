@@ -5,6 +5,7 @@ import MenuItem from './MenuItem';
 import MenuLink from './MenuLink';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
+import styled from 'styled-components';
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -17,6 +18,14 @@ import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
  * </SidebarMenu>
  *
  */
+ 
+ 
+const SideMenuList = styled.ul`
+    margin-top: 10px;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none; 
+`;
  
  
 /**
@@ -137,9 +146,9 @@ class DynamicSidebarMenu extends Component {
 		return (
 			<div id="sidebar-menu" tabIndex="0" onBlur={()=>{	this.contextSwitchHandler();}}>
 				<h3>General</h3>
-				<ul id="sidebar-menu-items" className="nav2 side-menu">
+				<SideMenuList>
 					{menu}
-				</ul>
+				</SideMenuList>
 			</div>
 		);
 	}

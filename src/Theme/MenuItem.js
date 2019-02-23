@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 import { withRouter } from 'react-router';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 /**
@@ -18,7 +20,92 @@ import { withRouter } from 'react-router';
  *
  */
 
+ 
+const IconContainer = styled.span`
+	font-size: ${props => props.sidebar_menu_is_fullsize ? "16px" : "22px"};
+	text-align: ${props => !props.sidebar_menu_is_fullsize && "center"};
+	width: ${props => props.sidebar_menu_is_fullsize ? "26px" : "100%"}; 
+	opacity: .99;
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: 400;
+`;
+ 
+const ChevronContainer = styled.span`
+	display: ${props => props.sidebar_menu_is_fullsize ? "inline-block" : "none"};
+	width: 26px;
+	opacity: .99;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: 400;
+	float: right;
+	text-align: center;
+	padding: 0 10px 0 0;	
+	font-size: 10px;
+	min-width: inherit;
+	color: #C4CFDA;
+`;
+
+const ChildMenu = styled.ul`
+	display: ${props => props.active ? 'block' : 'none'};
+	margin-bottom: 0;
+	list-style: none;
+	
+	li {
+		cursor: pointer;
+	}
+	
+	li:hover, li:active {
+		background-color: rgba(255,255,255,0.06);
+	}
+	
+	
+	${props => (props.sidebar_menu_is_fullsize ? `
+		li:before { 
+			background:#425668;
+			bottom:auto;
+			content:"";
+			height:8px;
+			left:23px;
+			margin-top:15px;
+			position:absolute;
+			right:auto;
+			width:8px;
+			z-index:1;
+			border-radius:50%;
+		}
+		
+		li:after {
+			border-left:1px solid #425668;
+			bottom:0;
+			content:"";
+			left:27px;
+			position:absolute;
+			height:38px;
+		}
+	`
+	:
+	`
+		left: 100%;
+		position: absolute;
+		top: 0;
+		width: 210px;
+		z-index: 4000;
+		background: #3E5367;
+		list-style: none;
+		padding-left: 0;
+	`)}
+`;
   
+const Item = styled.li`
+	position: relative;
+	
+	${props => props.active && (`
+	border-right: 5px solid #1ABB9C;
+	`)}
+`;
+
 /**
  * Represents a top level menu heading/URL
  */
@@ -28,7 +115,7 @@ class MenuItem extends Component {
 		name   	: PropTypes.string.isRequired,
 		title	: PropTypes.string.isRequired,
 		active	: PropTypes.bool.isRequired,
-		icon	: PropTypes.string,
+		icon	: PropTypes.array,
 		url		: PropTypes.string
 	}
 	
@@ -41,37 +128,51 @@ class MenuItem extends Component {
 	render(){
 		
 		// Determine if there are any child elements
-		let hasChildren = (this.props.children !== undefined && this.props.children.length > 0);
-		var childMenu = (hasChildren && this.props.active ? 
-			<ul className="nav2 child_menu" style={{'display' : 'block'}}>{this.props.children}</ul> 
-			: null);
+		let hasChildren = (this.props.children !== undefined && this.props.children.length > 0);		
+		/*var childMenu = (hasChildren && this.props.active ? 
+			<ChildMenu active={this.props.active} sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>{this.props.children}</ChildMenu> 
+			: null);*/
 
 		var EntryType = (!hasChildren && this.props.url != null ? Link : "a");
 		
 		return (
         
-			<li className={(this.props.active === true ? 'active' : null)}  >
+			<Item active={this.props.active} >
 			
 			
 				<EntryType to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
 				
 					{/* Add Glypicon if one is supplied */}
-					{this.props.icon ? <i className={this.props.icon}></i> : null}
+					{this.props.icon && (
+						<IconContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+							<FontAwesomeIcon icon={this.props.icon} />
+						</IconContainer>
+					)}
 					
 					{this.props.title}
 					
 					{/* Add down chevron if there are subitems */}
-					{hasChildren ? <span className="fa fa-chevron-down"></span> : null}
+					{hasChildren && (
+						<ChevronContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+							<FontAwesomeIcon icon={["fas", "chevron-down"]} />
+						</ChevronContainer>
+					)}
 				
 				</EntryType>
 				
-				{childMenu}
+				<ChildMenu active={this.props.active} sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>{this.props.children}</ChildMenu>
 				
-			</li>
+			</Item>
 		
 		)
 	}
 }
+
+const mapStateToProps = (state) => {
+    return {
+        sidebar_menu_is_fullsize: state.sidebar.isFullSize,
+    };
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -79,4 +180,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(MenuItem))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MenuItem))

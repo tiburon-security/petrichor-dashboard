@@ -13,6 +13,13 @@ import {
 	faSignOutAlt as fasSignOutAlt,
 	faUser as fasUser,
 	faBars as fasBars,
+	faWrench as fasWrench,
+	faWindowClose as fasWindowClose,
+	faTimes as fasTimes,
+	faChevronDown as fasChevronDown,
+	faChartBar as fasChartBar,
+	faSearch as fasSearch,
+	faHome as fasHome
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -27,6 +34,13 @@ export function init(){
 		fasExclamationTriangle,
 		fasSignOutAlt,
 		fasUser,
-		fasBars
+		fasBars,
+		fasWrench,
+		fasWindowClose,
+		fasTimes,
+		fasChevronDown,
+		fasChartBar,
+		fasSearch,
+		fasHome
 	)
 }

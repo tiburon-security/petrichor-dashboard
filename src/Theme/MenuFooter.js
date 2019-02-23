@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+// Wrapper for the entire component
 const Wrapper = styled.div`
-  bottom:0;
-  clear:both;
-  display:block;
-  position:fixed;
-  width:230px;
-  background:#2A3F54;
-  height:50px;
-  padding:13px 0 0;
+	display: ${props => props.sidebar_menu_is_fullsize ? "block" : "none"}
+	bottom:0;
+	clear:both;
+	position:fixed;
+	width:230px;
+	background:#2A3F54;
+	height:50px;
+	padding:13px 0 0;
 `;
 
 // Container for all buttons
@@ -56,7 +58,7 @@ class MenuFooter extends Component {
 
 		return (
 
-            <Wrapper>
+            <Wrapper sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
 				{ this.props.config.show_menu_footer && (
 					<OverallButtonContainer>
 						<MenuButton>
@@ -78,4 +80,10 @@ class MenuFooter extends Component {
 	}
 }
 
-export default MenuFooter
+const mapStateToProps = (state) => {
+    return {
+        sidebar_menu_is_fullsize: state.sidebar.isFullSize,
+    };
+};
+
+export default connect(mapStateToProps, null)(MenuFooter);
