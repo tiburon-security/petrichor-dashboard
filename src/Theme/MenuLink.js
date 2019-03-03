@@ -20,18 +20,18 @@ import styled from 'styled-components';
 const Link = styled.button`
     position: relative;
     display: block;
-		border: none;
+	border: none;
 	cursor: pointer;
 	background: none;
 	
-			color: rgba(255,255,255,0.75)!important;
-		font-size: 12px;
-		padding: 9px;
-		position: relative;
-		display: block;
-		font-weight: 500;
+	color: rgba(255,255,255,0.75)!important;
+	font-size: 12px;
+	padding: 9px;
+	position: relative;
+	display: block;
+	font-weight: 500;
 	
-		:hover {
+	:hover {
 		color: #23527c;
 	}
 	

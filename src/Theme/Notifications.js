@@ -30,6 +30,8 @@ const CustomDropDownMenu = styled.div`
 
 // Adds styles to react-bootstrap Dropdown item
 const CustomMenuItem = styled(Dropdown.Item)`	
+	font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+	font-weight: normal;
 	background:#f7f7f7;
 	display:block;
 	width:96%!important;

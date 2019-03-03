@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 /**
@@ -20,6 +20,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
  *
  */
 
+// Simple Wrapper that pulls out boolean CSS attributes used for conditional styling
+const LinkWrapper = ({ className, active, sidebar_menu_is_fullsize, ...props }) => (
+  <Link  {...props} className={className}>
+    {props.children}
+  </Link>
+)
+
+// Simple Wrapper that pulls out boolean CSS attributes used for conditional styling
+const ButtonWrapper = ({ className, active, sidebar_menu_is_fullsize, ...props }) => (
+  <button  {...props} className={className}>
+    {props.children}
+  </button>
+)
  
 const IconContainer = styled.span`
 	font-size: ${props => props.sidebar_menu_is_fullsize ? "16px" : "22px"};
@@ -102,9 +115,78 @@ const Item = styled.li`
 	position: relative;
 	
 	${props => props.active && (`
-	border-right: 5px solid #1ABB9C;
+		border-right: 5px solid #1ABB9C;
 	`)}
 `;
+
+const LinkButton = styled(ButtonWrapper)`
+	border: none;
+	cursor: pointer;
+	background: none;
+	width: 100%;
+	display:block;
+	color: #E7E7E7;
+	
+	:hover {
+		color: #E7E7E7;
+	}
+
+	:focus {
+		outline: none;
+	}
+
+	${props => (props.sidebar_menu_is_fullsize  ?
+		`
+			padding: 13px 15px 12px;
+			text-align: left;
+			font-size: 13px;
+			font-weight: 500;
+		`
+		:
+		`
+			padding: 10px 5px; 
+			text-align: center;
+			font-size: 10px;
+			font-weight: 400;
+		`
+	)}	
+	
+	${props => props.active && (`
+		background: linear-gradient(#334556,#2C4257), #2A3F54; 
+	`)}	
+`;
+
+const StyledLink = styled(LinkWrapper)`
+	text-align: center;
+	display:block;
+	color: #E7E7E7;
+	
+	:hover {
+		color: #E7E7E7;
+	}
+	
+
+	${props => (props.sidebar_menu_is_fullsize  ?
+		`
+			padding: 13px 15px 12px;
+			text-align: left;
+			font-size: 13px;
+			font-weight: 500;
+		`
+		:
+		`
+			padding: 10px 5px; 
+			text-align: center;
+			font-size: 10px;
+			font-weight: 400;
+		`
+	)}
+	
+	${props => props.active && (`
+		background: linear-gradient(#334556,#2C4257), #2A3F54; 
+	`)}	
+`;
+
 
 /**
  * Represents a top level menu heading/URL
@@ -133,14 +215,19 @@ class MenuItem extends Component {
 			<ChildMenu active={this.props.active} sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>{this.props.children}</ChildMenu> 
 			: null);*/
 
-		var EntryType = (!hasChildren && this.props.url != null ? Link : "a");
+		var EntryType = (!hasChildren && this.props.url != null ? StyledLink : LinkButton);
 		
 		return (
         
 			<Item active={this.props.active} >
 			
 			
-				<EntryType to={(!hasChildren && this.props.url != null ? this.props.url : null)} onClick={this.openSubmenu.bind(this)}>
+				<EntryType 
+					to={(!hasChildren && this.props.url != null ? this.props.url : null)} 
+					onClick={this.openSubmenu.bind(this)}
+					active={this.props.active}	
+					sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}
+				>
 				
 					{/* Add Glypicon if one is supplied */}
 					{this.props.icon && (

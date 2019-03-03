@@ -23,6 +23,8 @@ const DropdownToggle = styled.button`
 
 // Adds styles to react-bootstrap Dropdown item
 const CustomMenuItem = styled(Dropdown.Item)`	
+	font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+	font-size: 14px;
     display: block;
     padding: 3px 20px;
     clear: both;
@@ -30,6 +32,7 @@ const CustomMenuItem = styled(Dropdown.Item)`
     line-height: 1.42857143;
     color: #333;
     white-space: nowrap;
+	
 	
 	:hover {
 	    color: #262626;
