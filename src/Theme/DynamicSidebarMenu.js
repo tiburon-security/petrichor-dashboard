@@ -26,6 +26,20 @@ const SideMenuList = styled.ul`
     margin-bottom: 0;
     list-style: none; 
 `;
+
+const Heading = styled.h3`
+	${props => (!props.sidebar_menu_is_fullsize && 'display:none;')};
+
+	padding-left: 23px;
+	color: #fff;
+	text-transform: uppercase;
+	letter-spacing: .5px;
+	font-weight: 700;
+	font-size: 11px;
+	margin-bottom: 0;
+	margin-top: 0;
+	text-shadow: 1px 1px #000;
+`;
  
  
 /**
@@ -144,8 +158,8 @@ class DynamicSidebarMenu extends Component {
 		}
 		
 		return (
-			<div id="sidebar-menu" tabIndex="0" onBlur={()=>{	this.contextSwitchHandler();}}>
-				<h3>General</h3>
+			<div tabIndex="0" onBlur={()=>{	this.contextSwitchHandler();}}>
+				<Heading sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>General</Heading>
 				<SideMenuList>
 					{menu}
 				</SideMenuList>
