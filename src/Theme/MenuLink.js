@@ -23,7 +23,8 @@ const Link = styled.button`
 	border: none;
 	cursor: pointer;
 	background: none;
-	
+	width: 100%;
+	text-align: left;
 	color: rgba(255,255,255,0.75)!important;
 	font-size: 12px;
 	padding: 9px;

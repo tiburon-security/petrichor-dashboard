@@ -14,10 +14,69 @@ import { Route, Switch } from 'react-router';
 import  { recursivelyWalkRoutes } from '../Helpers/Routes';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Brings all components used in dynamic routes into namespace
 // for referencing by their string name
 import * as routableViews from '../RoutableViews.js';
+
+const BrandingContainer = styled.div`
+	float: left;
+	height: 57px;
+	font-weight: 400;
+	font-size: 19px;
+	color: #ECF0F1;
+	display:flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	
+	${props => props.sidebar_menu_is_fullsize ? `
+		width: 230px;
+	`
+	:
+	`
+		width: 70px;
+	`
+	};
+}
+`;
+
+const Logo = styled.div`
+
+	svg {
+		border: 1px solid #EAEAEA;
+		border-radius: 50%;
+		padding: 5px 6px;
+	}
+	
+	flex: 0 0 auto;
+	
+	
+	${props => props.sidebar_menu_is_fullsize ? `
+		font-size:32px;
+		margin: 0 5px 0 0;
+	`
+	:
+	`
+		font-size:40px;
+		margin: 13px 0 0 0;
+	`};
+
+`;
+
+const WebsiteTitle = styled.div`
+	flex: 0 0 auto;
+	
+	.nav-md > & {
+		color: red !important;
+	}
+	
+	${props => !props.sidebar_menu_is_fullsize && `display:none`};
+`;
 
 export class Gentella extends Component {
 	
@@ -65,11 +124,16 @@ export class Gentella extends Component {
 				<div className="main_container">
 					<div className="col-md-3 left_col">
 						<div className="left_col scroll-view">
-						
-							<div className="nav_title" style={{"border": "0"}}>
-								<span className="site_title"><i className="fa fa-paw"></i> {this.props.config.website_name}</span>
-							</div>
-
+							
+							<BrandingContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+								<Logo sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+									<FontAwesomeIcon icon={["fas", "paw"]} />
+								</Logo>
+								<WebsiteTitle sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+									{this.props.config.website_name}
+								</WebsiteTitle>
+							</BrandingContainer>
+							
 							<div className="clearfix"></div>
 
 							<br />

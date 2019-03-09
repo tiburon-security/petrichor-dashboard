@@ -19,7 +19,8 @@ import {
 	faChevronDown as fasChevronDown,
 	faChartBar as fasChartBar,
 	faSearch as fasSearch,
-	faHome as fasHome
+	faHome as fasHome,
+	faPaw as fasPaw
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -41,6 +42,7 @@ export function init(){
 		fasChevronDown,
 		fasChartBar,
 		fasSearch,
-		fasHome
+		fasHome,
+		fasPaw
 	)
 }
