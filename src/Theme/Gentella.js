@@ -22,7 +22,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as routableViews from '../RoutableViews.js';
 
 const BrandingContainer = styled.div`
-	float: left;
 	height: 57px;
 	font-weight: 400;
 	font-size: 19px;
@@ -33,6 +32,7 @@ const BrandingContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 	align-content: center;
+	margin-bottom: 20px;
 	
 	${props => props.sidebar_menu_is_fullsize ? `
 		width: 230px;
@@ -78,6 +78,47 @@ const WebsiteTitle = styled.div`
 	${props => !props.sidebar_menu_is_fullsize && `display:none`};
 `;
 
+const MainContainer = styled.div`
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	overflow: hidden;
+`;
+
+
+const LeftContainer = styled.div`
+	min-height: 100%;
+	position: absolute;
+	padding: 0;
+	display: block;
+
+	${props => props.sidebar_menu_is_fullsize ? `
+		width: 230px;
+		z-index: 1;
+	
+	`
+	:
+	`
+		width: 70px;
+		z-index: 9999;
+	`};
+`;
+
+const RightContainer = styled.div`
+    padding: 10px 20px 0;
+	background: #F7F7F7;
+	flex: 1 1;
+	
+	${props => props.sidebar_menu_is_fullsize ? `
+		margin-left: 230px;
+	`
+	:
+	`
+		margin-left: 70px;
+		z-index: 2;
+	`};
+`;
+
 export class Gentella extends Component {
 	
 	constructor(props) {
@@ -118,91 +159,71 @@ export class Gentella extends Component {
   render() {
 
     return (
-		
-		<div className={(this.props.sidebar_menu_is_fullsize ? 'nav-md' : 'nav-sm')}>
-			<div className="full_container body">
-				<div className="main_container">
-					<div className="col-md-3 left_col">
-						<div className="left_col scroll-view">
-							
-							<BrandingContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-								<Logo sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-									<FontAwesomeIcon icon={["fas", "paw"]} />
-								</Logo>
-								<WebsiteTitle sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-									{this.props.config.website_name}
-								</WebsiteTitle>
-							</BrandingContainer>
-							
-							<div className="clearfix"></div>
+		<MainContainer className={(this.props.sidebar_menu_is_fullsize ? 'nav-md' : 'nav-sm')}>
+			<LeftContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+					<BrandingContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+						<Logo sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+							<FontAwesomeIcon icon={["fas", "paw"]} />
+						</Logo>
+						<WebsiteTitle sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+							{this.props.config.website_name}
+						</WebsiteTitle>
+					</BrandingContainer>
 
-							<br />
-							
-							<Switch>
-								{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
-									return (
-										<Route 
-											exact
-											path={fullPath}
-											key={index}
-											render={(props)=>(
-												<DynamicSidebarMenu 
-													route_name={obj.route_name} 
-													config={this.props.config}/>
-											)}
-										/>
-									)
-								})}
-							</Switch>
-							
-							<MenuFooter config={this.props.config} />
-
-						</div>
-					</div>
-
-
-					<TopNavigation>
-						{this.props.config.notifications_api_endpoint !== null &&
-							<Notifications notifications_api={this.props.config.notifications_api_endpoint} />
-						}
-						<ProfileDropdown user_name={get(this.props.userConfig, this.props.config.user_api_name_key)} />
-					</TopNavigation>
-
-
-					<PopupModal />
+					<Switch>
+						{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
+							return (
+								<Route 
+									exact
+									path={fullPath}
+									key={index}
+									render={(props)=>(
+										<DynamicSidebarMenu 
+											route_name={obj.route_name} 
+											config={this.props.config}/>
+									)}
+								/>
+							)
+						})}
+					</Switch>
 					
-					<div className="right_col" role="main" id="gentella_content_body">
+					<MenuFooter config={this.props.config} />
+			</LeftContainer>
 
-						{/* page content */}
-						<div>
-							<Switch>
-								{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
-									
-									let ChildComponentRender = routableViews[obj.component];
-									
-									return (
-										<Route 
-											exact
-											path={fullPath}
-											key={index}
-											render={(props)=>(
-												<ChildComponentRender route_name={obj.route_name} />
-											)}
-										/>
-									)
-								})}
-							</Switch>
-						</div>
+			<TopNavigation>
+				{this.props.config.notifications_api_endpoint !== null &&
+					<Notifications notifications_api={this.props.config.notifications_api_endpoint} />
+				}
+				<ProfileDropdown user_name={get(this.props.userConfig, this.props.config.user_api_name_key)} />
+			</TopNavigation>
 
-					</div>
-					
-					<Footer>
-						{ this.props.config.footer_text }
-					</Footer>
-
-				</div>
-			</div>
-		</div>
+			<PopupModal />
+			
+			<RightContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+				{/* page content */}
+					<Switch>
+						{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
+							
+							let ChildComponentRender = routableViews[obj.component];
+							
+							return (
+								<Route 
+									exact
+									path={fullPath}
+									key={index}
+									render={(props)=>(
+										<ChildComponentRender route_name={obj.route_name} />
+									)}
+								/>
+							)
+						})}
+					</Switch>
+			</RightContainer>
+			
+			<Footer>
+				{ this.props.config.footer_text }
+			</Footer>
+		</MainContainer>
 	);
   }
 }

@@ -1,54 +1,5 @@
 @charset UTF-8;
 
-.left_col
-{
-  background:#2A3F54;
-}
-
-body .full_container.body .right_col
-{
-  background:#F7F7F7;
-  flex:1;
-}
-
-.nav-md .full_container.body .col-md-3.left_col
-{
-  min-height:100%;
-  width:230px;
-  position:absolute;
-  display:flex;
-  z-index:1;
-  padding:0;
-}
-
-.nav-md .full_container.body .right_col
-{
-  margin-left:230px;
-  padding:10px 20px 0;
-}
-
-.nav-sm .full_container.body .col-md-3.left_col
-{
-  min-height:100%;
-  width:70px;
-  z-index:9999;
-  position:absolute;
-  padding:0;
-}
-
-.nav-sm .full_container.body .right_col
-{
-  margin-left:70px;
-  z-index:2;
-  padding:10px 20px;
-}
-
-.full_container
-{
-  width:100%;
-  padding:0;
-}
-
 body
 {
   color:#73879C;

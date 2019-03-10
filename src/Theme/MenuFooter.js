@@ -4,37 +4,43 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Wrapper for the entire component
-const Wrapper = styled.div`
+const Footer = styled.div`
 	display: ${props => props.sidebar_menu_is_fullsize ? "block" : "none"}
 	bottom:0;
-	clear:both;
 	position:fixed;
 	width:230px;
 	background:#2A3F54;
-	height:50px;
-	padding:13px 0 0;
+	z-index:1;
+	height:57px;
+`;
+
+// Pushes component all the way down to avoid whitespace
+const Wrapper = styled.div`
+	position:fixed;
+	bottom:0;
+	width:230px;
 `;
 
 // Container for all buttons
 const OverallButtonContainer = styled.div`
-	height: 57px;
-	display:flex;
-	flex-direction:row;
-	flex-wrap: wrap;
-	align-content:space-between;
+	height: 37px;
+	display:flex
+	flex-wrap: nowrap;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
+	align-content: center;
 `;
 
 // Represents a styled button
 const MenuButton = styled.button`
 	flex: 1;
-	height:57px;
 	border: none;
 	cursor: pointer;
 	background: none;
 	font-size: 17px;
 	color: #5A738E;
 	background: #172D44;
-    padding: 0px 0 3px;
 	
 	:hover {
 		color: #23527c;
@@ -45,12 +51,6 @@ const MenuButton = styled.button`
 		outline: none;
 	}
 `;
-
-// Text/icons within a button
-const ButtonText = styled(FontAwesomeIcon)`
-	vertical-align: 8px;
-`;
-
  
 class MenuFooter extends Component {	
 	
@@ -58,24 +58,26 @@ class MenuFooter extends Component {
 
 		return (
 
-            <Wrapper sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+            <Footer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
 				{ this.props.config.show_menu_footer && (
+					<Wrapper>
 					<OverallButtonContainer>
 						<MenuButton>
-							<ButtonText icon="cog" />
+							<FontAwesomeIcon icon="cog" />
 						</MenuButton>
 						<MenuButton>
-							<ButtonText icon="arrows-alt" />
+							<FontAwesomeIcon icon="arrows-alt" />
 						</MenuButton>
 						<MenuButton>
-							<ButtonText icon="eye-slash" />
+							<FontAwesomeIcon icon="eye-slash" />
 						</MenuButton>
 						<MenuButton>
-							<ButtonText icon="power-off" />
+							<FontAwesomeIcon icon="power-off" />
 						</MenuButton>
 					</OverallButtonContainer>
+					</Wrapper>
 				)}
-            </Wrapper>            
+            </Footer>            
 		);
 	}
 }
