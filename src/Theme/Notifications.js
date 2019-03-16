@@ -8,10 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Button for opening dropdown menu
 const DropdownToggle = styled.button`
+	height:57px;
+	padding: 0 15px;
 	border: none;
 	cursor: pointer;
 	background: none;
-	color:#5A738E;
+	color:#515356;
 	
 	:focus {
 		outline: none;
@@ -24,17 +26,20 @@ const DropdownToggle = styled.button`
 
 // Adds styles to react-bootstrap Dropdown menu
 const CustomDropDownMenu = styled.div`
-	width:300px;
-	//margin: 25px 0 0 0;
+	left:auto  !important;
+	right 0 !important;
+	top:54px !important;
+	transform:none !important;
+	border: 1px solid #D9DEE4;
+	border-radius:0;
 `;
 
 // Adds styles to react-bootstrap Dropdown item
 const CustomMenuItem = styled(Dropdown.Item)`	
-	font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
 	font-weight: normal;
 	background:#f7f7f7;
 	display:block;
-	width:96%!important;
+	width:300px;
 	margin:6px 6px 0;
 	padding:5px;
 	color: #5A738E;
@@ -56,13 +61,13 @@ const NotificationItemTime = styled.span`
 
 // Represents a notification item
 const NotificationItem = styled.span`
-  display:block!important;
-  font-size:11px;
-  white-space: normal;
-  :hover {
-	  color: #000;
-  }
-  
+	width:300px;
+	display:block!important;
+	font-size:11px;
+	white-space:normal;
+	:hover {
+		color: #000;
+	}  
 `;
 
 // Style for notifications count
@@ -72,7 +77,6 @@ const NotificationCount = styled.span`
 	line-height: 13px;
 	position: absolute;
 	margin: -10px 10px 0 0;
-
 	background: #1ABB9C!important;
 	border: 1px solid #1ABB9C!important;
 	color: #fff;
@@ -197,7 +201,7 @@ class Notifications extends Component {
 		)
 		
 		return (
-			<Dropdown>
+			<Dropdown style={{"position":"relative"}}>
 				<Dropdown.Toggle as={DropdownToggle}>{title}</Dropdown.Toggle>
 				<Dropdown.Menu as={CustomDropDownMenu} alignRight={true}>
 					{notificationItems}

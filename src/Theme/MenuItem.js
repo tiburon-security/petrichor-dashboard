@@ -6,7 +6,8 @@ import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { SlideDown } from 'react-slidedown'
+import 'react-slidedown/lib/slidedown.css'
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -61,8 +62,7 @@ const ChevronContainer = styled.span`
 `;
 
 const ChildMenu = styled.ul`
-	display: ${props => props.active ? 'block' : 'none'};
-	margin-bottom: 0;
+	margin-top: 5px;
 	list-style: none;
 	
 	li {
@@ -73,9 +73,9 @@ const ChildMenu = styled.ul`
 		background-color: rgba(255,255,255,0.06);
 	}
 	
-	
 	${props => (props.sidebar_menu_is_fullsize ? `
 		li:before { 
+			z-index:-1;
 			background:#425668;
 			bottom:auto;
 			content:"";
@@ -90,12 +90,13 @@ const ChildMenu = styled.ul`
 		}
 		
 		li:after {
+			z-index:-1;
 			border-left:1px solid #425668;
 			bottom:0;
 			content:"";
 			left:27px;
 			position:absolute;
-			height:38px;
+			height: calc(100% - 55px);
 		}
 	`
 	:
@@ -120,6 +121,8 @@ const Item = styled.li`
 `;
 
 const LinkButton = styled(ButtonWrapper)`
+	position:relative;
+	z-index:1;
 	border: none;
 	cursor: pointer;
 	background: none;
@@ -136,27 +139,44 @@ const LinkButton = styled(ButtonWrapper)`
 	}
 
 	${props => (props.sidebar_menu_is_fullsize  ?
-		`
-			padding: 13px 15px 12px;
+		`	
 			text-align: left;
 			font-size: 13px;
 			font-weight: 500;
 		`
 		:
-		`
-			padding: 10px 5px; 
+		`	 
 			text-align: center;
 			font-size: 10px;
 			font-weight: 400;
 		`
 	)}	
 	
+	${props => props.sidebar_menu_is_fullsize && props.active && (`
+		padding: 13px 10px 13px 15px;
+	`)};
+	
+	${props => props.sidebar_menu_is_fullsize && !props.active && (`
+		padding: 13px 15px 13px 15px;
+	`)};
+	
+	${props => !props.sidebar_menu_is_fullsize && props.active && (`
+		padding: 10px 0 10px 5px;
+	`)};
+	
+	${props => !props.sidebar_menu_is_fullsize && !props.active && (`
+		padding: 10px 5px 10px 5px;
+	`)};
+	
 	${props => props.active && (`
 		background: linear-gradient(#334556,#2C4257), #2A3F54; 
+		box-shadow: rgba(0,0,0,.25) 0 1px 0, inset rgba(255,255,255,.16) 0 1px 0;
 	`)}	
 `;
 
 const StyledLink = styled(LinkWrapper)`
+	position:relative;
+	z-index:1;
 	text-align: center;
 	display:block;
 	color: #E7E7E7;
@@ -168,22 +188,37 @@ const StyledLink = styled(LinkWrapper)`
 
 	${props => (props.sidebar_menu_is_fullsize  ?
 		`
-			padding: 13px 15px 12px;
 			text-align: left;
 			font-size: 13px;
 			font-weight: 500;
 		`
 		:
 		`
-			padding: 10px 5px; 
 			text-align: center;
 			font-size: 10px;
 			font-weight: 400;
 		`
 	)}
 	
+	${props => props.sidebar_menu_is_fullsize && props.active && (`
+		padding: 13px 10px 13px 15px;
+	`)};
+	
+	${props => props.sidebar_menu_is_fullsize && !props.active && (`
+		padding: 13px 15px 13px 15px;
+	`)};
+	
+	${props => !props.sidebar_menu_is_fullsize && props.active && (`
+		padding: 10px 0 10px 5px;
+	`)};
+	
+	${props => !props.sidebar_menu_is_fullsize && !props.active && (`
+		padding: 10px 5px 10px 5px;
+	`)};	
+	
 	${props => props.active && (`
 		background: linear-gradient(#334556,#2C4257), #2A3F54; 
+		box-shadow: rgba(0,0,0,.25) 0 1px 0, inset rgba(255,255,255,.16) 0 1px 0;
 	`)}	
 `;
 
@@ -211,9 +246,6 @@ class MenuItem extends Component {
 		
 		// Determine if there are any child elements
 		let hasChildren = (this.props.children !== undefined && this.props.children.length > 0);		
-		/*var childMenu = (hasChildren && this.props.active ? 
-			<ChildMenu active={this.props.active} sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>{this.props.children}</ChildMenu> 
-			: null);*/
 
 		var EntryType = (!hasChildren && this.props.url != null ? StyledLink : LinkButton);
 		
@@ -247,8 +279,13 @@ class MenuItem extends Component {
 				
 				</EntryType>
 				
-				<ChildMenu active={this.props.active} sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>{this.props.children}</ChildMenu>
-				
+				<SlideDown>
+					 {this.props.active && 
+						<ChildMenu active={this.props.active} sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+							{this.props.children}
+						</ChildMenu>
+					 }
+				</SlideDown>
 			</Item>
 		
 		)

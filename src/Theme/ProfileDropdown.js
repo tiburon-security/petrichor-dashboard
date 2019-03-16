@@ -7,10 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // Button for opening dropdown menu
 const DropdownToggle = styled.button`
+	height:57px;
+	padding: 0 15px;
 	border: none;
 	cursor: pointer;
 	background: none;
-	color: #5A738E;
+	color: #515356;
 	
 	:focus {
 		outline: none;
@@ -21,9 +23,15 @@ const DropdownToggle = styled.button`
 	}
 `;
 
+// Adds styles to react-bootstrap Dropdown menu
+const CustomDropDownMenu = styled.div`
+	top:-3px !important;
+	border: 1px solid #D9DEE4;
+	border-radius:0;
+`;
+
 // Adds styles to react-bootstrap Dropdown item
 const CustomMenuItem = styled(Dropdown.Item)`	
-	font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
 	font-size: 14px;
     display: block;
     padding: 3px 20px;
@@ -32,7 +40,6 @@ const CustomMenuItem = styled(Dropdown.Item)`
     line-height: 1.42857143;
     color: #333;
     white-space: nowrap;
-	
 	
 	:hover {
 	    color: #262626;
@@ -54,7 +61,6 @@ class ProfileDropdown extends Component {
 		user_name: "Unknown",
 	}
 	
-	
 	render() { 
 	
 		let title = (
@@ -67,14 +73,13 @@ class ProfileDropdown extends Component {
 	
 		return (
 		
-			<Dropdown>
+			<Dropdown >
 				<Dropdown.Toggle as={DropdownToggle}>{title}</Dropdown.Toggle>
-				<Dropdown.Menu alignRight={true}>
-					
+				<Dropdown.Menu as={CustomDropDownMenu} alignRight={true}>
 					<CustomMenuItem eventKey={4.1}>Profile</CustomMenuItem>
 					<CustomMenuItem eventKey={4.2}>                      
-						<span className="badge bg-red pull-right">50%</span>
 						<span>Settings</span>
+						<span className="badge badge-pill badge-danger pull-right">50%</span>
 					</CustomMenuItem>
 					<Dropdown.Divider />
 					<CustomMenuItem eventKey={4.3}>Help</CustomMenuItem>

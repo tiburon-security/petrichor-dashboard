@@ -32,6 +32,13 @@
                     "visible_in_menu" : true,
                     "menu_title"      : "Daily",
                     "component"      : "Dashboard"
+                },               
+				{
+                    "route_name"      : "analytics_daily" ,
+                    "route"           : "/daily",
+                    "visible_in_menu" : true,
+                    "menu_title"      : "Daily",
+                    "component"      : "Dashboard"
                 }
             ]
         },        
