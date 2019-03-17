@@ -49,13 +49,11 @@ const RightContainer = styled.div`
     list-style: none;
 	display: flex;
 	justify-content : flex-start;
-	
 `;
 
 const RightContainerItem = styled.div`
 	flex : 0 0 auto;
 	margin: 0;
-	//padding: 19px 15px 0 15px;
 	color: #5A738E;
 	
 	a:hover, a:focus{

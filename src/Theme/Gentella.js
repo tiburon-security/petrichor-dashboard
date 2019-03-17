@@ -46,15 +46,12 @@ const BrandingContainer = styled.div`
 `;
 
 const Logo = styled.div`
-
+	flex: 0 0 auto;
 	svg {
 		border: 1px solid #EAEAEA;
 		border-radius: 50%;
 		padding: 5px 6px;
 	}
-	
-	flex: 0 0 auto;
-	
 	
 	${props => props.sidebar_menu_is_fullsize ? `
 		font-size:32px;
@@ -85,7 +82,6 @@ const MainContainer = styled.div`
 	overflow: hidden;
 `;
 
-
 const LeftContainer = styled.div`
 	min-height: 100%;
 	position: absolute;
@@ -95,7 +91,6 @@ const LeftContainer = styled.div`
 	${props => props.sidebar_menu_is_fullsize ? `
 		width: 230px;
 		z-index: 1;
-	
 	`
 	:
 	`
@@ -146,7 +141,7 @@ export class Gentella extends Component {
 			this.props.setSidebarFullsize(false);
 		}
 	}
-
+	
 	
 	/**
 	* Remove event listener
@@ -161,33 +156,33 @@ export class Gentella extends Component {
     return (
 		<MainContainer className={(this.props.sidebar_menu_is_fullsize ? 'nav-md' : 'nav-sm')}>
 			<LeftContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-					<BrandingContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-						<Logo sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-							<FontAwesomeIcon icon={["fas", "paw"]} />
-						</Logo>
-						<WebsiteTitle sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
-							{this.props.config.website_name}
-						</WebsiteTitle>
-					</BrandingContainer>
+				<BrandingContainer sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+					<Logo sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+						<FontAwesomeIcon icon={["fas", "paw"]} />
+					</Logo>
+					<WebsiteTitle sidebar_menu_is_fullsize={this.props.sidebar_menu_is_fullsize}>
+						{this.props.config.website_name}
+					</WebsiteTitle>
+				</BrandingContainer>
 
-					<Switch>
-						{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
-							return (
-								<Route 
-									exact
-									path={fullPath}
-									key={index}
-									render={(props)=>(
-										<DynamicSidebarMenu 
-											route_name={obj.route_name} 
-											config={this.props.config}/>
-									)}
-								/>
-							)
-						})}
-					</Switch>
-					
-					<MenuFooter config={this.props.config} />
+				<Switch>
+					{recursivelyWalkRoutes(this.props.config.routes, (index, obj, fullPath, level) => {
+						return (
+							<Route 
+								exact
+								path={fullPath}
+								key={index}
+								render={(props)=>(
+									<DynamicSidebarMenu 
+										route_name={obj.route_name} 
+										config={this.props.config}/>
+								)}
+							/>
+						)
+					})}
+				</Switch>
+				
+				<MenuFooter config={this.props.config} />
 			</LeftContainer>
 
 			<TopNavigation>
