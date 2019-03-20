@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setOpenMenu } from '../redux/actions/SidebarMenu.js';
 import { withRouter } from 'react-router';
-
+import styled from 'styled-components';
 
 /**
  * Complete reimplementation of Gentella's Sidebar menu functionality from jQuery to React. 
@@ -16,7 +16,30 @@ import { withRouter } from 'react-router';
  * </SidebarMenu>
  *
  */
- 
+
+const Link = styled.button`
+    position: relative;
+    display: block;
+	border: none;
+	cursor: pointer;
+	background: none;
+	width: 100%;
+	text-align: left;
+	color: rgba(255,255,255,0.75)!important;
+	font-size: 12px;
+	padding: 9px;
+	position: relative;
+	display: block;
+	font-weight: 500;
+	
+	:hover {
+		color: #23527c;
+	}
+	
+	:focus {
+		outline: none;
+	}
+`;
 
 /**
  * Represents the link under a menu heading
@@ -42,7 +65,7 @@ class MenuLink extends Component {
 	render(){
 		
 		return (
-			<li> <a onMouseDown={()=>{ this.mouseDownEvent(); }}>{this.props.title}</a></li>
+			<li> <Link onMouseDown={()=>{ this.mouseDownEvent(); }}>{this.props.title}</Link></li>
 		)
 	}
 }

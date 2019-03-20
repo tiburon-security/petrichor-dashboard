@@ -15,7 +15,7 @@
 			"route"					  : "/",
 			"visible_in_menu"         : true,
 			"menu_title"              : "Home",
-			"menu_font_awesome_icon"  : "fa fa-home",
+			"menu_font_awesome_icon"  : ["fas", "home"],
 			"component"              : "App"
 		},
         {
@@ -23,10 +23,17 @@
             "route"                   : "/analytics",
             "visible_in_menu"         : true,
             "menu_title"              : "Analytics",
-            "menu_font_awesome_icon"  : "fa fa-bar-chart",
+            "menu_font_awesome_icon"  : ["fas", "chart-bar"],
             "component"              : "Dashboard",
             "routes" : [
                 {
+                    "route_name"      : "analytics_daily" ,
+                    "route"           : "/daily",
+                    "visible_in_menu" : true,
+                    "menu_title"      : "Daily",
+                    "component"      : "Dashboard"
+                },               
+				{
                     "route_name"      : "analytics_daily" ,
                     "route"           : "/daily",
                     "visible_in_menu" : true,
@@ -40,7 +47,7 @@
             "route"                   : "/discover",
             "visible_in_menu"         : true,
             "menu_title"              : "Discover",
-            "menu_font_awesome_icon"  : "fa fa-search",
+            "menu_font_awesome_icon"  : ["fas", "search"],
             "component"              : "Dashboard",
             "routes"            :   [             
 				{
@@ -58,7 +65,7 @@
             "route"                   : "/gentella",
             "visible_in_menu"         : true,
             "menu_title"              : "Gentella",
-            "menu_font_awesome_icon"  : "fa fa-search",
+            "menu_font_awesome_icon"  : ["fas", "search"],
             "component"              : "Dashboard",
             "routes"            : null		
 		}
