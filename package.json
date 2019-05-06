@@ -27,7 +27,7 @@
     "react-dom": "^16.8.6",
     "react-grid-layout": "^0.16.6",
     "react-jsonschema-form": "^1.0.6",
-    "react-redux": "^5.0.7",
+    "react-redux": "^7.0.3",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-slidedown": "^2.0.9",
