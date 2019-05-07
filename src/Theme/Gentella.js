@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './resources/custom.css';
-import 'font-awesome/css/font-awesome.min.css';
 import DynamicSidebarMenu from './DynamicSidebarMenu';
 import MenuFooter from './MenuFooter';
 import TopNavigation from './TopNavigation';
