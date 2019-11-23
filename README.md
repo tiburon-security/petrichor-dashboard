@@ -213,15 +213,172 @@ The global configuration for the applications is stored in routes_menu_config.js
 
 #### Routes & Menu
 
-The routes and menu in the application are completly controlled by the configuration. The `index_route` represents the default path for the application (ie localhost/). The `routes` specify all other url locations supported by the application. For each route, you can specify whether or not it should be displayed in the menu, the icon you'd like to be associated with it, a unique name/identifier, and a React component that will render the be rendered when the URL is called. Additionally, optional `child_routes`, whic allows for nesting of URLs; currently only 1 level of nesting is allowed (ie localhost/parent/child). Lastly, each route can specify an optional `link`, which slightly differs from the `route`. The `route` tells the application how to handle the request, the `link` points to the application. In doing so, we can support parameters in the route, while still allowing the base URL to be clicked in the menu.
+The routes and menu in the application are completly controlled by the configuration. The `index_route` represents the default path for the application (ie localhost/). The `routes` specify all other url locations supported by the application. For each route, you can specify whether or not it should be displayed in the menu, the icon you'd like to be associated with it, a unique name/identifier, and a React component that will render the be rendered when the URL is called. Additionally, optional `child_routes`, which allows for nesting of URLs; currently only 1 level of nesting is allowed (ie localhost/parent/child). Lastly, each route can specify an optional `link`, which slightly differs from the `route`. The `route` tells the application how to handle the request, the `link` points to the application. In doing so, we can support parameters in the route, while still allowing the base URL to be clicked in the menu.
 
 #### Dashboards & Widgets
 
-Each Widget definition specifies the name of the React component's class, in addition the path where the class is found. Within the dashboard, these widgets are dynamically loaded and added to the DOM. The must also specify a minimum grid size, which represents the smallest size they may be instantiated to within a dashboard. This is important because each dashboard can define a different size and layout for each widget. The dashboard can also chose to omit changing the size of a given widget, at which point the size will default to the size in the widget definition. Each dashboard indicates which `route_name` it belongs to, when the `route` for that `route_name` is reached the dashboard is loaded. Each widget defined in the `supported_widgets` property is added to the dashboard. There is a `auto_position_widgets` property, which will automatically position each widget. If this property is set to true, no layout is required; if one is supplied it is ignored. `auto_position_widgets` will utilize the default widget sizes and will arrange them as best fits on the the grid. **NOTE: this feature has not been fully implemented yet.**
+Each Widget definition specifies the name of the React component's class, in addition the path where the class is found. Within the dashboard, these widgets are dynamically loaded and added to the DOM. The must also specify a minimum grid size, which represents the smallest size they may be instantiated to within a dashboard. This is important because each dashboard can define a different size and layout for each widget. The dashboard can also chose to omit changing the size of a given widget, at which point the size will default to the size in the widget definition. Each dashboard indicates which `route_name` it belongs to, when the `route` for that `route_name` is reached the dashboard is loaded. Each widget defined in the `supported_widgets` property is added to the dashboard. 
 
-#### Notifications
+#### Views
 
-Notifications can be used for showing alerts of you liking, such as application updates, outages, etc. Each notification must be provided an ISO formatted timestamp, the message to be displayed, and a font awesome icon to indicate the notification type (alert, warning, info, etc). Every notiication is displayed, so be prudent to keep the notifications to a limit. Notifications added within the last 24 hours are indicated by a count in the user interface.
+Each view utilized in the application must be made routable by being added to `RouteableViews.js`; this allows dynamic loading upon initial load. Once added as a routable view, the views can be defined in the schema using the `component` property in each route.
+
+## Widgets
+
+Widgets are composoble UI boxes that display data on a dashboard. They are user defined React components that can be rendered in the common dashboard boxes. Several built in widgets are inculuded as part of this project to demonstrate common functions such as displaying data in a table, in a chart, or for filtering data.
+
+### TabularDataFromAPIWidget.js
+
+Fetches data from an API and displays it in a highly customizable table. This is the most advanced widget included in the dashboard and offers a plethora of options for displaying & even sending data.
+
+At a basic level, the table can be utilized for display "flat" data, where one piece of data is displayed in each column/row:
+
+```
+"props" : {
+
+	// Options to allow for table page sizes
+	"pageSizeOptions": [50, 100, 250, 500, 1000],
+	
+	// Default page size for table
+	"defaultPageSize": 500,
+	
+	// API endpoint from which to fetch data
+	"endpoint" : "/sample_nested_table_data_api.json",	
+	
+	// Key the API returns containing target data
+	"api_response_data_key" : "users",
+	
+	// Name to display for the table
+	"table_name" : "Sample Table 2 (Nested Table Example)",
+	
+	// Parameters that are sent to API
+	api_page_number_variable_name 		: "page",
+	api_page_size_variable_name 		: "per_page",
+	api_sort_variable_name 				: "sort_by",
+	api_filter_variable_name 			: "filter_by",
+	api_start_date_variable_name	 	: "start_date",
+	api_end_date_variable_name	 		: "end_date",
+	api_response_data_key 				: "data",
+	api_response_number_of_pages_key 	: "total_pages",	
+	api_page_number_offset 				: 1,
+		
+	// Query String Params that are added to current URL
+	query_string_page_variable_name 	: "page",
+	query_string_page_size_variable_name: "page_size",
+	query_string_filter_variable_name	: "filter_by",
+	query_string_sorts_variable_name 	: "sort_by",
+	
+	//
+	"columns" : [
+		{
+			"label": "ID",
+			"id": "id"
+		}
+	]
+
+},
+```
+
+#### Accessors & Formatters
+
+Accessors & formatters are used for displaying non-flat, but related data. For example, if you wanted to display a name and birth date in a column as a bulleted list or in a sub-table. In essence, the Accessor defines how to read the JSON returned from the API to retrieve the target data, and the formatter defines how to display the data; both must be used in concert.
+
+This feature can be utilized by leveraging the `custom_accessor` property definable for every column element.
+
+##### ArrayTabularDataAccessor
+
+This is the only accessor included as it covers most use cases involving tables. Essentially,  it crawls an array of objects to pull specific key(s) and return it in a an array of objects to be used by a Formatter
+
+For example, assume data from your API was returned in the follow format:
+
+```
+{
+	"users": [{
+		"id": 1,
+		"first_name": "George",
+		"last_name": "Bluth",
+		"avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg",
+		"siblings" :
+			[
+				{
+					"id": 1,
+					"first_name" : "Sarah",
+					"last_name"	:	"Bluth"
+				},		
+				{
+					"id": 1,
+					"first_name" : "Gob",
+					"last_name"	:	"Bluth"				
+				}
+			],
+... [snip] ...
+
+```
+
+And you wanted to display the first/last name of all the sibling in a single column for every row as a bulleted list, this accessor could be used as such:
+
+```
+"columns" : [
+	{
+		"label" : "Siblings",
+		"id": "siblings",
+		"filterable" : false,
+		"custom_accessor":  {
+			"method" : "ArrayTabularDataAccessor",
+			"keys" : [
+				{
+					"label" : "First Name",
+					"key" : "first_name"										
+				},										
+				{
+					"label" : "Last Name",
+					"key" : "last_name"										
+				}
+			],
+			"formatter" : {
+				"method": "BulletedListFormatter",
+				"show_label" : true
+			}
+		}
+	}
+]
+```
+
+##### BulletedListFormatter
+
+![img](https://imgur.com/7xoHkF4.png)
+
+As seen in the `ArrayTabularDataAccessor` section above, this Formatter is utilized for displaying multiple pieces of data in a given column for every row as a bulled list. Any data passed to it by the Accessor is displayed. Its only property is `show_label` which optionally displays the data's Label field defined in the accessor.
+
+##### NestedTableFormatter
+
+![img](https://imgur.com/l8VMK9r.png)
+
+This formatter displays an array of data as a nested react-table. It caan only be used as a formatter in the "SubmitAndAdditionalDataSubComponent" "AdditionalDataSubComponent" subcomponents, *not* in the column of a table - see those upcoming sections for more details.
+
+Like the `BulletListFormatter`, its only property is `show_label` which optionally displays the data's Label field defined in the accessor.
+
+#### Column Filters
+
+##### UniqueValuesSelectFilter
+
+##### ArrayValuesSelectFilter
+
+#### Sub Components
+
+##### AdditionalDataSubComponent
+
+##### SubmitAndAdditionalDataSubComponent
+ 
+
+### GraphingChartAPIWidget.js
+
+![img](https://i.imgur.com/lqNyhwvr.png)
+
+Fetches data from an API and displays it in a highly customizable series of graphs including a bar, pie, line, or doughnut chart.
+
+### FilteringWidget.js
+
 
 ## Technologies
 
