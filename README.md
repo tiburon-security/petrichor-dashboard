@@ -254,17 +254,17 @@ At a basic level, the table can be utilized for display "flat" data, where one p
 	// Parameters that are sent to API
 	api_page_number_variable_name 		: "page",
 	api_page_size_variable_name 		: "per_page",
-	api_sort_variable_name 				: "sort_by",
-	api_filter_variable_name 			: "filter_by",
+	api_sort_variable_name 			: "sort_by",
+	api_filter_variable_name 		: "filter_by",
 	api_start_date_variable_name	 	: "start_date",
-	api_end_date_variable_name	 		: "end_date",
-	api_response_data_key 				: "data",
+	api_end_date_variable_name	 	: "end_date",
+	api_response_data_key 			: "data",
 	api_response_number_of_pages_key 	: "total_pages",	
-	api_page_number_offset 				: 1,
+	api_page_number_offset 			: 1,
 		
 	// Query String Params that are added to current URL
 	query_string_page_variable_name 	: "page",
-	query_string_page_size_variable_name: "page_size",
+	query_string_page_size_variable_name    : "page_size",
 	query_string_filter_variable_name	: "filter_by",
 	query_string_sorts_variable_name 	: "sort_by",
 	
@@ -303,12 +303,12 @@ For example, assume data from your API was returned in the follow format:
 				{
 					"id": 1,
 					"first_name" : "Sarah",
-					"last_name"	:	"Bluth"
+					"last_name" : "Bluth"
 				},		
 				{
 					"id": 1,
 					"first_name" : "Gob",
-					"last_name"	:	"Bluth"				
+					"last_name" : "Bluth"				
 				}
 			],
 ... [snip] ...
@@ -354,22 +354,126 @@ As seen in the `ArrayTabularDataAccessor` section above, this Formatter is utili
 
 ![img](https://imgur.com/l8VMK9r.png)
 
-This formatter displays an array of data as a nested react-table. It caan only be used as a formatter in the "SubmitAndAdditionalDataSubComponent" "AdditionalDataSubComponent" subcomponents, *not* in the column of a table - see those upcoming sections for more details.
+This formatter displays an array of data as a nested react-table. It caan only be used as a formatter in the "SubmitAndAdditionalDataSubComponent" "AdditionalDataSubComponent" subcomponents, **not** in the column of a table - see those upcoming sections for more details.
 
 Like the `BulletListFormatter`, its only property is `show_label` which optionally displays the data's Label field defined in the accessor.
 
 #### Column Filters
 
+Within each column definition, you can optionally define a filter for the column. By default, the filter is a free-form textbox and any data typed into it is passed back to the underlying API serving the table's data. Filters can also be disabled using the boolean `filterable` property. Included are two custom filters described below. Custom filters are set utilizing the `custom_filter_ui` property.
+
 ##### UniqueValuesSelectFilter
+
+![img](https://imgur.com/B4B4vBB.png)
+
+This custom filters which displays the unique datapoint within the active page of the table and allows them to be selected in in a drop-down Select menu.
 
 ##### ArrayValuesSelectFilter
 
+This custom filter is similar to the above, but the difference is that it allows options to be statically defined. This is useful in cases where you only want users to be able to filter for a subset of options. The definition is as follows:
+
+```
+"custom_filter_ui" :"ArrayValuesSelectFilter",
+"custom_filter_array" : [
+	{
+		"key" : "Bluth",
+		"label" : "Bluth"
+	},							
+	{
+		"key" : "Weaver",
+		"label" : "Weaver"
+	}
+]
+```
+
 #### Sub Components
+
+Subcomponents are powerful modifications that allow for data to be nested within the table. It functions by adding as arrow on each row that a user can expand and view additional information. Two subcomponenets are included and can utilized via the `sub_component`.
 
 ##### AdditionalDataSubComponent
 
+This component allows additional data to be displayed upon expanding a row. This sub component can take the core column definition properties of a standard Tabular Data widget.
+
+Of particular interest, this sub component can utilize both `BulletedListFormatter` and `NestedTableFormatter`
+
+```
+"sub_component" : {
+	"method" : "AdditionalDataSubComponent",
+	"columns" : [
+		{
+			"label": "First Name",
+			"id": "first_name"
+		},
+		{
+			"label" : "Degrees",
+			"id": "degrees",
+			"custom_accessor":  {
+				"method" : "ArrayTabularDataAccessor",
+				"keys" : [
+					{
+						"label" : "Name",
+						"key" : "name"										
+					},
+					{
+						"label" : "Level",
+						"key" : "level"										
+					}
+				],
+				"formatter" : {
+					"method": "NestedTableFormatter",
+					"show_label" : true
+				}
+			}
+		}
+	]
+}
+```
+
 ##### SubmitAndAdditionalDataSubComponent
  
+![img](https://imgur.com/8KCvBb3.png)
+ 
+This sub component expands on the `AdditionalDataSubComponent` by also allowing the row to capture data via a form and send it to a desired API. It leverages the `react-jsonschema-form` for defining the forms that will capture data:
+
+```
+// If true, deletes row from UI when form submitted
+"delete_row_on_submit" : true,
+
+"form_configuration" : {
+
+	// API where data is sent
+	"target_endpoint" : "fake.php",
+	
+	// Data (by their key) from current row that is sent to API
+	"api_data_to_send" : [
+		{
+			"label" : "name_im_sending_to_api_first",
+			"key" : "first_name"
+		},							
+		{
+			"label" : "name_im_sending_to_api",
+			"key" : "last_name"
+		}
+	],
+	
+	// react-jsonschema-form form schema - see project docs for breakdown on usage
+	"form_schema" : {
+		"type": "object",
+		"required": ["status", "comments"],
+		"properties": {
+			"status": {"type": "string", "title": "Status", "enum": ["Ongoing", "Complete"]},
+			"comments": {"type": "string", "title": "Comments"}
+		}								
+	},
+	
+	// react-jsonschema-form UI schema - see project docs for breakdown on usage
+	"ui_schema" : {
+		"comments" : {
+			"ui:widget": "textarea"
+		}
+	}
+}
+```
 
 ### GraphingChartAPIWidget.js
 
@@ -377,8 +481,11 @@ Like the `BulletListFormatter`, its only property is `show_label` which optional
 
 Fetches data from an API and displays it in a highly customizable series of graphs including a bar, pie, line, or doughnut chart.
 
+**TODO**
+
 ### FilteringWidget.js
 
+**TODO**
 
 ## Technologies
 
