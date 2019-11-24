@@ -279,8 +279,7 @@ At a basic level, the table can be utilized for display "flat" data, where one p
 },
 ```
 
-Listens to `startDate` & `endDate` Redux properties set by `FilteringWidget` & adjusts as appropriate by sending data to do the the API leveraging the `api_start_date_variable_name` and `api_end_date_variable_name` properties.
-
+Listens to `START_DATE` & `END_DATE` Redux properties set by `FilteringWidget` & adjusts as appropriate by sending data to do the the API leveraging the `api_start_date_variable_name` and `api_end_date_variable_name` properties.
 
 #### Accessors & Formatters
 
@@ -531,21 +530,86 @@ Fetches data from an API and displays it in a highly customizable series of grap
 	// Escape hatch for defining custom settings utilized by chart.js
 	custom_chart_options			: null,
 	
-	// Parameters that are sent to API
-	api_response_data_key 			: "data",
+	// Key holding target data returned by API
+	api_response_data_key 			: "results",
+	
+	// Parameters that are sent to API for filtering
 	api_filter_variable_name 		: "filter",
 	api_start_date_variable_name	 	: "start_date",
 	api_end_date_variable_name 		: "end_date"
 }
+```
 
+Listens to `START_DATE` & `END_DATE` Redux properties set by `FilteringWidget` & adjusts as appropriate by sending data to do the the API leveraging the `api_start_date_variable_name` and `api_end_date_variable_name` properties.
 
-Listens to `startDate` & `endDate` Redux properties set by `FilteringWidget` & adjusts as appropriate by sending data to do the the API leveraging the `api_start_date_variable_name` and `api_end_date_variable_name` properties.
+Expects data to be in a simple format, for example:
 
+```
+{
+	"results": [
+		{
+			"label" : "Sample Series 1",
+			"data": [
+				{
+					"label" : "Red",
+					"data" : 12
+				},		
+				{
+					"label" : "Blue",
+					"data" : 19
+				}
+			]
+		},		
+		{
+			"label" : "Sample series 2",
+			"data": [
+				{
+					"label" : "Red",
+					"data" : 10
+				},		
+				{
+					"label" : "Blue",
+					"data" : 12
+				}
+			]
+		}
+	]
+}
 ```
 
 ### FilteringWidget.js
 
-**TODO**
+![img](https://imgur.com/UfMGKeR.png)
+
+Custom widget for filtering both the `GraphingChartAPIWidget` and `TabularDataFromAPIWidget` by dispatching data via the Redux `START_DATE`, `END_DATE`, and `KEYWORD_SEARCH ` Redux properties.
+
+```
+"props" : {
+	// Toggles the keyword filtering option
+	show_keyword_filter 	: true,
+	
+	// Toggles the date filtering option
+	show_date_filter 	: true,
+	
+	// Allows setting a preset for quick selection of date filter ranges
+	presets			: "USGovtQuarters"
+	
+	// Query string variables to save/read data from
+	query_string_keyword	: "search",
+	query_string_start_date	: "start_date",
+	query_string_end_date	: "end_date"
+}
+```
+
+#### Date Range Preset Choices
+
+![img](https://imgur.com/eHoh8Gr.jpg)
+
+Various preset choices are available to enable quickly selecting date ranges such as calendar year quarters, recent days, and US government quarters.
+
+- Recent
+- CalendarYearQuarters
+- USGovtQuarters
 
 ## Technologies
 
