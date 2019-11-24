@@ -279,6 +279,9 @@ At a basic level, the table can be utilized for display "flat" data, where one p
 },
 ```
 
+Listens to `startDate` & `endDate` Redux properties set by `FilteringWidget` & adjusts as appropriate by sending data to do the the API leveraging the `api_start_date_variable_name` and `api_end_date_variable_name` properties.
+
+
 #### Accessors & Formatters
 
 Accessors & formatters are used for displaying non-flat, but related data. For example, if you wanted to display a name and birth date in a column as a bulleted list or in a sub-table. In essence, the Accessor defines how to read the JSON returned from the API to retrieve the target data, and the formatter defines how to display the data; both must be used in concert.
@@ -481,7 +484,64 @@ This sub component expands on the `AdditionalDataSubComponent` by also allowing 
 
 Fetches data from an API and displays it in a highly customizable series of graphs including a bar, pie, line, or doughnut chart.
 
-**TODO**
+```
+"props" : {
+	
+	chart_name				: "Sample Graph",
+	
+	// API Endpoint
+	endpoint : "https://reqres.in/api/users",	
+	
+	// Type of graph to display (bar || pie || line || doughnut)
+	graph_type				 : "bar",
+	
+	// Possible colors for the graph elements, defined as Hex strings
+	graph_colors				: [
+		"#26b99a",
+		"#3498db",
+		"#455c73",
+		"#9b59b6",
+		"#bdc3c7"
+	],		
+	
+	// Possible colors for the graph elements, defined as Hex strings
+	graph_border_colors			: [
+		"#26b99a",
+		"#3498db",
+		"#455c73",
+		"#9b59b6",
+		"#bdc3c7"
+	],
+	
+	// Show legend on graph
+	show_legend				: false,
+	
+	// Start graph numbering for zero (bar & graph)
+	start_from_zero				: false,
+	
+	// Maximize space and skip xaxis labels to condense graph
+	auto_skip_xaxis_labels			: false,		
+	
+	// Truncate xaxis labels to this size
+	truncate_xaxis_label_length		: 10,
+	
+	// Only applicable for pie and doughnut graphs
+	show_percentage_labels			: true,
+	
+	// Escape hatch for defining custom settings utilized by chart.js
+	custom_chart_options			: null,
+	
+	// Parameters that are sent to API
+	api_response_data_key 			: "data",
+	api_filter_variable_name 		: "filter",
+	api_start_date_variable_name	 	: "start_date",
+	api_end_date_variable_name 		: "end_date"
+}
+
+
+Listens to `startDate` & `endDate` Redux properties set by `FilteringWidget` & adjusts as appropriate by sending data to do the the API leveraging the `api_start_date_variable_name` and `api_end_date_variable_name` properties.
+
+```
 
 ### FilteringWidget.js
 
