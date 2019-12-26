@@ -1,5 +1,5 @@
 // Polyfills for legacy browsers
-import 'babel-polyfill';
+import "core-js/stable";
 
 import React from 'react';
 import ReactDOM from 'react-dom';

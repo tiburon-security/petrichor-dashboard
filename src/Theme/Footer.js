@@ -6,6 +6,7 @@ const StyledFooter = styled.footer`
 	background:#fff;
 	display:block;
 	padding:15px 20px;
+	margin-left:230px;
 
 	${props => !props.sidebar_menu_is_fullsize && `
 		margin-left:70px;
