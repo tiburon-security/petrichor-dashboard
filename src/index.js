@@ -38,6 +38,7 @@ function bootstrapApplication(config, userConfig){
 	// Hook the content body of gentella, this is where page content
 	// will be rendered. Routes control this body content
 	ReactDOM.render((
+	<React.StrictMode>
 	<Provider store={store}>
 		<BrowserRouter>
 		
@@ -51,7 +52,8 @@ function bootstrapApplication(config, userConfig){
 				)}
 			/>
 		</BrowserRouter>
-		</Provider>
+	</Provider>
+	</React.StrictMode>
 	     
 	), document.getElementById('root'));
 
