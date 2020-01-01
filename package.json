@@ -1,6 +1,6 @@
 {
   "name": "@tiburon-security/petrichor-dashboard",
-  "version": "1.0.3",0
+  "version": "1.0.0",
   "homepage": "https://github.com/tiburon-security/petrichor-dashboard",
   "license": "MIT",
   "devDependencies": {
