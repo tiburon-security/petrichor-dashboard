@@ -41,8 +41,9 @@ const ContentContainer = styled.div`
 `;
 
 const Content = styled.div`
-	display : ${props => props.loading && "none"};
 	height : 100%;
+	${props => props.loading && `display:none`};
+
 `;
 
 
@@ -121,7 +122,7 @@ class FullWidget extends Component {
 						<LoadingIcon alt="Loading Icon" src={LoadingIconImg} /> 
 					)}
 					
-					<Content loading={this.state.loading}>
+					<Content loading={this.state.loading ? 1 : 0}>
 						{this.props.children}
 					</Content>
 					
