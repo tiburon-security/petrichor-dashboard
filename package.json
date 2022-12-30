@@ -4,7 +4,7 @@
   "homepage": "https://github.com/tiburon-security/petrichor-dashboard",
   "license": "MIT",
   "devDependencies": {
-    "react-scripts": "3.3.0"
+    "react-scripts": "5.0.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
